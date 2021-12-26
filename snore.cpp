@@ -36,13 +36,13 @@ using coder::array;
 
 typedef array<double, 2U> array1D;
 
-void snorInitial() {
+void snore::snoreInitial() {
     if (!isInitialized_SnoringRecognition) {
         SnoringRecognition_initialize();
     }
 }
 
-void snorDestroy() {
+void snore::snoreDestroy() {
     if (isInitialized_SnoringRecognition) {
         SnoringRecognition_terminate();
     }
