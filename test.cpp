@@ -19,13 +19,13 @@ void readWav(const char *path, I16pcm &dst) {
 }
 
 int main() {
-    I16pcm src;
-    readWav("0001.wav", src);
-    F64pcm dst = {nullptr, src.length, 1, 44100};
-    convert(src, dst);
-    ModelResult modelResult;
-    calculateModelResult(dst, modelResult);
-    modelResult.print();
-    free(src.raw);
-    free(dst.raw);
+//    I16pcm src;
+//    readWav("0001.wav", src);
+//    F64pcm dst = {nullptr, src.length, 1, 44100};
+//    convert(src, dst);
+//    ModelResult modelResult;
+//    calculateModelResult(dst, modelResult);
+//    modelResult.print();
+//    free(src.raw);
+//    free(dst.raw);
 }

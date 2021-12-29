@@ -219,13 +219,13 @@ void snore::calculateModelResult(F64pcm &pcm, ModelResult &modelResult) {
     modelResult.s_size = w_starts.size(1);
     modelResult.starts = new uint32_t[w_starts.size(1)];
     for (int i = 0; i < w_starts.size(1); ++i) {
-        modelResult.starts[i] = (uint32_t) w_starts[i];
+        modelResult.starts[i] = (uint32_t) w_starts[i] - 1;
     }
 
     modelResult.e_size = w_ends.size(1);
     modelResult.ends = new uint32_t[w_ends.size(1)];
     for (int i = 0; i < w_ends.size(1); ++i) {
-        modelResult.ends[i] = (uint32_t) w_ends[i];
+        modelResult.ends[i] = (uint32_t) w_ends[i] - 1;
     }
 }
 
@@ -276,28 +276,4 @@ ModelResult::ModelResult() {
     starts = nullptr;
     ends = nullptr;
     label = nullptr;
-}
-
-bool snore::convert(I16pcm &src, F64pcm &dst) {
-    if (src.raw == nullptr || src.length == 0) return false;
-    dst.fs = src.fs;
-    dst.length = src.length;
-    dst.channel = src.channel;
-    dst.raw = (double *) malloc(sizeof(double) * src.length);
-    for (int i = 0; i < dst.length; ++i) {
-        dst.raw[i] = src.raw[i] / 32768.0;
-    }
-    return true;
-}
-
-bool snore::convert(F64pcm &src, I16pcm &dst) {
-    if (src.raw == nullptr || src.length == 0) return false;
-    dst.fs = src.fs;
-    dst.length = src.length;
-    dst.channel = src.channel;
-    dst.raw = (int16_t *) malloc(sizeof(int16_t) * src.length);
-    for (int i = 0; i < dst.length; ++i) {
-        dst.raw[i] = (int16_t) (src.raw[i] * 32768);
-    }
-    return true;
 }

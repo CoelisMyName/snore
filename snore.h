@@ -1,9 +1,6 @@
 #ifndef SNORING_RECOGNITION_SNOR_H
 #define SNORING_RECOGNITION_SNOR_H
 
-#ifndef MODEL_H
-#define MODEL_H
-
 #include <cstdint>
 
 namespace snore {
@@ -36,22 +33,6 @@ namespace snore {
         uint32_t channel; /* 通道数 */
         double fs /* 采样率 */;
     } F64pcm;
-
-    /**
-     * 需要手动free dst.raw
-     * @param src
-     * @param dst
-     * @return
-     */
-    extern bool convert(I16pcm &src, F64pcm &dst);
-
-    /**
-     * 需要手动free dst.raw
-     * @param src
-     * @param dst
-     * @return
-     */
-    extern bool convert(F64pcm &src, I16pcm &dst);
 
 /**
  * SPL结构体，存储声压级测量数据
@@ -115,7 +96,5 @@ namespace snore {
  */
     extern void calculateSPL(F64pcm &src, SPL &spl);
 }
-
-#endif
 
 #endif

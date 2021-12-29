@@ -25,7 +25,7 @@ else ()
 endif ()
 
 if (${EXEC})
-    add_executable(snore test.cpp snore.h snore.cpp ${MATLAB_SRC})
+    add_executable(snore example2.cpp snore.h snore.cpp ${MATLAB_SRC})
 else ()
     add_library(snore SHARED snore.h snore.cpp ${MATLAB_SRC})
 endif ()
