@@ -13,7 +13,7 @@ set(LIB_DIR lib)
 include_directories(${INC_DIR})
 
 #decide build exe or lib
-set(EXEC OFF)
+set(EXEC ON)
 
 if (ANDROID)
     #    message("link directories ${LIB_DIR}/${ANDROID_ABI}")
@@ -25,7 +25,7 @@ else ()
 endif ()
 
 if (${EXEC})
-    add_executable(snore example2.cpp snore.h snore.cpp ${MATLAB_SRC})
+    add_executable(snore test.cpp snore.h snore.cpp AudioDataBuffer.h AudioDataBufferImpl.h ${MATLAB_SRC})
 else ()
     add_library(snore SHARED snore.h snore.cpp ${MATLAB_SRC})
 endif ()

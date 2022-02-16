@@ -27,7 +27,7 @@ extern "C" {
 #ifdef ANDROID
 #include <android/log.h>
 #define LOG_D(tag, ...) __android_log_print(ANDROID_LOG_DEBUG, tag, __VA_ARGS__)
-static const char *const TAG = "model";
+static const char *const TAG = "snore";
 #endif
 
 using namespace snore;
@@ -199,12 +199,12 @@ void snore::calculateModelResult(F64pcm &pcm, ModelResult &modelResult) {
     /**
      * 分类器分类
      */
-#ifdef ANDROID
-    LOG_D(TAG, "w_starts %d, w_ends %d", w_starts.size(1), w_ends.size(1));
-    for(int i = 0; i < w_starts.size(1); ++i) {
-        LOG_D(TAG, "start %.1f, end %.1f", w_starts[i], w_ends[i]);
-    }
-#endif
+//#ifdef ANDROID
+//    LOG_D(TAG, "w_starts %d, w_ends %d", w_starts.size(1), w_ends.size(1));
+//    for(int i = 0; i < w_starts.size(1); ++i) {
+//        LOG_D(TAG, "start %.1f, end %.1f", w_starts[i], w_ends[i]);
+//    }
+//#endif
     classifier(x, w_starts, w_ends, pcm.fs, label);
 
     /**
