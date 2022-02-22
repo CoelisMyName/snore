@@ -5,16 +5,6 @@
 
 namespace snore {
 
-    /**
-     * 调用库前调用
-     */
-    extern void snoreInitial();
-
-    /**
-     * 不再使用后调用 call once
-     */
-    extern void snoreDestroy();
-
 #define DEFAULT_PRECISION 16
 
 /**

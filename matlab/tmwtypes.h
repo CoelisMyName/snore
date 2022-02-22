@@ -41,7 +41,9 @@
  || (defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)) \
  || (defined(_MSC_VER) && (_MSC_VER >= 1900))
 #ifndef tmwtypes_do_not_include_stdbool
+
 #include <stdbool.h>
+
 #endif
 #endif
 
@@ -96,7 +98,7 @@ typedef unsigned long ulong_T;
  || defined(__x86_64__) || defined(__LP64__)  \
  || defined(__LCC64__)
 
-typedef unsigned long long  ulonglong_T;
+typedef unsigned long long ulonglong_T;
 #endif
 
 
@@ -759,12 +761,12 @@ typedef struct {
  * as it only handles the specfic range of double between 2^63 and 2^64-1 */
 __forceinline
 uint64_T double_to_uint64_helper(double d) {
-  union double_to_uint64_union_type {
-    double dd;
-    uint64_T i64;
-  } di;
-  di.dd = d;
-  return (((di.i64 & 0x000fffffffffffff) | 0x0010000000000000) << 11);
+    union double_to_uint64_union_type {
+        double dd;
+        uint64_T i64;
+    } di;
+    di.dd = d;
+    return (((di.i64 & 0x000fffffffffffff) | 0x0010000000000000) << 11);
 }
 
 /* The largest double value that can be cast to uint64 in windows is the

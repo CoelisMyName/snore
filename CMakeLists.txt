@@ -13,7 +13,7 @@ set(LIB_DIR lib)
 include_directories(${INC_DIR})
 
 #decide build exe or lib
-set(EXEC ON)
+set(EXEC OFF)
 
 if (ANDROID)
     #    message("link directories ${LIB_DIR}/${ANDROID_ABI}")

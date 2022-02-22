@@ -2,7 +2,7 @@
 // File: histcounts.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 // Include Files
@@ -10,203 +10,220 @@
 #include "SnoringRecognition_rtwutil.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
-#include <cmath>
-#include <cstring>
+#include "rt_nonfinite.h"
 #include <math.h>
 
 // Function Definitions
 //
 // Arguments    : const ::coder::array<double, 2U> &x
-//                double n_data[]
-//                int n_size[2]
-//                double edges_data[]
-//                int edges_size[2]
+//                ::coder::array<double, 2U> &n
+//                ::coder::array<double, 2U> &edges
 // Return Type  : void
 //
 namespace coder {
-void histcounts(const ::coder::array<double, 2U> &x, double n_data[],
-                int n_size[2], double edges_data[], int edges_size[2])
-{
-  double HighLimit;
-  double LowLimit;
-  double RawBinWidth_tmp;
-  double epsxScale;
-  double leftEdge;
-  double xScale;
-  int ni_data[20];
-  int high_i;
-  int i;
-  int k;
-  int low_i;
-  int low_ip1;
-  int mid_i;
-  int nx;
-  nx = x.size(1);
-  k = 0;
-  while ((k + 1 <= nx) && (std::isinf(x[k]) || std::isnan(x[k]))) {
-    k++;
-  }
-  if (k + 1 > x.size(1)) {
-    LowLimit = 0.0;
-    low_i = 0;
-  } else {
-    LowLimit = x[k];
-    low_i = 1;
-  }
-  HighLimit = LowLimit;
-  i = k + 2;
-  for (low_ip1 = i; low_ip1 <= nx; low_ip1++) {
-    RawBinWidth_tmp = x[low_ip1 - 1];
-    if ((!std::isinf(RawBinWidth_tmp)) && (!std::isnan(RawBinWidth_tmp))) {
-      if (RawBinWidth_tmp < LowLimit) {
-        LowLimit = RawBinWidth_tmp;
-      } else if (RawBinWidth_tmp > HighLimit) {
-        HighLimit = RawBinWidth_tmp;
-      }
-      low_i++;
-    }
-  }
-  if (low_i > 0) {
-    boolean_T b;
-    boolean_T b1;
-    xScale = std::fmax(std::abs(LowLimit), std::abs(HighLimit));
-    b = !std::isinf(xScale);
-    b1 = !std::isnan(xScale);
-    if (b && b1) {
-      if (xScale <= 2.2250738585072014E-308) {
-        epsxScale = 4.94065645841247E-324;
-      } else {
-        frexp(xScale, &high_i);
-        epsxScale = std::ldexp(1.0, high_i - 53);
-      }
-    } else {
-      epsxScale = rtNaN;
-    }
-    RawBinWidth_tmp = HighLimit - LowLimit;
-    leftEdge = std::fmax(RawBinWidth_tmp / 20.0, epsxScale);
-    if (RawBinWidth_tmp >
-        std::fmax(std::sqrt(epsxScale), 2.2250738585072014E-308)) {
-      xScale = rt_powd_snf(10.0, std::floor(std::log10(leftEdge)));
-      epsxScale = xScale * std::floor(leftEdge / xScale);
-      leftEdge = std::fmax(
-          std::fmin(epsxScale * std::floor(LowLimit / epsxScale), LowLimit),
-          -1.7976931348623157E+308);
-      xScale = (HighLimit - leftEdge) / 20.0;
-      epsxScale = rt_powd_snf(
-          10.0, std::floor(std::log10((HighLimit - leftEdge) / 19.0 - xScale)));
-      epsxScale *= std::ceil(xScale / epsxScale);
-      xScale = std::fmin(std::fmax(leftEdge + 20.0 * epsxScale, HighLimit),
-                         1.7976931348623157E+308);
-    } else {
-      if (b && b1) {
-        if (xScale <= 2.2250738585072014E-308) {
-          xScale = 4.94065645841247E-324;
+    void histcounts(const ::coder::array<double, 2U> &x,
+                    ::coder::array<double, 2U> &n,
+                    ::coder::array<double, 2U> &edges) {
+        array<int, 2U> ni;
+        double HighLimit;
+        double LowLimit;
+        double binWidth;
+        double epsxScale;
+        double leftEdge;
+        double xScale;
+        int high_i;
+        int k;
+        int low_i;
+        int low_ip1;
+        int mid_i;
+        int nx;
+        nx = x.size(1);
+        k = 0;
+        while ((k + 1 <= nx) && (rtIsInf(x[k]) || rtIsNaN(x[k]))) {
+            k++;
+        }
+        if (k + 1 > x.size(1)) {
+            LowLimit = 0.0;
+            high_i = 0;
         } else {
-          frexp(xScale, &mid_i);
-          xScale = std::ldexp(1.0, mid_i - 53);
+            LowLimit = x[k];
+            high_i = 1;
         }
-      } else {
-        xScale = rtNaN;
-      }
-      xScale = std::fmax(1.0, std::ceil(20.0 * xScale));
-      leftEdge = std::floor(2.0 * (LowLimit - xScale / 4.0)) / 2.0;
-      xScale = std::ceil(2.0 * (HighLimit + xScale / 4.0)) / 2.0;
-      epsxScale = (xScale - leftEdge) / 20.0;
-    }
-    if ((!std::isinf(epsxScale)) && (!std::isnan(epsxScale))) {
-      edges_size[0] = 1;
-      edges_size[1] = 21;
-      std::memset(&edges_data[0], 0, 21U * sizeof(double));
-      edges_data[0] = leftEdge;
-      for (low_i = 0; low_i < 19; low_i++) {
-        edges_data[low_i + 1] =
-            leftEdge + (static_cast<double>(low_i) + 1.0) * epsxScale;
-      }
-      edges_data[20] = xScale;
-    } else {
-      edges_size[0] = 1;
-      edges_size[1] = 21;
-      edges_data[20] = xScale;
-      edges_data[0] = leftEdge;
-      if (leftEdge == -xScale) {
-        xScale /= 20.0;
-        for (k = 0; k < 19; k++) {
-          edges_data[k + 1] =
-              (2.0 * (static_cast<double>(k) + 2.0) - 22.0) * xScale;
+        HighLimit = LowLimit;
+        mid_i = k + 2;
+        for (k = mid_i; k <= nx; k++) {
+            xScale = x[k - 1];
+            if ((!rtIsInf(xScale)) && (!rtIsNaN(xScale))) {
+                if (xScale < LowLimit) {
+                    LowLimit = xScale;
+                } else if (xScale > HighLimit) {
+                    HighLimit = xScale;
+                }
+                high_i++;
+            }
         }
-        edges_data[10] = 0.0;
-      } else if (((leftEdge < 0.0) != (xScale < 0.0)) &&
-                 ((std::abs(leftEdge) > 8.9884656743115785E+307) ||
-                  (std::abs(xScale) > 8.9884656743115785E+307))) {
-        epsxScale = leftEdge / 20.0;
-        xScale /= 20.0;
-        for (k = 0; k < 19; k++) {
-          edges_data[k + 1] =
-              (leftEdge + xScale * (static_cast<double>(k) + 1.0)) -
-              epsxScale * (static_cast<double>(k) + 1.0);
-        }
-      } else {
-        epsxScale = (xScale - leftEdge) / 20.0;
-        for (k = 0; k < 19; k++) {
-          edges_data[k + 1] =
-              leftEdge + (static_cast<double>(k) + 1.0) * epsxScale;
-        }
-      }
-    }
-  } else {
-    edges_size[0] = 1;
-    edges_size[1] = 21;
-    for (k = 0; k < 21; k++) {
-      edges_data[k] = k;
-    }
-  }
-  std::memset(&ni_data[0], 0, 20U * sizeof(int));
-  nx = x.size(1);
-  leftEdge = edges_data[0];
-  xScale = edges_data[1] - edges_data[0];
-  for (k = 0; k < nx; k++) {
-    RawBinWidth_tmp = x[k];
-    if ((RawBinWidth_tmp >= leftEdge) && (RawBinWidth_tmp <= edges_data[20])) {
-      boolean_T guard1{false};
-      epsxScale = std::ceil((RawBinWidth_tmp - leftEdge) / xScale);
-      guard1 = false;
-      if ((epsxScale >= 1.0) && (epsxScale < 21.0)) {
-        i = static_cast<int>(epsxScale);
-        if ((RawBinWidth_tmp >= edges_data[i - 1]) &&
-            (RawBinWidth_tmp < edges_data[i])) {
-          ni_data[i - 1]++;
+        binWidth = HighLimit - LowLimit;
+        leftEdge = binWidth / 20.0;
+        if (high_i > 0) {
+            double u0;
+            boolean_T b;
+            boolean_T b1;
+            u0 = fabs(LowLimit);
+            epsxScale = fabs(HighLimit);
+            if ((u0 > epsxScale) || rtIsNaN(epsxScale)) {
+                xScale = u0;
+            } else {
+                xScale = epsxScale;
+            }
+            b = !rtIsInf(xScale);
+            b1 = !rtIsNaN(xScale);
+            if (b && b1) {
+                if (xScale <= 2.2250738585072014E-308) {
+                    epsxScale = 4.94065645841247E-324;
+                } else {
+                    frexp(xScale, &low_i);
+                    epsxScale = ldexp(1.0, low_i - 53);
+                }
+            } else {
+                epsxScale = rtNaN;
+            }
+            if ((!(leftEdge > epsxScale)) && (!rtIsNaN(epsxScale))) {
+                leftEdge = epsxScale;
+            }
+            u0 = sqrt(epsxScale);
+            if (!(u0 > 2.2250738585072014E-308)) {
+                u0 = 2.2250738585072014E-308;
+            }
+            if (binWidth > u0) {
+                epsxScale = rt_powd_snf(10.0, floor(log10(leftEdge)));
+                binWidth = epsxScale * floor(leftEdge / epsxScale);
+                u0 = binWidth * floor(LowLimit / binWidth);
+                if ((u0 < LowLimit) || rtIsNaN(LowLimit)) {
+                    leftEdge = u0;
+                } else {
+                    leftEdge = LowLimit;
+                }
+                if (!(leftEdge > -1.7976931348623157E+308)) {
+                    leftEdge = -1.7976931348623157E+308;
+                }
+                epsxScale = HighLimit - leftEdge;
+                binWidth = epsxScale / 20.0;
+                epsxScale = rt_powd_snf(10.0, floor(log10(epsxScale / 19.0 - binWidth)));
+                binWidth = epsxScale * ceil(binWidth / epsxScale);
+                u0 = leftEdge + 20.0 * binWidth;
+                if ((u0 > HighLimit) || rtIsNaN(HighLimit)) {
+                    epsxScale = u0;
+                } else {
+                    epsxScale = HighLimit;
+                }
+                if (!(epsxScale < 1.7976931348623157E+308)) {
+                    epsxScale = 1.7976931348623157E+308;
+                }
+            } else {
+                if (b && b1) {
+                    if (xScale <= 2.2250738585072014E-308) {
+                        epsxScale = 4.94065645841247E-324;
+                    } else {
+                        frexp(xScale, &low_ip1);
+                        epsxScale = ldexp(1.0, low_ip1 - 53);
+                    }
+                } else {
+                    epsxScale = rtNaN;
+                }
+                epsxScale = ceil(20.0 * epsxScale);
+                if ((1.0 > epsxScale) || rtIsNaN(epsxScale)) {
+                    epsxScale = 1.0;
+                }
+                leftEdge = floor(2.0 * (LowLimit - epsxScale / 4.0)) / 2.0;
+                epsxScale = ceil(2.0 * (HighLimit + epsxScale / 4.0)) / 2.0;
+                binWidth = (epsxScale - leftEdge) / 20.0;
+            }
+            if ((!rtIsInf(binWidth)) && (!rtIsNaN(binWidth))) {
+                edges.set_size(1, 21);
+                for (mid_i = 0; mid_i < 21; mid_i++) {
+                    edges[mid_i] = 0.0;
+                }
+                edges[0] = leftEdge;
+                for (high_i = 0; high_i < 19; high_i++) {
+                    edges[high_i + 1] =
+                            leftEdge + (static_cast<double>(high_i) + 1.0) * binWidth;
+                }
+                edges[20] = epsxScale;
+            } else {
+                edges.set_size(1, 21);
+                edges[20] = epsxScale;
+                edges[0] = leftEdge;
+                if (leftEdge == -epsxScale) {
+                    epsxScale /= 20.0;
+                    for (k = 0; k < 19; k++) {
+                        edges[k + 1] =
+                                ((2.0 * (static_cast<double>(k) + 2.0) - 21.0) - 1.0) * epsxScale;
+                    }
+                    edges[10] = 0.0;
+                } else if (((leftEdge < 0.0) != (epsxScale < 0.0)) &&
+                           ((fabs(leftEdge) > 8.9884656743115785E+307) ||
+                            (fabs(epsxScale) > 8.9884656743115785E+307))) {
+                    binWidth = leftEdge / 20.0;
+                    epsxScale /= 20.0;
+                    for (k = 0; k < 19; k++) {
+                        edges[k + 1] =
+                                (leftEdge + epsxScale * (static_cast<double>(k) + 1.0)) -
+                                binWidth * (static_cast<double>(k) + 1.0);
+                    }
+                } else {
+                    binWidth = (epsxScale - leftEdge) / 20.0;
+                    for (k = 0; k < 19; k++) {
+                        edges[k + 1] = leftEdge + (static_cast<double>(k) + 1.0) * binWidth;
+                    }
+                }
+            }
         } else {
-          guard1 = true;
+            edges.set_size(1, 21);
+            for (k = 0; k < 21; k++) {
+                edges[k] = k;
+            }
         }
-      } else {
-        guard1 = true;
-      }
-      if (guard1) {
-        low_i = 1;
-        low_ip1 = 2;
-        high_i = 21;
-        while (high_i > low_ip1) {
-          mid_i = (low_i >> 1) + (high_i >> 1);
-          if (((low_i & 1) == 1) && ((high_i & 1) == 1)) {
-            mid_i++;
-          }
-          if (x[k] >= edges_data[mid_i - 1]) {
-            low_i = mid_i;
-            low_ip1 = mid_i + 1;
-          } else {
-            high_i = mid_i;
-          }
+        ni.set_size(1, 20);
+        for (mid_i = 0; mid_i < 20; mid_i++) {
+            ni[mid_i] = 0;
         }
-        ni_data[low_i - 1]++;
-      }
+        nx = x.size(1);
+        leftEdge = edges[0];
+        epsxScale = edges[1] - edges[0];
+        for (k = 0; k < nx; k++) {
+            xScale = x[k];
+            if ((xScale >= leftEdge) && (xScale <= edges[20])) {
+                binWidth = ceil((xScale - leftEdge) / epsxScale);
+                if ((binWidth >= 1.0) && (binWidth < 21.0) &&
+                    (xScale >= edges[static_cast<int>(binWidth) - 1]) &&
+                    (xScale < edges[static_cast<int>(binWidth)])) {
+                    ni[static_cast<int>(binWidth) - 1] =
+                            ni[static_cast<int>(binWidth) - 1] + 1;
+                } else {
+                    high_i = 21;
+                    low_i = 1;
+                    low_ip1 = 2;
+                    while (high_i > low_ip1) {
+                        mid_i = (low_i >> 1) + (high_i >> 1);
+                        if (((low_i & 1) == 1) && ((high_i & 1) == 1)) {
+                            mid_i++;
+                        }
+                        if (x[k] >= edges[mid_i - 1]) {
+                            low_i = mid_i;
+                            low_ip1 = mid_i + 1;
+                        } else {
+                            high_i = mid_i;
+                        }
+                    }
+                    ni[low_i - 1] = ni[low_i - 1] + 1;
+                }
+            }
+        }
+        n.set_size(1, 20);
+        for (mid_i = 0; mid_i < 20; mid_i++) {
+            n[mid_i] = ni[mid_i];
+        }
     }
-  }
-  n_size[0] = 1;
-  n_size[1] = 20;
-  for (i = 0; i < 20; i++) {
-    n_data[i] = ni_data[i];
-  }
-}
 
 } // namespace coder
 

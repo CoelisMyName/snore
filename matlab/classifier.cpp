@@ -2,7 +2,7 @@
 // File: classifier.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 // Include Files
@@ -14,10 +14,10 @@
 #include "HENR.h"
 #include "LPCFeature.h"
 #include "PR800.h"
-#include "SnoringRecognition_data.h"
-#include "SnoringRecognition_initialize.h"
-#include "blockedSummation.h"
+#include "SnoringRecognition_types.h"
+#include "abs.h"
 #include "combineVectorElements.h"
+#include "fix.h"
 #include "mean.h"
 #include "mfcc_m.h"
 #include "minOrMax.h"
@@ -25,1003 +25,690 @@
 #include "rt_nonfinite.h"
 #include "var.h"
 #include "coder_array.h"
-#include <algorithm>
-#include <cmath>
+#include <string.h>
 
 // Function Definitions
 //
 // function [predict_label] = classifier(x, w_starts, w_ends, fs)
 //
-// Arguments    : const coder::array<double, 2U> &x
+// Arguments    : SnoringRecognitionStackData *SD
+//                const coder::array<double, 2U> &x
 //                const coder::array<double, 2U> &w_starts
 //                const coder::array<double, 2U> &w_ends
 //                double fs
 //                coder::array<double, 2U> &predict_label
 // Return Type  : void
 //
-void classifier(const coder::array<double, 2U> &x,
+void classifier(SnoringRecognitionStackData *SD,
+                const coder::array<double, 2U> &x,
                 const coder::array<double, 2U> &w_starts,
                 const coder::array<double, 2U> &w_ends, double fs,
-                coder::array<double, 2U> &predict_label)
-{
-  static const signed char b_iv[23]{3,  18, 19, 1,  46, 47, 53, 34,
-                                    50, 30, 31, 51, 33, 42, 54, 29,
-                                    28, 32, 53, 7,  52, 27, 36};
-  coder::classreg::learning::classif::CompactClassificationEnsemble r8;
-  coder::array<double, 2U> BARKEE;
-  coder::array<double, 2U> Crest_Factor;
-  coder::array<double, 2U> Eh;
-  coder::array<double, 2U> HZCRR;
-  coder::array<double, 2U> LPCmean;
-  coder::array<double, 2U> PR800max;
-  coder::array<double, 2U> PR800mean;
-  coder::array<double, 2U> PR800min;
-  coder::array<double, 2U> PR800var;
-  coder::array<double, 2U> a__2;
-  coder::array<double, 2U> a__5;
-  coder::array<double, 2U> ccc1;
-  coder::array<double, 2U> f0;
-  coder::array<double, 2U> feature;
-  coder::array<double, 2U> feature1;
-  coder::array<double, 2U> mfcc_new;
-  coder::array<double, 2U> period_max;
-  coder::array<double, 2U> period_mean;
-  coder::array<double, 2U> period_min;
-  coder::array<double, 2U> period_var;
-  coder::array<double, 2U> r7;
-  coder::array<double, 2U> varargin_1;
-  coder::array<double, 2U> varargin_2;
-  coder::array<double, 2U> vzc;
-  coder::array<double, 1U> b_f0;
-  coder::array<double, 1U> c_f0;
-  coder::array<double, 1U> d_f0;
-  coder::array<double, 1U> e_f0;
-  coder::array<double, 1U> f_f0;
-  coder::array<double, 1U> g_f0;
-  coder::array<double, 1U> h_f0;
-  coder::array<double, 1U> r;
-  coder::array<double, 1U> r1;
-  coder::array<double, 1U> r2;
-  coder::array<double, 1U> r3;
-  coder::array<double, 1U> r4;
-  coder::array<double, 1U> r5;
-  coder::array<double, 1U> r6;
-  coder::array<double, 1U> sig;
-  coder::array<double, 1U> varargin_10;
-  coder::array<double, 1U> varargin_11;
-  coder::array<double, 1U> varargin_12;
-  coder::array<double, 1U> varargin_13;
-  coder::array<double, 1U> varargin_14;
-  coder::array<double, 1U> varargin_6;
-  coder::array<double, 1U> varargin_7;
-  coder::array<double, 1U> varargin_8;
-  coder::array<double, 1U> varargin_9;
-  coder::array<double, 1U> y;
-  coder::array<boolean_T, 2U> b_x;
-  double a__3[17];
-  double a__4[17];
-  double b_dv[17];
-  double tmp_data[16];
-  double LPC_mean[12];
-  double a__6[12];
-  double a__7[12];
-  double a__8[12];
-  double zcr_m;
-  int b_result[2];
-  int c_result[2];
-  int d_result[2];
-  int e_result[2];
-  int f_result[2];
-  int g_result[2];
-  int h_result[2];
-  int i_result[2];
-  int j_result[2];
-  int k_result[2];
-  int l_result[2];
-  int m_result[2];
-  int result[2];
-  int tmp_size[2];
-  int N;
-  int b_loop_ub;
-  int i;
-  int i1;
-  int k;
-  int loop_ub;
-  int nx;
-  signed char b_input_sizes_idx_1;
-  signed char c_input_sizes_idx_1;
-  signed char d_input_sizes_idx_1;
-  signed char e_input_sizes_idx_1;
-  signed char f_input_sizes_idx_1;
-  signed char g_input_sizes_idx_1;
-  signed char h_input_sizes_idx_1;
-  signed char i_input_sizes_idx_1;
-  signed char input_sizes_idx_1;
-  signed char j_input_sizes_idx_1;
-  signed char k_input_sizes_idx_1;
-  signed char l_input_sizes_idx_1;
-  signed char m_input_sizes_idx_1;
-  boolean_T empty_non_axis_sizes;
-  if (!isInitialized_SnoringRecognition) {
-    SnoringRecognition_initialize();
-  }
-  // 'classifier:2' N = min(length(w_starts), length(w_ends));
-  N = static_cast<int>(std::fmin(static_cast<double>(w_starts.size(1)),
-                                 static_cast<double>(w_ends.size(1))));
-  // 'classifier:4' period_mean = zeros(1, N);
-  period_mean.set_size(1, N);
-  // 'classifier:5' period_min = zeros(1, N);
-  period_min.set_size(1, N);
-  // 'classifier:6' period_max = zeros(1, N);
-  period_max.set_size(1, N);
-  // 'classifier:7' period_var = zeros(1, N);
-  period_var.set_size(1, N);
-  // 'classifier:8' mfcc_new = zeros(16, N);
-  mfcc_new.set_size(16, N);
-  loop_ub = N << 4;
-  if (static_cast<int>(loop_ub < 1200)) {
-    for (i = 0; i < loop_ub; i++) {
-      mfcc_new[i] = 0.0;
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
-    for (i = 0; i < loop_ub; i++) {
-      mfcc_new[i] = 0.0;
-    }
-  }
-  // 'classifier:9' Crest_Factor = zeros(1, N);
-  Crest_Factor.set_size(1, N);
-  // 'classifier:10' HZCRR = zeros(1, N);
-  HZCRR.set_size(1, N);
-  // 'classifier:11' Eh = zeros(1, N);
-  Eh.set_size(1, N);
-  // 'classifier:12' BARKEE = zeros(17, N);
-  BARKEE.set_size(17, N);
-  // 'classifier:13' LPCmean = zeros(12, N);
-  LPCmean.set_size(12, N);
-  // 'classifier:14' PR800mean = zeros(1, N);
-  PR800mean.set_size(1, N);
-  // 'classifier:15' PR800max = zeros(1, N);
-  PR800max.set_size(1, N);
-  // 'classifier:16' PR800min = zeros(1, N);
-  PR800min.set_size(1, N);
-  // 'classifier:17' PR800var = zeros(1, N);
-  PR800var.set_size(1, N);
-  // 'classifier:19' for i = 1:N
-  for (int b_i{0}; b_i < N; b_i++) {
-    double d;
+                coder::array<double, 2U> &predict_label) {
+    static const signed char b_iv[23] = {3, 18, 19, 1, 46, 47, 53, 34,
+                                         50, 30, 31, 51, 33, 42, 54, 29,
+                                         28, 32, 53, 7, 52, 27, 36};
+    coder::classreg::learning::classif::CompactClassificationEnsemble r;
+    coder::array<double, 2U> BARKEE;
+    coder::array<double, 2U> Crest_Factor;
+    coder::array<double, 2U> Eh;
+    coder::array<double, 2U> HZCRR;
+    coder::array<double, 2U> LPCmean;
+    coder::array<double, 2U> PR800max;
+    coder::array<double, 2U> PR800mean;
+    coder::array<double, 2U> PR800min;
+    coder::array<double, 2U> PR800var;
+    coder::array<double, 2U> a__2;
+    coder::array<double, 2U> a__5;
+    coder::array<double, 2U> f0;
+    coder::array<double, 2U> feature;
+    coder::array<double, 2U> mfcc_new;
+    coder::array<double, 2U> period_max;
+    coder::array<double, 2U> period_mean;
+    coder::array<double, 2U> period_min;
+    coder::array<double, 2U> period_var;
+    coder::array<double, 2U> varargin_1;
+    coder::array<double, 2U> varargin_2;
+    coder::array<double, 2U> vzc;
+    coder::array<double, 1U> ccc;
+    coder::array<double, 1U> sig;
+    coder::array<double, 1U> varargin_10;
+    coder::array<double, 1U> varargin_11;
+    coder::array<double, 1U> varargin_12;
+    coder::array<double, 1U> varargin_13;
+    coder::array<double, 1U> varargin_14;
+    coder::array<double, 1U> varargin_6;
+    coder::array<double, 1U> varargin_7;
+    coder::array<double, 1U> varargin_8;
+    coder::array<double, 1U> varargin_9;
+    coder::array<boolean_T, 2U> b_vzc;
+    double a__3[17];
+    double a__4[17];
+    double b_dv[17];
+    double LPC_mean[12];
+    double a__6[12];
+    double a__7[12];
+    double a__8[12];
+    double N;
     double wlen_tmp;
-    // 'classifier:20' wlen = fix(0.02 * fs);
-    wlen_tmp = std::trunc(0.02 * fs);
-    // 'classifier:21' inc = fix(0.5 * wlen);
-    // 'classifier:22' sig = x(w_starts(i):w_ends(i))';
-    zcr_m = w_starts[b_i];
-    d = w_ends[b_i];
-    if (zcr_m > d) {
-      k = -1;
-      nx = -1;
-    } else {
-      k = static_cast<int>(zcr_m) - 2;
-      nx = static_cast<int>(d) - 1;
+    int b_i;
+    int i;
+    int i1;
+    int loop_ub;
+    int sizes_idx_1;
+    signed char b_input_sizes_idx_1;
+    signed char c_input_sizes_idx_1;
+    signed char d_input_sizes_idx_1;
+    signed char e_input_sizes_idx_1;
+    signed char f_input_sizes_idx_1;
+    signed char g_input_sizes_idx_1;
+    signed char h_input_sizes_idx_1;
+    signed char i_input_sizes_idx_1;
+    signed char input_sizes_idx_1;
+    signed char j_input_sizes_idx_1;
+    signed char k_input_sizes_idx_1;
+    signed char l_input_sizes_idx_1;
+    signed char m_input_sizes_idx_1;
+    boolean_T empty_non_axis_sizes;
+    // 'classifier:2' N = min(length(w_starts), length(w_ends));
+    N = coder::internal::minimum2(static_cast<double>(w_starts.size(1)),
+                                  static_cast<double>(w_ends.size(1)));
+    // 'classifier:4' period_mean = zeros(1, N);
+    period_mean.set_size(1, static_cast<int>(N));
+    // 'classifier:5' period_min = zeros(1, N);
+    period_min.set_size(1, static_cast<int>(N));
+    // 'classifier:6' period_max = zeros(1, N);
+    period_max.set_size(1, static_cast<int>(N));
+    // 'classifier:7' period_var = zeros(1, N);
+    period_var.set_size(1, static_cast<int>(N));
+    // 'classifier:8' mfcc_new = zeros(16, N);
+    mfcc_new.set_size(16, static_cast<int>(N));
+    loop_ub = static_cast<int>(N) << 4;
+    for (i = 0; i < loop_ub; i++) {
+        mfcc_new[i] = 0.0;
     }
-    // 'classifier:23' sig = sig - mean(sig);
-    loop_ub = nx - k;
-    sig.set_size(loop_ub);
-    for (nx = 0; nx < loop_ub; nx++) {
-      sig[nx] = x[(k + nx) + 1];
+    // 'classifier:9' Crest_Factor = zeros(1, N);
+    Crest_Factor.set_size(1, static_cast<int>(N));
+    // 'classifier:10' HZCRR = zeros(1, N);
+    HZCRR.set_size(1, static_cast<int>(N));
+    // 'classifier:11' Eh = zeros(1, N);
+    Eh.set_size(1, static_cast<int>(N));
+    // 'classifier:12' BARKEE = zeros(17, N);
+    BARKEE.set_size(17, static_cast<int>(N));
+    // 'classifier:13' LPCmean = zeros(12, N);
+    LPCmean.set_size(12, static_cast<int>(N));
+    // 'classifier:14' PR800mean = zeros(1, N);
+    PR800mean.set_size(1, static_cast<int>(N));
+    // 'classifier:15' PR800max = zeros(1, N);
+    PR800max.set_size(1, static_cast<int>(N));
+    // 'classifier:16' PR800min = zeros(1, N);
+    PR800min.set_size(1, static_cast<int>(N));
+    // 'classifier:17' PR800var = zeros(1, N);
+    PR800var.set_size(1, static_cast<int>(N));
+    // 'classifier:19' for i = 1:N
+    i = static_cast<int>(N);
+    for (b_i = 0; b_i < i; b_i++) {
+        double d;
+        // 'classifier:20' wlen = fix(0.02 * fs);
+        wlen_tmp = 0.02 * fs;
+        coder::b_fix(&wlen_tmp);
+        // 'classifier:21' inc = fix(0.5 * wlen);
+        // 'classifier:22' sig = x(w_starts(i):w_ends(i))';
+        N = w_starts[b_i];
+        d = w_ends[b_i];
+        if (N > d) {
+            i1 = 0;
+            sizes_idx_1 = 0;
+        } else {
+            i1 = static_cast<int>(N) - 1;
+            sizes_idx_1 = static_cast<int>(d);
+        }
+        loop_ub = sizes_idx_1 - i1;
+        sig.set_size(loop_ub);
+        for (sizes_idx_1 = 0; sizes_idx_1 < loop_ub; sizes_idx_1++) {
+            sig[sizes_idx_1] = x[i1 + sizes_idx_1];
+        }
+        // 'classifier:23' sig = sig - mean(sig);
+        N = coder::mean(sig);
+        loop_ub = sig.size(0);
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            sig[i1] = sig[i1] - N;
+        }
+        // 'classifier:24' sig = sig / max(abs(sig));
+        coder::b_abs(sig, ccc);
+        N = coder::internal::maximum(ccc);
+        loop_ub = sig.size(0);
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            sig[i1] = sig[i1] / N;
+        }
+        // 'classifier:25' sig1 = sig;
+        // 'classifier:27' [Eh1, ~] = HENR(sig1, fs);
+        HENR(sig, fs, &Eh[b_i], &N);
+        // 'classifier:28' Eh(i) = Eh1;
+        // 'classifier:29' f0 = [];
+        f0.set_size(0, 0);
+        //  适配Coder
+        // 'classifier:31' switch fs
+        switch (static_cast<int>(fs)) {
+            case 8000:
+                // 'classifier:32' case 8000
+                // 'classifier:33' f0 = pitch(sig1, 8000, 'WindowLength', 400,
+                // 'OverlapLength', 200);
+                coder::pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+            case 11025:
+                // 'classifier:34' case 11025
+                // 'classifier:35' f0 = pitch(sig1, 11025, 'WindowLength', 551,
+                // 'OverlapLength', 276);
+                coder::b_pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+            case 12000:
+                // 'classifier:36' case 12000
+                // 'classifier:37' f0 = pitch(sig1, 12000, 'WindowLength', 600,
+                // 'OverlapLength', 300);
+                coder::c_pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+            case 22050:
+                // 'classifier:38' case 22050
+                // 'classifier:39' f0 = pitch(sig1, 22050, 'WindowLength', 1103,
+                // 'OverlapLength', 551);
+                coder::d_pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+            case 24000:
+                // 'classifier:40' case 24000
+                // 'classifier:41' f0 = pitch(sig1, 24000, 'WindowLength', 1200,
+                // 'OverlapLength', 600);
+                coder::e_pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+            case 44100:
+                // 'classifier:42' case 44100
+                // 'classifier:43' f0 = pitch(sig1, 44100, 'WindowLength', 2205,
+                // 'OverlapLength', 1103);
+                coder::f_pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+            case 48000:
+                // 'classifier:44' case 48000
+                // 'classifier:45' f0 = pitch(sig1, 48000, 'WindowLength', 2400,
+                // 'OverlapLength', 1200);
+                coder::g_pitch(sig, ccc);
+                f0.set_size(ccc.size(0), 1);
+                loop_ub = ccc.size(0);
+                for (i1 = 0; i1 < loop_ub; i1++) {
+                    f0[i1] = ccc[i1];
+                }
+                break;
+        }
+        // 'classifier:48' period_mean(i) = mean(f0);
+        coder::mean(f0, vzc);
+        period_mean[b_i] = vzc[0];
+        // 计算基音周期的平均值
+        // 'classifier:49' period_min(i) = min(f0);
+        coder::internal::minimum(f0, vzc);
+        period_min[b_i] = vzc[0];
+        // 计算基音周期的最小值
+        // 'classifier:50' period_max(i) = max(f0);
+        coder::internal::maximum(f0, vzc);
+        period_max[b_i] = vzc[0];
+        // 计算基音周期的最大值
+        // 'classifier:51' period_var(i) = var(f0);
+        coder::var(f0, vzc);
+        period_var[b_i] = vzc[0];
+        // 计算基音周期的方差
+        // 'classifier:53' [vzc, ~] = FeatureTimeZeroCrossingRate(sig1, wlen, inc,
+        // fs);
+        N = 0.5 * wlen_tmp;
+        coder::b_fix(&N);
+        FeatureTimeZeroCrossingRate(sig, wlen_tmp, N, fs, vzc, a__2);
+        // 'classifier:54' zcr_m = 1.5 * mean(vzc);
+        N = 1.5 * coder::mean(vzc);
+        // 'classifier:55' HZCRR(i) = sum(vzc > zcr_m) / length(vzc);
+        b_vzc.set_size(1, vzc.size(1));
+        loop_ub = vzc.size(1);
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            b_vzc[i1] = (vzc[i1] > N);
+        }
+        HZCRR[b_i] = static_cast<double>(coder::b_combineVectorElements(b_vzc)) /
+                     static_cast<double>(vzc.size(1));
+        // 'classifier:57' framesize = fix(0.02 * fs);
+        // 帧长20ms，帧移0.25 使用这个
+        // 'classifier:58' inc = fix(0.25 * framesize);
+        // 'classifier:59' ccc1 = mfcc_m(sig1, fs, 16, framesize, inc);
+        N = 0.25 * wlen_tmp;
+        coder::b_fix(&N);
+        mfcc_m(SD, sig, fs, wlen_tmp, N, f0);
+        // sig1
+        // 'classifier:60' ccc = mean(ccc1)';
+        coder::mean(f0, vzc);
+        ccc.set_size(vzc.size(1));
+        loop_ub = vzc.size(1);
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            ccc[i1] = vzc[i1];
+        }
+        // sig1
+        // 'classifier:61' mfcc_new(:, i) = ccc;
+        for (i1 = 0; i1 < 16; i1++) {
+            mfcc_new[i1 + 16 * b_i] = ccc[i1];
+        }
+        // 'classifier:63' [CF_mean] = CrestFactor(sig1, fs);
+        Crest_Factor[b_i] = CrestFactor(sig, fs);
+        // sig1
+        // 'classifier:64' Crest_Factor(i) = CF_mean;
+        // 'classifier:66' [BARK1, ~, ~] = BARKenergy(sig1, fs);
+        BARKenergy(sig, fs, b_dv, a__3, a__4);
+        memcpy(&(*(double (*)[17]) &BARKEE[17 * b_i])[0], &b_dv[0],
+               17U * sizeof(double));
+        //
+        //  BARKse(:,i) =BPSE1;
+        // 'classifier:68' BARKEE(:, i) = BARK1;
+        // ----------------------提取LPC特征----------------------------
+        // 'classifier:70' [~, LPC_mean, ~, ~, ~] = LPCFeature(sig1, fs);
+        LPCFeature(sig, fs, a__5, LPC_mean, a__6, a__7, a__8);
+        // 'classifier:71' LPCmean(:, i) = LPC_mean';
+        for (i1 = 0; i1 < 12; i1++) {
+            LPCmean[i1 + 12 * b_i] = LPC_mean[i1];
+        }
+        //  %---------------------PR800-----------------------------------
+        // 'classifier:73' [PR800_mean, PR800_max, PR800_min, PR800_var] =
+        // PR800(sig1, fs);
+        PR800(sig, fs, &PR800mean[b_i], &PR800max[b_i], &PR800min[b_i],
+              &PR800var[b_i]);
+        // 'classifier:74' PR800mean(i) = PR800_mean;
+        // 'classifier:75' PR800max(i) = PR800_max;
+        // 'classifier:76' PR800min(i) = PR800_min;
+        // 'classifier:77' PR800var(i) = PR800_var;
     }
-    zcr_m =
-        coder::blockedSummation(sig, loop_ub) / static_cast<double>(loop_ub);
-    sig.set_size(loop_ub);
-    for (nx = 0; nx < loop_ub; nx++) {
-      sig[nx] = x[(k + nx) + 1] - zcr_m;
-    }
-    // 'classifier:24' sig = sig / max(abs(sig));
-    nx = sig.size(0);
-    y.set_size(sig.size(0));
-    for (k = 0; k < nx; k++) {
-      y[k] = std::abs(sig[k]);
-    }
-    zcr_m = coder::internal::maximum(y);
-    loop_ub = sig.size(0);
-    for (k = 0; k < loop_ub; k++) {
-      sig[k] = sig[k] / zcr_m;
-    }
-    // 'classifier:25' sig1 = sig;
-    // 'classifier:27' [Eh1, ~] = HENR(sig1, fs);
-    HENR(sig, fs, &Eh[b_i], &zcr_m);
-    // 'classifier:28' Eh(i) = Eh1;
-    // 'classifier:29' f0 = [];
-    f0.set_size(0, 0);
-    //  适配Coder
-    // 'classifier:31' switch fs
-    switch (static_cast<int>(fs)) {
-    case 8000:
-      // 'classifier:32' case 8000
-      // 'classifier:33' f0 = pitch(sig1, 8000, 'WindowLength', 400,
-      // 'OverlapLength', 200);
-      coder::pitch(sig, r);
-      b_f0.set_size(r.size(0));
-      loop_ub = r.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        b_f0[k] = r[k];
-      }
-      f0.set_size(b_f0.size(0), 1);
-      loop_ub = b_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = b_f0[k];
-      }
-      break;
-    case 11025:
-      // 'classifier:34' case 11025
-      // 'classifier:35' f0 = pitch(sig1, 11025, 'WindowLength', 551,
-      // 'OverlapLength', 276);
-      coder::b_pitch(sig, r1);
-      c_f0.set_size(r1.size(0));
-      loop_ub = r1.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        c_f0[k] = r1[k];
-      }
-      f0.set_size(c_f0.size(0), 1);
-      loop_ub = c_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = c_f0[k];
-      }
-      break;
-    case 12000:
-      // 'classifier:36' case 12000
-      // 'classifier:37' f0 = pitch(sig1, 12000, 'WindowLength', 600,
-      // 'OverlapLength', 300);
-      coder::c_pitch(sig, r2);
-      d_f0.set_size(r2.size(0));
-      loop_ub = r2.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        d_f0[k] = r2[k];
-      }
-      f0.set_size(d_f0.size(0), 1);
-      loop_ub = d_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = d_f0[k];
-      }
-      break;
-    case 22050:
-      // 'classifier:38' case 22050
-      // 'classifier:39' f0 = pitch(sig1, 22050, 'WindowLength', 1103,
-      // 'OverlapLength', 551);
-      coder::d_pitch(sig, r3);
-      e_f0.set_size(r3.size(0));
-      loop_ub = r3.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        e_f0[k] = r3[k];
-      }
-      f0.set_size(e_f0.size(0), 1);
-      loop_ub = e_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = e_f0[k];
-      }
-      break;
-    case 24000:
-      // 'classifier:40' case 24000
-      // 'classifier:41' f0 = pitch(sig1, 24000, 'WindowLength', 1200,
-      // 'OverlapLength', 600);
-      coder::e_pitch(sig, r4);
-      f_f0.set_size(r4.size(0));
-      loop_ub = r4.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f_f0[k] = r4[k];
-      }
-      f0.set_size(f_f0.size(0), 1);
-      loop_ub = f_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = f_f0[k];
-      }
-      break;
-    case 44100:
-      // 'classifier:42' case 44100
-      // 'classifier:43' f0 = pitch(sig1, 44100, 'WindowLength', 2205,
-      // 'OverlapLength', 1103);
-      coder::f_pitch(sig, r5);
-      g_f0.set_size(r5.size(0));
-      loop_ub = r5.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        g_f0[k] = r5[k];
-      }
-      f0.set_size(g_f0.size(0), 1);
-      loop_ub = g_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = g_f0[k];
-      }
-      break;
-    case 48000:
-      // 'classifier:44' case 48000
-      // 'classifier:45' f0 = pitch(sig1, 48000, 'WindowLength', 2400,
-      // 'OverlapLength', 1200);
-      coder::g_pitch(sig, r6);
-      h_f0.set_size(r6.size(0));
-      loop_ub = r6.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        h_f0[k] = r6[k];
-      }
-      f0.set_size(h_f0.size(0), 1);
-      loop_ub = h_f0.size(0);
-      for (k = 0; k < loop_ub; k++) {
-        f0[k] = h_f0[k];
-      }
-      break;
-    }
-    // 'classifier:48' period_mean(i) = mean(f0);
-    coder::mean(f0, tmp_data, tmp_size);
-    period_mean[b_i] = tmp_data[0];
-    // 计算基音周期的平均值
-    // 'classifier:49' period_min(i) = min(f0);
-    coder::internal::minimum(f0, (double *)&zcr_m, tmp_size);
-    period_min[b_i] = zcr_m;
-    // 计算基音周期的最小值
-    // 'classifier:50' period_max(i) = max(f0);
-    coder::internal::maximum(f0, (double *)&zcr_m, tmp_size);
-    period_max[b_i] = zcr_m;
-    // 计算基音周期的最大值
-    // 'classifier:51' period_var(i) = var(f0);
-    coder::var(f0, (double *)&zcr_m, tmp_size);
-    period_var[b_i] = zcr_m;
-    // 计算基音周期的方差
-    // 'classifier:53' [vzc, ~] = FeatureTimeZeroCrossingRate(sig1, wlen, inc,
-    // fs);
-    FeatureTimeZeroCrossingRate(sig, wlen_tmp, std::trunc(0.5 * wlen_tmp), fs,
-                                vzc, a__2);
-    // 'classifier:54' zcr_m = 1.5 * mean(vzc);
-    zcr_m = 1.5 * (coder::combineVectorElements(vzc) /
-                   static_cast<double>(vzc.size(1)));
-    // 'classifier:55' HZCRR(i) = sum(vzc > zcr_m) / length(vzc);
-    b_x.set_size(1, vzc.size(1));
-    loop_ub = vzc.size(1);
-    for (k = 0; k < loop_ub; k++) {
-      b_x[k] = (vzc[k] > zcr_m);
-    }
-    nx = b_x.size(1);
-    if (b_x.size(1) == 0) {
-      loop_ub = 0;
-    } else {
-      loop_ub = b_x[0];
-      for (k = 2; k <= nx; k++) {
-        loop_ub += b_x[k - 1];
-      }
-    }
-    HZCRR[b_i] =
-        static_cast<double>(loop_ub) / static_cast<double>(vzc.size(1));
-    // 'classifier:57' framesize = fix(0.02 * fs);
-    // 帧长20ms，帧移0.25 使用这个
-    // 'classifier:58' inc = fix(0.25 * framesize);
-    // 'classifier:59' ccc1 = mfcc_m(sig1, fs, 16, framesize, inc);
-    mfcc_m(sig, fs, wlen_tmp, std::trunc(0.25 * wlen_tmp), r7);
-    ccc1.set_size(r7.size(0), r7.size(1));
-    loop_ub = r7.size(0) * r7.size(1);
-    for (k = 0; k < loop_ub; k++) {
-      ccc1[k] = r7[k];
-    }
-    // sig1
-    // 'classifier:60' ccc = mean(ccc1)';
-    // sig1
-    // 'classifier:61' mfcc_new(:, i) = ccc;
-    coder::mean(ccc1, tmp_data, tmp_size);
-    for (k = 0; k < 16; k++) {
-      mfcc_new[k + 16 * b_i] = tmp_data[k];
-    }
-    // 'classifier:63' [CF_mean] = CrestFactor(sig1, fs);
-    Crest_Factor[b_i] = CrestFactor(sig, fs);
-    // sig1
-    // 'classifier:64' Crest_Factor(i) = CF_mean;
-    // 'classifier:66' [BARK1, ~, ~] = BARKenergy(sig1, fs);
-    BARKenergy(sig, fs, b_dv, a__3, a__4);
-    std::copy(&b_dv[0], &b_dv[17], &(*(double(*)[17]) & BARKEE[17 * b_i])[0]);
-    //
-    //  BARKse(:,i) =BPSE1;
-    // 'classifier:68' BARKEE(:, i) = BARK1;
-    // ----------------------提取LPC特征----------------------------
-    // 'classifier:70' [~, LPC_mean, ~, ~, ~] = LPCFeature(sig1, fs);
-    LPCFeature(sig, fs, a__5, LPC_mean, a__6, a__7, a__8);
-    // 'classifier:71' LPCmean(:, i) = LPC_mean';
-    for (k = 0; k < 12; k++) {
-      LPCmean[k + 12 * b_i] = LPC_mean[k];
-    }
-    //  %---------------------PR800-----------------------------------
-    // 'classifier:73' [PR800_mean, PR800_max, PR800_min, PR800_var] =
-    // PR800(sig1, fs);
-    PR800(sig, fs, &PR800mean[b_i], &PR800max[b_i], &PR800min[b_i],
-          &PR800var[b_i]);
-    // 'classifier:74' PR800mean(i) = PR800_mean;
-    // 'classifier:75' PR800max(i) = PR800_max;
-    // 'classifier:76' PR800min(i) = PR800_min;
-    // 'classifier:77' PR800var(i) = PR800_var;
-  }
-  // 'classifier:80' feature1 = [mfcc_new', BARKEE', LPCmean', period_mean',
-  // period_min', period_max', period_var', Crest_Factor', HZCRR', Eh',
-  // PR800mean', PR800max', PR800min', PR800var'];
-  varargin_1.set_size(mfcc_new.size(1), 16);
-  loop_ub = mfcc_new.size(1);
-  if (static_cast<int>((mfcc_new.size(1) << 4) < 1200)) {
+    // 'classifier:80' feature1 = [mfcc_new', BARKEE', LPCmean', period_mean',
+    // period_min', period_max', period_var', Crest_Factor', HZCRR', Eh',
+    // PR800mean', PR800max', PR800min', PR800var'];
+    varargin_1.set_size(mfcc_new.size(1), 16);
+    loop_ub = mfcc_new.size(1);
     for (i = 0; i < 16; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        varargin_1[i1 + varargin_1.size(0) * i] = mfcc_new[i + 16 * i1];
-      }
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            varargin_1[i1 + varargin_1.size(0) * i] = mfcc_new[i + 16 * i1];
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i1, i)
-
-    for (i = 0; i < 16; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        varargin_1[i1 + varargin_1.size(0) * i] = mfcc_new[i + 16 * i1];
-      }
-    }
-  }
-  varargin_2.set_size(BARKEE.size(1), 17);
-  loop_ub = BARKEE.size(1);
-  if (static_cast<int>(17 * BARKEE.size(1) < 1200)) {
+    varargin_2.set_size(BARKEE.size(1), 17);
+    loop_ub = BARKEE.size(1);
     for (i = 0; i < 17; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        varargin_2[i1 + varargin_2.size(0) * i] = BARKEE[i + 17 * i1];
-      }
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            varargin_2[i1 + varargin_2.size(0) * i] = BARKEE[i + 17 * i1];
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i1, i)
-
-    for (i = 0; i < 17; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        varargin_2[i1 + varargin_2.size(0) * i] = BARKEE[i + 17 * i1];
-      }
-    }
-  }
-  a__5.set_size(LPCmean.size(1), 12);
-  loop_ub = LPCmean.size(1);
-  if (static_cast<int>(12 * LPCmean.size(1) < 1200)) {
+    a__5.set_size(LPCmean.size(1), 12);
+    loop_ub = LPCmean.size(1);
     for (i = 0; i < 12; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        a__5[i1 + a__5.size(0) * i] = LPCmean[i + 12 * i1];
-      }
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            a__5[i1 + a__5.size(0) * i] = LPCmean[i + 12 * i1];
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i1, i)
-
-    for (i = 0; i < 12; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        a__5[i1 + a__5.size(0) * i] = LPCmean[i + 12 * i1];
-      }
-    }
-  }
-  sig.set_size(period_mean.size(1));
-  loop_ub = period_mean.size(1);
-  if (static_cast<int>(period_mean.size(1) < 1200)) {
+    ccc.set_size(period_mean.size(1));
+    loop_ub = period_mean.size(1);
     for (i = 0; i < loop_ub; i++) {
-      sig[i] = period_mean[i];
+        ccc[i] = period_mean[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    sig.set_size(period_min.size(1));
+    loop_ub = period_min.size(1);
     for (i = 0; i < loop_ub; i++) {
-      sig[i] = period_mean[i];
+        sig[i] = period_min[i];
     }
-  }
-  y.set_size(period_min.size(1));
-  loop_ub = period_min.size(1);
-  if (static_cast<int>(period_min.size(1) < 1200)) {
+    varargin_6.set_size(period_max.size(1));
+    loop_ub = period_max.size(1);
     for (i = 0; i < loop_ub; i++) {
-      y[i] = period_min[i];
+        varargin_6[i] = period_max[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    varargin_7.set_size(period_var.size(1));
+    loop_ub = period_var.size(1);
     for (i = 0; i < loop_ub; i++) {
-      y[i] = period_min[i];
+        varargin_7[i] = period_var[i];
     }
-  }
-  varargin_6.set_size(period_max.size(1));
-  loop_ub = period_max.size(1);
-  if (static_cast<int>(period_max.size(1) < 1200)) {
+    varargin_8.set_size(Crest_Factor.size(1));
+    loop_ub = Crest_Factor.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_6[i] = period_max[i];
+        varargin_8[i] = Crest_Factor[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    varargin_9.set_size(HZCRR.size(1));
+    loop_ub = HZCRR.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_6[i] = period_max[i];
+        varargin_9[i] = HZCRR[i];
     }
-  }
-  varargin_7.set_size(period_var.size(1));
-  loop_ub = period_var.size(1);
-  if (static_cast<int>(period_var.size(1) < 1200)) {
+    varargin_10.set_size(Eh.size(1));
+    loop_ub = Eh.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_7[i] = period_var[i];
+        varargin_10[i] = Eh[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    varargin_11.set_size(PR800mean.size(1));
+    loop_ub = PR800mean.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_7[i] = period_var[i];
+        varargin_11[i] = PR800mean[i];
     }
-  }
-  varargin_8.set_size(Crest_Factor.size(1));
-  loop_ub = Crest_Factor.size(1);
-  if (static_cast<int>(Crest_Factor.size(1) < 1200)) {
+    varargin_12.set_size(PR800max.size(1));
+    loop_ub = PR800max.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_8[i] = Crest_Factor[i];
+        varargin_12[i] = PR800max[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    varargin_13.set_size(PR800min.size(1));
+    loop_ub = PR800min.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_8[i] = Crest_Factor[i];
+        varargin_13[i] = PR800min[i];
     }
-  }
-  varargin_9.set_size(HZCRR.size(1));
-  loop_ub = HZCRR.size(1);
-  if (static_cast<int>(HZCRR.size(1) < 1200)) {
+    varargin_14.set_size(PR800var.size(1));
+    loop_ub = PR800var.size(1);
     for (i = 0; i < loop_ub; i++) {
-      varargin_9[i] = HZCRR[i];
+        varargin_14[i] = PR800var[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    if (varargin_1.size(0) != 0) {
+        b_i = varargin_1.size(0);
+    } else if (varargin_2.size(0) != 0) {
+        b_i = varargin_2.size(0);
+    } else if (a__5.size(0) != 0) {
+        b_i = a__5.size(0);
+    } else if (ccc.size(0) != 0) {
+        b_i = ccc.size(0);
+    } else if (sig.size(0) != 0) {
+        b_i = sig.size(0);
+    } else if (varargin_6.size(0) != 0) {
+        b_i = varargin_6.size(0);
+    } else if (varargin_7.size(0) != 0) {
+        b_i = varargin_7.size(0);
+    } else if (varargin_8.size(0) != 0) {
+        b_i = varargin_8.size(0);
+    } else if (varargin_9.size(0) != 0) {
+        b_i = varargin_9.size(0);
+    } else if (varargin_10.size(0) != 0) {
+        b_i = varargin_10.size(0);
+    } else if (varargin_11.size(0) != 0) {
+        b_i = varargin_11.size(0);
+    } else if (varargin_12.size(0) != 0) {
+        b_i = varargin_12.size(0);
+    } else if (varargin_13.size(0) != 0) {
+        b_i = varargin_13.size(0);
+    } else if (varargin_14.size(0) != 0) {
+        b_i = varargin_14.size(0);
+    } else {
+        b_i = 0;
+    }
+    empty_non_axis_sizes = (b_i == 0);
+    if (empty_non_axis_sizes || (varargin_1.size(0) != 0)) {
+        input_sizes_idx_1 = 16;
+    } else {
+        input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_2.size(0) != 0)) {
+        b_input_sizes_idx_1 = 17;
+    } else {
+        b_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (a__5.size(0) != 0)) {
+        c_input_sizes_idx_1 = 12;
+    } else {
+        c_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (ccc.size(0) != 0)) {
+        d_input_sizes_idx_1 = 1;
+    } else {
+        d_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (sig.size(0) != 0)) {
+        e_input_sizes_idx_1 = 1;
+    } else {
+        e_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_6.size(0) != 0)) {
+        f_input_sizes_idx_1 = 1;
+    } else {
+        f_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_7.size(0) != 0)) {
+        g_input_sizes_idx_1 = 1;
+    } else {
+        g_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_8.size(0) != 0)) {
+        h_input_sizes_idx_1 = 1;
+    } else {
+        h_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_9.size(0) != 0)) {
+        i_input_sizes_idx_1 = 1;
+    } else {
+        i_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_10.size(0) != 0)) {
+        j_input_sizes_idx_1 = 1;
+    } else {
+        j_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_11.size(0) != 0)) {
+        k_input_sizes_idx_1 = 1;
+    } else {
+        k_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_12.size(0) != 0)) {
+        l_input_sizes_idx_1 = 1;
+    } else {
+        l_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_13.size(0) != 0)) {
+        m_input_sizes_idx_1 = 1;
+    } else {
+        m_input_sizes_idx_1 = 0;
+    }
+    if (empty_non_axis_sizes || (varargin_14.size(0) != 0)) {
+        sizes_idx_1 = 1;
+    } else {
+        sizes_idx_1 = 0;
+    }
+    f0.set_size(b_i, ((((((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                c_input_sizes_idx_1) +
+                               d_input_sizes_idx_1) +
+                              e_input_sizes_idx_1) +
+                             f_input_sizes_idx_1) +
+                            g_input_sizes_idx_1) +
+                           h_input_sizes_idx_1) +
+                          i_input_sizes_idx_1) +
+                         j_input_sizes_idx_1) +
+                        k_input_sizes_idx_1) +
+                       l_input_sizes_idx_1) +
+                      m_input_sizes_idx_1) +
+                     sizes_idx_1);
+    loop_ub = input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      varargin_9[i] = HZCRR[i];
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * i] = varargin_1[i1 + b_i * i];
+        }
     }
-  }
-  varargin_10.set_size(Eh.size(1));
-  loop_ub = Eh.size(1);
-  if (static_cast<int>(Eh.size(1) < 1200)) {
+    loop_ub = b_input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      varargin_10[i] = Eh[i];
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * (i + input_sizes_idx_1)] = varargin_2[i1 + b_i * i];
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    loop_ub = c_input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      varargin_10[i] = Eh[i];
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * ((i + input_sizes_idx_1) + b_input_sizes_idx_1)] =
+                    a__5[i1 + b_i * i];
+        }
     }
-  }
-  varargin_11.set_size(PR800mean.size(1));
-  loop_ub = PR800mean.size(1);
-  if (static_cast<int>(PR800mean.size(1) < 1200)) {
+    loop_ub = d_input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      varargin_11[i] = PR800mean[i];
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * ((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                  c_input_sizes_idx_1)] = ccc[i1];
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    loop_ub = e_input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      varargin_11[i] = PR800mean[i];
-    }
-  }
-  varargin_12.set_size(PR800max.size(1));
-  loop_ub = PR800max.size(1);
-  if (static_cast<int>(PR800max.size(1) < 1200)) {
-    for (i = 0; i < loop_ub; i++) {
-      varargin_12[i] = PR800max[i];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
-    for (i = 0; i < loop_ub; i++) {
-      varargin_12[i] = PR800max[i];
-    }
-  }
-  varargin_13.set_size(PR800min.size(1));
-  loop_ub = PR800min.size(1);
-  if (static_cast<int>(PR800min.size(1) < 1200)) {
-    for (i = 0; i < loop_ub; i++) {
-      varargin_13[i] = PR800min[i];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
-    for (i = 0; i < loop_ub; i++) {
-      varargin_13[i] = PR800min[i];
-    }
-  }
-  varargin_14.set_size(PR800var.size(1));
-  loop_ub = PR800var.size(1);
-  if (static_cast<int>(PR800var.size(1) < 1200)) {
-    for (i = 0; i < loop_ub; i++) {
-      varargin_14[i] = PR800var[i];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
-    for (i = 0; i < loop_ub; i++) {
-      varargin_14[i] = PR800var[i];
-    }
-  }
-  if (varargin_1.size(0) != 0) {
-    nx = varargin_1.size(0);
-  } else if (varargin_2.size(0) != 0) {
-    nx = varargin_2.size(0);
-  } else if (a__5.size(0) != 0) {
-    nx = a__5.size(0);
-  } else if (sig.size(0) != 0) {
-    nx = sig.size(0);
-  } else if (y.size(0) != 0) {
-    nx = y.size(0);
-  } else if (varargin_6.size(0) != 0) {
-    nx = varargin_6.size(0);
-  } else if (varargin_7.size(0) != 0) {
-    nx = varargin_7.size(0);
-  } else if (varargin_8.size(0) != 0) {
-    nx = varargin_8.size(0);
-  } else if (varargin_9.size(0) != 0) {
-    nx = varargin_9.size(0);
-  } else if (varargin_10.size(0) != 0) {
-    nx = varargin_10.size(0);
-  } else if (varargin_11.size(0) != 0) {
-    nx = varargin_11.size(0);
-  } else if (varargin_12.size(0) != 0) {
-    nx = varargin_12.size(0);
-  } else if (varargin_13.size(0) != 0) {
-    nx = varargin_13.size(0);
-  } else if (varargin_14.size(0) != 0) {
-    nx = varargin_14.size(0);
-  } else {
-    nx = 0;
-  }
-  empty_non_axis_sizes = (nx == 0);
-  if (empty_non_axis_sizes || (varargin_1.size(0) != 0)) {
-    input_sizes_idx_1 = 16;
-  } else {
-    input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_2.size(0) != 0)) {
-    b_input_sizes_idx_1 = 17;
-  } else {
-    b_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (a__5.size(0) != 0)) {
-    c_input_sizes_idx_1 = 12;
-  } else {
-    c_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (sig.size(0) != 0)) {
-    d_input_sizes_idx_1 = 1;
-  } else {
-    d_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (y.size(0) != 0)) {
-    e_input_sizes_idx_1 = 1;
-  } else {
-    e_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_6.size(0) != 0)) {
-    f_input_sizes_idx_1 = 1;
-  } else {
-    f_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_7.size(0) != 0)) {
-    g_input_sizes_idx_1 = 1;
-  } else {
-    g_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_8.size(0) != 0)) {
-    h_input_sizes_idx_1 = 1;
-  } else {
-    h_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_9.size(0) != 0)) {
-    i_input_sizes_idx_1 = 1;
-  } else {
-    i_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_10.size(0) != 0)) {
-    j_input_sizes_idx_1 = 1;
-  } else {
-    j_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_11.size(0) != 0)) {
-    k_input_sizes_idx_1 = 1;
-  } else {
-    k_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_12.size(0) != 0)) {
-    l_input_sizes_idx_1 = 1;
-  } else {
-    l_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_13.size(0) != 0)) {
-    m_input_sizes_idx_1 = 1;
-  } else {
-    m_input_sizes_idx_1 = 0;
-  }
-  if (empty_non_axis_sizes || (varargin_14.size(0) != 0)) {
-    N = 1;
-  } else {
-    N = 0;
-  }
-  tmp_size[0] = nx;
-  tmp_size[1] = input_sizes_idx_1;
-  result[0] = nx;
-  result[1] = b_input_sizes_idx_1;
-  b_result[0] = nx;
-  b_result[1] = c_input_sizes_idx_1;
-  c_result[0] = nx;
-  c_result[1] = d_input_sizes_idx_1;
-  d_result[0] = nx;
-  d_result[1] = e_input_sizes_idx_1;
-  e_result[0] = nx;
-  e_result[1] = f_input_sizes_idx_1;
-  f_result[0] = nx;
-  f_result[1] = g_input_sizes_idx_1;
-  g_result[0] = nx;
-  g_result[1] = h_input_sizes_idx_1;
-  h_result[0] = nx;
-  h_result[1] = i_input_sizes_idx_1;
-  i_result[0] = nx;
-  i_result[1] = j_input_sizes_idx_1;
-  j_result[0] = nx;
-  j_result[1] = k_input_sizes_idx_1;
-  k_result[0] = nx;
-  k_result[1] = l_input_sizes_idx_1;
-  l_result[0] = nx;
-  l_result[1] = m_input_sizes_idx_1;
-  m_result[0] = nx;
-  m_result[1] = N;
-  feature1.set_size(nx, ((((((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * (((input_sizes_idx_1 + b_input_sizes_idx_1) +
                                    c_input_sizes_idx_1) +
-                                  d_input_sizes_idx_1) +
-                                 e_input_sizes_idx_1) +
-                                f_input_sizes_idx_1) +
-                               g_input_sizes_idx_1) +
-                              h_input_sizes_idx_1) +
-                             i_input_sizes_idx_1) +
-                            j_input_sizes_idx_1) +
-                           k_input_sizes_idx_1) +
-                          l_input_sizes_idx_1) +
-                         m_input_sizes_idx_1) +
-                            N);
-  loop_ub = input_sizes_idx_1;
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(           \
-    i1, b_loop_ub, i)
-
-  for (i = 0; i < loop_ub; i++) {
-    b_loop_ub = tmp_size[0];
-    for (i1 = 0; i1 < b_loop_ub; i1++) {
-      feature1[i1 + feature1.size(0) * i] = varargin_1[i1 + tmp_size[0] * i];
+                                  d_input_sizes_idx_1)] = sig[i1];
+        }
     }
-  }
-  loop_ub = result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(           \
-    i1, b_loop_ub, i)
-
-  for (i = 0; i < loop_ub; i++) {
-    b_loop_ub = result[0];
-    for (i1 = 0; i1 < b_loop_ub; i1++) {
-      feature1[i1 + feature1.size(0) * (i + tmp_size[1])] =
-          varargin_2[i1 + varargin_2.size(0) * i];
-    }
-  }
-  loop_ub = b_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(           \
-    i1, b_loop_ub, i)
-
-  for (i = 0; i < loop_ub; i++) {
-    b_loop_ub = b_result[0];
-    for (i1 = 0; i1 < b_loop_ub; i1++) {
-      feature1[i1 + feature1.size(0) * ((i + tmp_size[1]) + result[1])] =
-          a__5[i1 + b_result[0] * i];
-    }
-  }
-  loop_ub = c_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = c_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       ((tmp_size[1] + result[1]) + b_result[1])] = sig[i];
-    }
-  }
-  loop_ub = d_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = d_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i +
-               feature1.size(0) * (((tmp_size[1] + result[1]) + b_result[1]) +
-                                   c_result[1])] = y[i];
-    }
-  }
-  loop_ub = e_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = e_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i +
-               feature1.size(0) *
-                   ((((tmp_size[1] + result[1]) + b_result[1]) + c_result[1]) +
-                    d_result[1])] = varargin_6[i];
-    }
-  }
-  loop_ub = f_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = f_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i +
-               feature1.size(0) *
-                   (((((tmp_size[1] + result[1]) + b_result[1]) + c_result[1]) +
-                     d_result[1]) +
-                    e_result[1])] = varargin_7[i];
-    }
-  }
-  loop_ub = g_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = g_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       ((((((tmp_size[1] + result[1]) + b_result[1]) +
-                           c_result[1]) +
-                          d_result[1]) +
-                         e_result[1]) +
-                        f_result[1])] = varargin_8[i];
-    }
-  }
-  loop_ub = h_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = h_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       (((((((tmp_size[1] + result[1]) + b_result[1]) +
-                            c_result[1]) +
-                           d_result[1]) +
-                          e_result[1]) +
-                         f_result[1]) +
-                        g_result[1])] = varargin_9[i];
-    }
-  }
-  loop_ub = i_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = i_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       ((((((((tmp_size[1] + result[1]) + b_result[1]) +
-                             c_result[1]) +
-                            d_result[1]) +
-                           e_result[1]) +
-                          f_result[1]) +
-                         g_result[1]) +
-                        h_result[1])] = varargin_10[i];
-    }
-  }
-  loop_ub = j_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = j_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       (((((((((tmp_size[1] + result[1]) + b_result[1]) +
-                              c_result[1]) +
-                             d_result[1]) +
-                            e_result[1]) +
-                           f_result[1]) +
-                          g_result[1]) +
-                         h_result[1]) +
-                        i_result[1])] = varargin_11[i];
-    }
-  }
-  loop_ub = k_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = k_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       ((((((((((tmp_size[1] + result[1]) + b_result[1]) +
-                               c_result[1]) +
-                              d_result[1]) +
-                             e_result[1]) +
-                            f_result[1]) +
-                           g_result[1]) +
-                          h_result[1]) +
-                         i_result[1]) +
-                        j_result[1])] = varargin_12[i];
-    }
-  }
-  loop_ub = l_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = l_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       (((((((((((tmp_size[1] + result[1]) + b_result[1]) +
-                                c_result[1]) +
-                               d_result[1]) +
-                              e_result[1]) +
-                             f_result[1]) +
-                            g_result[1]) +
-                           h_result[1]) +
-                          i_result[1]) +
-                         j_result[1]) +
-                        k_result[1])] = varargin_13[i];
-    }
-  }
-  loop_ub = m_result[1];
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i,         \
-                                                                    b_loop_ub)
-
-  for (k = 0; k < loop_ub; k++) {
-    b_loop_ub = m_result[0];
-    for (i = 0; i < b_loop_ub; i++) {
-      feature1[i + feature1.size(0) *
-                       ((((((((((((tmp_size[1] + result[1]) + b_result[1]) +
-                                 c_result[1]) +
-                                d_result[1]) +
-                               e_result[1]) +
-                              f_result[1]) +
-                             g_result[1]) +
-                            h_result[1]) +
-                           i_result[1]) +
-                          j_result[1]) +
-                         k_result[1]) +
-                        l_result[1])] = varargin_14[i];
-    }
-  }
-  // 'classifier:82' feature = feature1(:, [3, 18, 19, 1, 46, 47, 53, 34, 50,
-  // 30, 31, 51, 33, 42, 54, 29, 28, 32, 53, 7, 52, 27, 36]);
-  loop_ub = feature1.size(0);
-  feature.set_size(feature1.size(0), 23);
-  nx = feature1.size(0);
-  if (static_cast<int>(23 * feature1.size(0) < 1200)) {
-    for (i = 0; i < 23; i++) {
-      for (i1 = 0; i1 < loop_ub; i1++) {
-        feature[i1 + feature.size(0) * i] =
-            feature1[i1 + feature1.size(0) * (b_iv[i] - 1)];
-      }
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i1, i)
-
-    for (i = 0; i < 23; i++) {
-      for (i1 = 0; i1 < nx; i1++) {
-        feature[i1 + feature.size(0) * i] =
-            feature1[i1 + feature1.size(0) * (b_iv[i] - 1)];
-      }
-    }
-  }
-  // 'classifier:83' my_model = loadLearnerForCoder('compacted_model');
-  // 'classifier:84' predict_label = predict(my_model, feature)';
-  r8.init();
-  r8.predict(feature, sig);
-  predict_label.set_size(1, sig.size(0));
-  loop_ub = sig.size(0);
-  if (static_cast<int>(sig.size(0) < 1200)) {
+    loop_ub = f_input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      predict_label[i] = sig[i];
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * ((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                    c_input_sizes_idx_1) +
+                                   d_input_sizes_idx_1) +
+                                  e_input_sizes_idx_1)] = varargin_6[i1];
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(i)
-
+    loop_ub = g_input_sizes_idx_1;
     for (i = 0; i < loop_ub; i++) {
-      predict_label[i] = sig[i];
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * (((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                     c_input_sizes_idx_1) +
+                                    d_input_sizes_idx_1) +
+                                   e_input_sizes_idx_1) +
+                                  f_input_sizes_idx_1)] = varargin_7[i1];
+        }
     }
-  }
+    loop_ub = h_input_sizes_idx_1;
+    for (i = 0; i < loop_ub; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * ((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                      c_input_sizes_idx_1) +
+                                     d_input_sizes_idx_1) +
+                                    e_input_sizes_idx_1) +
+                                   f_input_sizes_idx_1) +
+                                  g_input_sizes_idx_1)] = varargin_8[i1];
+        }
+    }
+    loop_ub = i_input_sizes_idx_1;
+    for (i = 0; i < loop_ub; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * (((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                       c_input_sizes_idx_1) +
+                                      d_input_sizes_idx_1) +
+                                     e_input_sizes_idx_1) +
+                                    f_input_sizes_idx_1) +
+                                   g_input_sizes_idx_1) +
+                                  h_input_sizes_idx_1)] = varargin_9[i1];
+        }
+    }
+    loop_ub = j_input_sizes_idx_1;
+    for (i = 0; i < loop_ub; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * ((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                        c_input_sizes_idx_1) +
+                                       d_input_sizes_idx_1) +
+                                      e_input_sizes_idx_1) +
+                                     f_input_sizes_idx_1) +
+                                    g_input_sizes_idx_1) +
+                                   h_input_sizes_idx_1) +
+                                  i_input_sizes_idx_1)] = varargin_10[i1];
+        }
+    }
+    loop_ub = k_input_sizes_idx_1;
+    for (i = 0; i < loop_ub; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * (((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                         c_input_sizes_idx_1) +
+                                        d_input_sizes_idx_1) +
+                                       e_input_sizes_idx_1) +
+                                      f_input_sizes_idx_1) +
+                                     g_input_sizes_idx_1) +
+                                    h_input_sizes_idx_1) +
+                                   i_input_sizes_idx_1) +
+                                  j_input_sizes_idx_1)] = varargin_11[i1];
+        }
+    }
+    loop_ub = l_input_sizes_idx_1;
+    for (i = 0; i < loop_ub; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * ((((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                          c_input_sizes_idx_1) +
+                                         d_input_sizes_idx_1) +
+                                        e_input_sizes_idx_1) +
+                                       f_input_sizes_idx_1) +
+                                      g_input_sizes_idx_1) +
+                                     h_input_sizes_idx_1) +
+                                    i_input_sizes_idx_1) +
+                                   j_input_sizes_idx_1) +
+                                  k_input_sizes_idx_1)] = varargin_12[i1];
+        }
+    }
+    loop_ub = m_input_sizes_idx_1;
+    for (i = 0; i < loop_ub; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 + f0.size(0) * (((((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                           c_input_sizes_idx_1) +
+                                          d_input_sizes_idx_1) +
+                                         e_input_sizes_idx_1) +
+                                        f_input_sizes_idx_1) +
+                                       g_input_sizes_idx_1) +
+                                      h_input_sizes_idx_1) +
+                                     i_input_sizes_idx_1) +
+                                    j_input_sizes_idx_1) +
+                                   k_input_sizes_idx_1) +
+                                  l_input_sizes_idx_1)] = varargin_13[i1];
+        }
+    }
+    for (i = 0; i < sizes_idx_1; i++) {
+        for (i1 = 0; i1 < b_i; i1++) {
+            f0[i1 +
+               f0.size(0) * ((((((((((((input_sizes_idx_1 + b_input_sizes_idx_1) +
+                                       c_input_sizes_idx_1) +
+                                      d_input_sizes_idx_1) +
+                                     e_input_sizes_idx_1) +
+                                    f_input_sizes_idx_1) +
+                                   g_input_sizes_idx_1) +
+                                  h_input_sizes_idx_1) +
+                                 i_input_sizes_idx_1) +
+                                j_input_sizes_idx_1) +
+                               k_input_sizes_idx_1) +
+                              l_input_sizes_idx_1) +
+                             m_input_sizes_idx_1)] = varargin_14[i1];
+        }
+    }
+    // 'classifier:82' feature = feature1(:, [3, 18, 19, 1, 46, 47, 53, 34, 50,
+    // 30, 31, 51, 33, 42, 54, 29, 28, 32, 53, 7, 52, 27, 36]);
+    loop_ub = f0.size(0);
+    feature.set_size(f0.size(0), 23);
+    for (i = 0; i < 23; i++) {
+        for (i1 = 0; i1 < loop_ub; i1++) {
+            feature[i1 + feature.size(0) * i] = f0[i1 + f0.size(0) * (b_iv[i] - 1)];
+        }
+    }
+    // 'classifier:83' my_model = loadLearnerForCoder('compacted_model');
+    // 'classifier:84' predict_label = predict(my_model, feature)';
+    r.init();
+    r.predict(feature, ccc);
+    predict_label.set_size(1, ccc.size(0));
+    loop_ub = ccc.size(0);
+    for (i = 0; i < loop_ub; i++) {
+        predict_label[i] = ccc[i];
+    }
 }
 
 //

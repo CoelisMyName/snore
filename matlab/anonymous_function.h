@@ -2,7 +2,7 @@
 // File: anonymous_function.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 #ifndef ANONYMOUS_FUNCTION_H
@@ -11,21 +11,20 @@
 // Include Files
 #include "rtwtypes.h"
 #include "coder_array.h"
-#include "omp.h"
 #include <cstddef>
 #include <cstdlib>
 
 // Type Definitions
 struct b_struct_T {
-  coder::array<int, 1U> a;
-  coder::array<int, 1U> b;
+    coder::array<int, 1U> a;
+    coder::array<int, 1U> b;
 };
 
 namespace coder {
-class anonymous_function {
-public:
-  b_struct_T workspace;
-};
+    class anonymous_function {
+    public:
+        b_struct_T workspace;
+    };
 
 } // namespace coder
 

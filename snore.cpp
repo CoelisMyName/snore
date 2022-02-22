@@ -36,18 +36,6 @@ using coder::array;
 
 typedef array<double, 2U> array1D;
 
-void snore::snoreInitial() {
-    if (!isInitialized_SnoringRecognition) {
-        SnoringRecognition_initialize();
-    }
-}
-
-void snore::snoreDestroy() {
-    if (isInitialized_SnoringRecognition) {
-        SnoringRecognition_terminate();
-    }
-}
-
 void initialSox() {
     int res = sox_init();
     assert(res == SOX_SUCCESS);
@@ -185,6 +173,10 @@ void snore::reduceNoise(I16pcm &src, I16pcm &dst, const char *filename, double c
 }
 
 void snore::calculateModelResult(F64pcm &pcm, ModelResult &modelResult) {
+    SnoringRecognitionStackData stackData;
+    SnoringRecognitionPersistentData persistentData;
+    stackData.pd = &persistentData;
+    SnoringRecognition_initialize(&stackData);
     array1D x, w_starts, w_ends, label;
     //TODO 默认是单声道
     x.set(pcm.raw, 1, pcm.length);
@@ -199,13 +191,13 @@ void snore::calculateModelResult(F64pcm &pcm, ModelResult &modelResult) {
     /**
      * 分类器分类
      */
-//#ifdef ANDROID
-//    LOG_D(TAG, "w_starts %d, w_ends %d", w_starts.size(1), w_ends.size(1));
-//    for(int i = 0; i < w_starts.size(1); ++i) {
-//        LOG_D(TAG, "start %.1f, end %.1f", w_starts[i], w_ends[i]);
-//    }
-//#endif
-    classifier(x, w_starts, w_ends, pcm.fs, label);
+#ifdef ANDROID
+    LOG_D(TAG, "w_starts %d, w_ends %d", w_starts.size(1), w_ends.size(1));
+    for(int i = 0; i < w_starts.size(1); ++i) {
+        LOG_D(TAG, "start %.1f, end %.1f", w_starts[i], w_ends[i]);
+    }
+#endif
+    classifier(&stackData, x, w_starts, w_ends, pcm.fs, label);
 
     /**
      * 复制到结果

@@ -2,23 +2,25 @@
 // File: SnoringRecognition_initialize.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 // Include Files
 #include "SnoringRecognition_initialize.h"
-#include "SnoringRecognition_data.h"
+#include "SnoringRecognition_types.h"
+#include "frq2mel.h"
+#include "mel2frq.h"
 #include "rt_nonfinite.h"
 
 // Function Definitions
 //
-// Arguments    : void
+// Arguments    : SnoringRecognitionStackData *SD
 // Return Type  : void
 //
-void SnoringRecognition_initialize()
-{
-  omp_init_nest_lock(&emlrtNestLockGlobal);
-  isInitialized_SnoringRecognition = true;
+void SnoringRecognition_initialize(SnoringRecognitionStackData *SD) {
+    rt_InitInfAndNaN();
+    frq2mel_init(SD);
+    mel2frq_init(SD);
 }
 
 //

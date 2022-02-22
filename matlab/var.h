@@ -2,7 +2,7 @@
 // File: var.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 #ifndef VAR_H
@@ -11,15 +11,18 @@
 // Include Files
 #include "rtwtypes.h"
 #include "coder_array.h"
-#include "omp.h"
 #include <cstddef>
 #include <cstdlib>
 
 // Function Declarations
 namespace coder {
-void var(const ::coder::array<double, 2U> &x, double y_data[], int y_size[2]);
+    void var(const ::coder::array<double, 2U> &x, ::coder::array<double, 2U> &y);
 
-}
+    void var(const ::coder::array<double, 2U> &x, double y[12]);
+
+    double var(const ::coder::array<double, 2U> &x);
+
+} // namespace coder
 
 #endif
 //

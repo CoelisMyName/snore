@@ -2,18 +2,29 @@
 // File: melbankm.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 // Include Files
 #include "melbankm.h"
+#include "SnoringRecognition_types.h"
+#include "abs.h"
+#include "ceil.h"
 #include "colon.h"
+#include "cos.h"
 #include "find.h"
+#include "floor.h"
+#include "frq2mel.h"
+#include "isinf.h"
+#include "isnan.h"
+#include "mel2frq.h"
+#include "minOrMax.h"
+#include "nullAssignment.h"
 #include "rt_nonfinite.h"
 #include "sparse.h"
 #include "sparse1.h"
 #include "coder_array.h"
-#include <cmath>
+#include <math.h>
 
 // Function Definitions
 //
@@ -107,864 +118,418 @@
 //      IEEE Trans Acoustics Speech and Signal Processing, 28 (4): 357�366, Aug.
 //      1980.
 //
-// Arguments    : double n
+// Arguments    : SnoringRecognitionStackData *SD
+//                double n
 //                double fs
 //                coder::sparse *x
 // Return Type  : void
 //
-void melbankm(double n, double fs, coder::sparse *x)
-{
-  coder::array<double, 2U> af;
-  coder::array<double, 2U> c;
-  coder::array<double, 2U> fp;
-  coder::array<double, 2U> pf;
-  coder::array<double, 2U> v;
-  coder::array<int, 2U> r1;
-  coder::array<boolean_T, 2U> b_fp;
-  coder::array<boolean_T, 2U> r;
-  double b1;
-  double b_x;
-  double blim_idx_0;
-  double c_x;
-  double d;
-  double fn2;
-  double k2_data;
-  double melinc;
-  double mflh_idx_0;
-  int i_size[2];
-  int b_k;
-  int b_loop_ub;
-  int i;
-  int k;
-  int k2_size_idx_1;
-  unsigned int k3_data;
-  int loop_ub;
-  int nx;
-  int nxout;
-  boolean_T exitg1;
-  //       Copyright (C) Mike Brookes 1997-2009
-  //       Version: $Id: melbankm.m,v 1.11 2010/01/02 20:02:22 dmb Exp $
-  //
-  //    VOICEBOX is a MATLAB toolbox for speech processing.
-  //    Home page: http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
-  //
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //    This program is free software; you can redistribute it and/or modify
-  //    it under the terms of the GNU General Public License as published by
-  //    the Free Software Foundation; either version 2 of the License, or
-  //    (at your option) any later version.
-  //
-  //    This program is distributed in the hope that it will be useful,
-  //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-  //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  //    GNU General Public License for more details.
-  //
-  //    You can obtain a copy of the GNU General Public License from
-  //    http://www.gnu.org/copyleft/gpl.html or by writing to
-  //    Free Software Foundation, Inc.,675 Mass Ave, Cambridge, MA 02139, USA.
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //  Note "FFT bin_0" assumes DC = bin 0 whereas "FFT bin_1" means DC = bin 1
-  // 'melbankm:104' if nargin < 6
-  // 'melbankm:118' sfact = 2 - any(w == 's');
-  //  1 if single sided else 2
-  // 'melbankm:119' wr = ' ';
-  //  default warping is mel
-  // 'melbankm:121' for i = 1:length(w)
-  // 'melbankm:123' if any(w(i) == 'lebf')
-  // 'melbankm:129' if any(w == 'h') || any(w == 'H')
-  // 'melbankm:131' else
-  // 'melbankm:132' mflh = [fl fh] * fs;
-  // 'melbankm:135' if ~any(w == 'H')
-  // 'melbankm:137' switch wr
-  // 'melbankm:150' otherwise
-  // 'melbankm:151' mflh = frq2mel(mflh);
-  // FRQ2ERB  Convert Hertz to Mel frequency scale MEL=(FRQ)
-  // 	[mel,mr] = frq2mel(frq) converts a vector of frequencies (in Hz)
-  // 	to the corresponding values on the Mel scale which corresponds
-  // 	to the perceived pitch of a tone.
-  //    mr gives the corresponding gradients in Hz/mel.
-  // 	The relationship between mel and frq is given by:
-  //
-  // 	m = ln(1 + f/700) * 1000 / ln(1+1000/700)
-  //
-  //   	This means that m(1000) = 1000
-  //
-  // 	References:
-  //
-  // 	  [1] S. S. Stevens & J. Volkman "The relation of pitch to
-  // 		frequency", American J of Psychology, V 53, p329 1940
-  // 	  [2] C. G. M. Fant, "Acoustic description & classification
-  // 		of phonetic units", Ericsson Tchnics, No 1 1959
-  // 		(reprinted in "Speech Sounds & Features", MIT Press 1973)
-  // 	  [3] S. B. Davis & P. Mermelstein, "Comparison of parametric
-  // 		representations for monosyllabic word recognition in
-  // 		continuously spoken sentences", IEEE ASSP, V 28,
-  // 		pp 357-366 Aug 1980
-  // 	  [4] J. R. Deller Jr, J. G. Proakis, J. H. L. Hansen,
-  // 		"Discrete-Time Processing of Speech Signals", p380,
-  // 		Macmillan 1993
-  // 	  [5] HTK Reference Manual p73
-  //
-  //       Copyright (C) Mike Brookes 1998
-  //       Version: $Id: frq2mel.m,v 1.7 2010/08/01 08:41:57 dmb Exp $
-  //
-  //    VOICEBOX is a MATLAB toolbox for speech processing.
-  //    Home page: http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
-  //
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //    This program is free software; you can redistribute it and/or modify
-  //    it under the terms of the GNU General Public License as published by
-  //    the Free Software Foundation; either version 2 of the License, or
-  //    (at your option) any later version.
-  //
-  //    This program is distributed in the hope that it will be useful,
-  //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-  //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  //    GNU General Public License for more details.
-  //
-  //    You can obtain a copy of the GNU General Public License from
-  //    http://www.gnu.org/copyleft/gpl.html or by writing to
-  //    Free Software Foundation, Inc.,675 Mass Ave, Cambridge, MA 02139, USA.
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // 'frq2mel:54' if isempty(k)
-  // 'frq2mel:58' af = abs(frq);
-  // 'frq2mel:59' mel = sign(frq) .* log(1 + af / 700) * k;
-  // 'frq2mel:60' mr = (700 + af) / k;
-  // 'frq2mel:62' if ~nargout
-  //  convert frequency limits into mel
-  // 'melbankm:156' melrng = mflh * (-1:2:1)';
-  //  mel range
-  // 'melbankm:157' fn2 = floor(n / 2);
-  fn2 = std::floor(n / 2.0);
-  //  bin index of highest positive frequency (Nyquist if n is even)
-  // 'melbankm:159' if isempty(p)
-  // 'melbankm:163' if any(w == 'c')
-  // 'melbankm:171' else
-  // 'melbankm:173' if p < 1
-  // 'melbankm:177' melinc = melrng / (p + 1);
-  d = 0.0 * fs;
-  b_x = d;
-  if (d == 0.0) {
-    b_x = 0.0;
-  }
-  d = b_x * std::log(d / 700.0 + 1.0) * 1127.01048;
-  mflh_idx_0 = d;
-  k2_data = -d;
-  d = 0.5 * fs;
-  b_x = d;
-  if (d < 0.0) {
-    b_x = -1.0;
-  } else if (d > 0.0) {
-    b_x = 1.0;
-  } else if (d == 0.0) {
-    b_x = 0.0;
-  }
-  d = b_x * std::log(std::abs(d) / 700.0 + 1.0) * 1127.01048;
-  k2_data += d;
-  melinc = k2_data / 17.0;
-  //
-  //  Calculate the FFT bins corresponding to [filter#1-low filter#1-mid
-  //  filter#p-mid filter#p-high]
-  //
-  // 'melbankm:183' switch wr
-  // 'melbankm:192' otherwise
-  // 'melbankm:193' blim = mel2frq(mflh(1) + [0 1 p p + 1] * melinc) * n / fs;
-  // MEL2FRQ  Convert Mel frequency scale to Hertz FRQ=(MEL)
-  // 	frq = mel2frq(mel) converts a vector of Mel frequencies
-  // 	to the corresponding real frequencies.
-  //    mr gives the corresponding gradients in Hz/mel.
-  // 	The Mel scale corresponds to the perceived pitch of a tone
-  // 	The relationship between mel and frq is given by:
-  //
-  // 	m = ln(1 + f/700) * 1000 / ln(1+1000/700)
-  //
-  //   	This means that m(1000) = 1000
-  //
-  // 	References:
-  //
-  // 	  [1] S. S. Stevens & J. Volkman "The relation of pitch to
-  // 		frequency", American J of Psychology, V 53, p329 1940
-  // 	  [2] C. G. M. Fant, "Acoustic description & classification
-  // 		of phonetic units", Ericsson Tchnics, No 1 1959
-  // 		(reprinted in "Speech Sounds & Features", MIT Press 1973)
-  // 	  [3] S. B. Davis & P. Mermelstein, "Comparison of parametric
-  // 		representations for monosyllabic word recognition in
-  // 		continuously spoken sentences", IEEE ASSP, V 28,
-  // 		pp 357-366 Aug 1980
-  // 	  [4] J. R. Deller Jr, J. G. Proakis, J. H. L. Hansen,
-  // 		"Discrete-Time Processing of Speech Signals", p380,
-  // 		Macmillan 1993
-  // 	  [5] HTK Reference Manual p73
-  //
-  //       Copyright (C) Mike Brookes 1998
-  //       Version: $Id: mel2frq.m,v 1.7 2010/08/01 08:41:57 dmb Exp $
-  //
-  //    VOICEBOX is a MATLAB toolbox for speech processing.
-  //    Home page: http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
-  //
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //    This program is free software; you can redistribute it and/or modify
-  //    it under the terms of the GNU General Public License as published by
-  //    the Free Software Foundation; either version 2 of the License, or
-  //    (at your option) any later version.
-  //
-  //    This program is distributed in the hope that it will be useful,
-  //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-  //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  //    GNU General Public License for more details.
-  //
-  //    You can obtain a copy of the GNU General Public License from
-  //    http://www.gnu.org/copyleft/gpl.html or by writing to
-  //    Free Software Foundation, Inc.,675 Mass Ave, Cambridge, MA 02139, USA.
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // 'mel2frq:54' if isempty(k)
-  // 'mel2frq:58' frq = 700 * sign(mel) .* (exp(abs(mel) / k) - 1);
-  // 'mel2frq:59' mr = (700 + abs(frq)) / k;
-  // 'mel2frq:61' if ~nargout
-  d = mflh_idx_0 + 0.0 * melinc;
-  b_x = d;
-  if (d == 0.0) {
-    b_x = 0.0;
-  }
-  blim_idx_0 = 700.0 * b_x * (std::exp(d / 1127.01048) - 1.0) * n / fs;
-  d = mflh_idx_0 + 17.0 * melinc;
-  b_x = d;
-  if (d < 0.0) {
-    b_x = -1.0;
-  } else if (d > 0.0) {
-    b_x = 1.0;
-  } else if (d == 0.0) {
-    b_x = 0.0;
-  }
-  // 'melbankm:196' mc = mflh(1) + (1:p) * melinc;
-  //  mel centre frequencies
-  // 'melbankm:197' b1 = floor(blim(1)) + 1;
-  b1 = blim_idx_0 + 1.0;
-  //  lowest FFT bin_0 required might be negative)
-  // 'melbankm:198' b4 = min(fn2, ceil(blim(4)) - 1);
-  k2_data = std::fmin(
-      fn2, std::ceil(700.0 * b_x * (std::exp(std::abs(d) / 1127.01048) - 1.0) *
-                     n / fs) -
-               1.0);
-  //  highest FFT bin_0 required
-  //
-  //  now map all the useful FFT bins_0 to filter1 centres
-  //
-  // 'melbankm:202' switch wr
-  // 'melbankm:211' otherwise
-  // 'melbankm:212' pf = (frq2mel((b1:b4) * fs / n) - mflh(1)) / melinc;
-  if (std::isnan(blim_idx_0 + 1.0) || std::isnan(k2_data)) {
-    pf.set_size(1, 1);
-    pf[0] = rtNaN;
-  } else if (k2_data < blim_idx_0 + 1.0) {
-    pf.set_size(pf.size(0), 0);
-  } else if (std::isinf(k2_data) && (blim_idx_0 + 1.0 == k2_data)) {
-    pf.set_size(1, 1);
-    pf[0] = rtNaN;
-  } else if (blim_idx_0 + 1.0 == blim_idx_0 + 1.0) {
-    d = blim_idx_0 + 1.0;
-    loop_ub = static_cast<int>(k2_data - (blim_idx_0 + 1.0));
-    pf.set_size(1, loop_ub + 1);
-    if (static_cast<int>(loop_ub + 1 < 1200)) {
-      for (k = 0; k <= loop_ub; k++) {
-        pf[k] = (blim_idx_0 + 1.0) + static_cast<double>(k);
-      }
+void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
+              coder::sparse *x) {
+    coder::array<double, 2U> b_y;
+    coder::array<double, 2U> c;
+    coder::array<double, 2U> fp;
+    coder::array<double, 2U> k2;
+    coder::array<double, 2U> pf;
+    coder::array<double, 2U> y;
+    coder::array<int, 2U> ii;
+    coder::array<int, 2U> r1;
+    coder::array<boolean_T, 2U> b_fp;
+    coder::array<boolean_T, 2U> r;
+    double b_mflh[4];
+    double blim[4];
+    double b_dv[2];
+    double mflh[2];
+    double b;
+    double b1;
+    double d;
+    double d1;
+    double fn2;
+    double melinc;
+    int b_i;
+    int b_loop_ub;
+    int c_loop_ub;
+    int i;
+    int i1;
+    int i2;
+    int i3;
+    int loop_ub;
+    //       Copyright (C) Mike Brookes 1997-2009
+    //       Version: $Id: melbankm.m,v 1.11 2010/01/02 20:02:22 dmb Exp $
+    //
+    //    VOICEBOX is a MATLAB toolbox for speech processing.
+    //    Home page: http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
+    //
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //    This program is free software; you can redistribute it and/or modify
+    //    it under the terms of the GNU General Public License as published by
+    //    the Free Software Foundation; either version 2 of the License, or
+    //    (at your option) any later version.
+    //
+    //    This program is distributed in the hope that it will be useful,
+    //    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    //    GNU General Public License for more details.
+    //
+    //    You can obtain a copy of the GNU General Public License from
+    //    http://www.gnu.org/copyleft/gpl.html or by writing to
+    //    Free Software Foundation, Inc.,675 Mass Ave, Cambridge, MA 02139, USA.
+    // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    //  Note "FFT bin_0" assumes DC = bin 0 whereas "FFT bin_1" means DC = bin 1
+    // 'melbankm:104' if nargin < 6
+    // 'melbankm:118' sfact = 2 - any(w == 's');
+    //  1 if single sided else 2
+    // 'melbankm:119' wr = ' ';
+    //  default warping is mel
+    // 'melbankm:121' for i = 1:length(w)
+    // 'melbankm:123' if any(w(i) == 'lebf')
+    // 'melbankm:129' if any(w == 'h') || any(w == 'H')
+    // 'melbankm:131' else
+    // 'melbankm:132' mflh = [fl fh] * fs;
+    // 'melbankm:135' if ~any(w == 'H')
+    // 'melbankm:137' switch wr
+    // 'melbankm:150' otherwise
+    // 'melbankm:151' mflh = frq2mel(mflh);
+    b_dv[0] = 0.0 * fs;
+    b_dv[1] = 0.5 * fs;
+    frq2mel(SD, b_dv, mflh);
+    //  convert frequency limits into mel
+    // 'melbankm:156' melrng = mflh * (-1:2:1)';
+    //  mel range
+    // 'melbankm:157' fn2 = floor(n / 2);
+    fn2 = n / 2.0;
+    coder::b_floor(&fn2);
+    //  bin index of highest positive frequency (Nyquist if n is even)
+    // 'melbankm:159' if isempty(p)
+    // 'melbankm:163' if any(w == 'c')
+    // 'melbankm:171' else
+    // 'melbankm:173' if p < 1
+    // 'melbankm:177' melinc = melrng / (p + 1);
+    melinc = (-mflh[0] + mflh[1]) / 17.0;
+    //
+    //  Calculate the FFT bins corresponding to [filter#1-low filter#1-mid
+    //  filter#p-mid filter#p-high]
+    //
+    // 'melbankm:183' switch wr
+    // 'melbankm:192' otherwise
+    // 'melbankm:193' blim = mel2frq(mflh(1) + [0 1 p p + 1] * melinc) * n / fs;
+    b_mflh[0] = mflh[0] + 0.0 * melinc;
+    b_mflh[1] = mflh[0] + melinc;
+    b_mflh[2] = mflh[0] + 16.0 * melinc;
+    b_mflh[3] = mflh[0] + 17.0 * melinc;
+    mel2frq(SD, b_mflh, blim);
+    blim[0] = blim[0] * n / fs;
+    blim[3] = blim[3] * n / fs;
+    // 'melbankm:196' mc = mflh(1) + (1:p) * melinc;
+    //  mel centre frequencies
+    // 'melbankm:197' b1 = floor(blim(1)) + 1;
+    d = blim[0];
+    coder::b_floor(&d);
+    b1 = d + 1.0;
+    //  lowest FFT bin_0 required might be negative)
+    // 'melbankm:198' b4 = min(fn2, ceil(blim(4)) - 1);
+    d1 = blim[3];
+    coder::b_ceil(&d1);
+    b = coder::internal::minimum2(fn2, d1 - 1.0);
+    //  highest FFT bin_0 required
+    //
+    //  now map all the useful FFT bins_0 to filter1 centres
+    //
+    // 'melbankm:202' switch wr
+    // 'melbankm:211' otherwise
+    // 'melbankm:212' pf = (frq2mel((b1:b4) * fs / n) - mflh(1)) / melinc;
+    if (coder::b_isnan(d + 1.0) || coder::b_isnan(b)) {
+        y.set_size(1, 1);
+        y[0] = rtNaN;
+    } else if (b < d + 1.0) {
+        y.set_size(1, 0);
+    } else if ((coder::b_isinf(d + 1.0) || coder::b_isinf(b)) && (d + 1.0 == b)) {
+        y.set_size(1, 1);
+        y[0] = rtNaN;
     } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-      for (k = 0; k <= loop_ub; k++) {
-        pf[k] = d + static_cast<double>(k);
-      }
+        d1 = d + 1.0;
+        coder::b_floor(&d1);
+        if (d1 == d + 1.0) {
+            loop_ub = static_cast<int>(floor(b - (d + 1.0)));
+            y.set_size(1, loop_ub + 1);
+            for (i = 0; i <= loop_ub; i++) {
+                y[i] = (d + 1.0) + static_cast<double>(i);
+            }
+        } else {
+            coder::eml_float_colon(d + 1.0, b, y);
+        }
     }
-  } else {
-    coder::eml_float_colon(blim_idx_0 + 1.0, k2_data, pf);
-  }
-  pf.set_size(1, pf.size(1));
-  loop_ub = pf.size(1) - 1;
-  b_loop_ub = pf.size(1) - 1;
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k <= loop_ub; k++) {
-      pf[k] = pf[k] * fs / n;
+    b_y.set_size(1, y.size(1));
+    loop_ub = y.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        b_y[i] = y[i] * fs / n;
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k <= b_loop_ub; k++) {
-      pf[k] = pf[k] * fs / n;
+    frq2mel(SD, b_y, pf);
+    pf.set_size(1, pf.size(1));
+    loop_ub = pf.size(1) - 1;
+    for (i = 0; i <= loop_ub; i++) {
+        pf[i] = (pf[i] - mflh[0]) / melinc;
     }
-  }
-  // FRQ2ERB  Convert Hertz to Mel frequency scale MEL=(FRQ)
-  // 	[mel,mr] = frq2mel(frq) converts a vector of frequencies (in Hz)
-  // 	to the corresponding values on the Mel scale which corresponds
-  // 	to the perceived pitch of a tone.
-  //    mr gives the corresponding gradients in Hz/mel.
-  // 	The relationship between mel and frq is given by:
-  //
-  // 	m = ln(1 + f/700) * 1000 / ln(1+1000/700)
-  //
-  //   	This means that m(1000) = 1000
-  //
-  // 	References:
-  //
-  // 	  [1] S. S. Stevens & J. Volkman "The relation of pitch to
-  // 		frequency", American J of Psychology, V 53, p329 1940
-  // 	  [2] C. G. M. Fant, "Acoustic description & classification
-  // 		of phonetic units", Ericsson Tchnics, No 1 1959
-  // 		(reprinted in "Speech Sounds & Features", MIT Press 1973)
-  // 	  [3] S. B. Davis & P. Mermelstein, "Comparison of parametric
-  // 		representations for monosyllabic word recognition in
-  // 		continuously spoken sentences", IEEE ASSP, V 28,
-  // 		pp 357-366 Aug 1980
-  // 	  [4] J. R. Deller Jr, J. G. Proakis, J. H. L. Hansen,
-  // 		"Discrete-Time Processing of Speech Signals", p380,
-  // 		Macmillan 1993
-  // 	  [5] HTK Reference Manual p73
-  //
-  //       Copyright (C) Mike Brookes 1998
-  //       Version: $Id: frq2mel.m,v 1.7 2010/08/01 08:41:57 dmb Exp $
-  //
-  //    VOICEBOX is a MATLAB toolbox for speech processing.
-  //    Home page: http://www.ee.ic.ac.uk/hp/staff/dmb/voicebox/voicebox.html
-  //
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  //    This program is free software; you can redistribute it and/or modify
-  //    it under the terms of the GNU General Public License as published by
-  //    the Free Software Foundation; either version 2 of the License, or
-  //    (at your option) any later version.
-  //
-  //    This program is distributed in the hope that it will be useful,
-  //    but WITHOUT ANY WARRANTY; without even the implied warranty of
-  //    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  //    GNU General Public License for more details.
-  //
-  //    You can obtain a copy of the GNU General Public License from
-  //    http://www.gnu.org/copyleft/gpl.html or by writing to
-  //    Free Software Foundation, Inc.,675 Mass Ave, Cambridge, MA 02139, USA.
-  // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-  // 'frq2mel:54' if isempty(k)
-  // 'frq2mel:58' af = abs(frq);
-  nx = pf.size(1);
-  af.set_size(1, pf.size(1));
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k < nx; k++) {
-      af[k] = std::abs(pf[k]);
+    //
+    //   remove any incorrect entries in pf due to rounding errors
+    //
+    // 'melbankm:218' if pf(1) < 0
+    if (pf[0] < 0.0) {
+        // 'melbankm:219' pf(1) = [];
+        coder::internal::nullAssignment(pf);
+        // 'melbankm:220' b1 = b1 + 1;
+        b1 = (d + 1.0) + 1.0;
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < nx; k++) {
-      af[k] = std::abs(pf[k]);
+    // 'melbankm:223' if pf(end) >= p + 1
+    if (pf[pf.size(1) - 1] >= 17.0) {
+        // 'melbankm:224' pf(end) = [];
+        coder::internal::nullAssignment(pf, pf.size(1));
+        // 'melbankm:225' b4 = b4 - 1;
     }
-  }
-  // 'frq2mel:59' mel = sign(frq) .* log(1 + af / 700) * k;
-  nx = pf.size(1);
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k < nx; k++) {
-      c_x = pf[k];
-      if (c_x < 0.0) {
-        c_x = -1.0;
-      } else if (c_x > 0.0) {
-        c_x = 1.0;
-      } else if (c_x == 0.0) {
-        c_x = 0.0;
-      }
-      pf[k] = c_x;
+    // 'melbankm:228' fp = floor(pf);
+    fp.set_size(1, pf.size(1));
+    loop_ub = pf.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        fp[i] = pf[i];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(c_x, k)
-
-    for (k = 0; k < nx; k++) {
-      c_x = pf[k];
-      if (c_x < 0.0) {
-        c_x = -1.0;
-      } else if (c_x > 0.0) {
-        c_x = 1.0;
-      } else if (c_x == 0.0) {
-        c_x = 0.0;
-      }
-      pf[k] = c_x;
+    coder::b_floor(fp);
+    //  FFT bin_0 i contributes to filters_1 fp(1+i-b1)+[0 1]
+    // 'melbankm:229' pm = pf - fp;
+    pf.set_size(1, pf.size(1));
+    loop_ub = pf.size(1) - 1;
+    for (i = 0; i <= loop_ub; i++) {
+        pf[i] = pf[i] - fp[i];
     }
-  }
-  af.set_size(1, af.size(1));
-  nxout = af.size(1) - 1;
-  loop_ub = af.size(1) - 1;
-  if (static_cast<int>(af.size(1) < 1200)) {
-    for (k = 0; k <= nxout; k++) {
-      af[k] = af[k] / 700.0 + 1.0;
+    //  multiplier for upper filter
+    // 'melbankm:230' k2 = find(fp > 0, 1);
+    b_fp.set_size(1, fp.size(1));
+    loop_ub = fp.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        b_fp[i] = (fp[i] > 0.0);
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k <= loop_ub; k++) {
-      af[k] = af[k] / 700.0 + 1.0;
+    coder::eml_find(b_fp, ii);
+    k2.set_size(1, ii.size(1));
+    loop_ub = ii.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        k2[i] = ii[i];
     }
-  }
-  nx = af.size(1);
-  if (static_cast<int>(af.size(1) < 1200)) {
-    for (k = 0; k < nx; k++) {
-      af[k] = std::log(af[k]);
+    //  FFT bin_1 k2+b1 is the first to contribute to both upper and lower filters
+    // 'melbankm:231' k3 = find(fp < p, 1, 'last');
+    b_fp.set_size(1, fp.size(1));
+    loop_ub = fp.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        b_fp[i] = (fp[i] < 16.0);
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < nx; k++) {
-      af[k] = std::log(af[k]);
+    coder::b_eml_find(b_fp, ii);
+    //  FFT bin_1 k3+b1 is the last to contribute to both upper and lower filters
+    // 'melbankm:232' k4 = numel(fp);
+    //  FFT bin_1 k4+b1 is the last to contribute to any filters
+    // 'melbankm:234' if isempty(k2)
+    if (k2.size(1) == 0) {
+        // 'melbankm:235' k2 = k4 + 1;
+        k2.set_size(1, 1);
+        k2[0] = static_cast<double>(fp.size(1)) + 1.0;
     }
-  }
-  // 'frq2mel:60' mr = (700 + af) / k;
-  // 'frq2mel:62' if ~nargout
-  pf.set_size(1, pf.size(1));
-  nxout = pf.size(1) - 1;
-  loop_ub = pf.size(1) - 1;
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k <= nxout; k++) {
-      pf[k] = (pf[k] * af[k] * 1127.01048 - mflh_idx_0) / melinc;
+    // 'melbankm:238' if isempty(k3)
+    if (ii.size(1) == 0) {
+        // 'melbankm:239' k3 = 0;
+        ii.set_size(1, 1);
+        ii[0] = 0;
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k <= loop_ub; k++) {
-      pf[k] = (pf[k] * af[k] * 1127.01048 - mflh_idx_0) / melinc;
-    }
-  }
-  //
-  //   remove any incorrect entries in pf due to rounding errors
-  //
-  // 'melbankm:218' if pf(1) < 0
-  if (pf[0] < 0.0) {
-    // 'melbankm:219' pf(1) = [];
-    nx = pf.size(1);
-    nxout = pf.size(1) - 1;
-    for (b_k = 0; b_k < nxout; b_k++) {
-      pf[b_k] = pf[b_k + 1];
-    }
-    if (1 > nxout) {
-      i = 0;
+    // 'melbankm:242' if any(w == 'y')
+    // 'melbankm:248' else
+    // 'melbankm:249' r = [1 + fp(1:k3(1)) fp(k2(1):k4)];
+    if (1 > ii[0]) {
+        loop_ub = 0;
     } else {
-      i = nx - 1;
+        loop_ub = ii[0];
     }
-    pf.set_size(pf.size(0), i);
-    // 'melbankm:220' b1 = b1 + 1;
-    b1 = (blim_idx_0 + 1.0) + 1.0;
-  }
-  // 'melbankm:223' if pf(end) >= p + 1
-  if (pf[pf.size(1) - 1] >= 17.0) {
-    // 'melbankm:224' pf(end) = [];
-    b_loop_ub = pf.size(1);
-    nx = pf.size(1);
-    nxout = pf.size(1) - 1;
-    for (b_k = b_loop_ub; b_k <= nxout; b_k++) {
-      pf[b_k - 1] = pf[b_k];
-    }
-    if (1 > nxout) {
-      i = 0;
+    if (k2[0] > fp.size(1)) {
+        i = 0;
+        i1 = 0;
     } else {
-      i = nx - 1;
+        i = static_cast<int>(k2[0]) - 1;
+        i1 = fp.size(1);
     }
-    pf.set_size(pf.size(0), i);
-    // 'melbankm:225' b4 = b4 - 1;
-  }
-  // 'melbankm:228' fp = floor(pf);
-  fp.set_size(1, pf.size(1));
-  loop_ub = pf.size(1);
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k < loop_ub; k++) {
-      fp[k] = pf[k];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < loop_ub; k++) {
-      fp[k] = pf[k];
-    }
-  }
-  nx = pf.size(1);
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k < nx; k++) {
-      fp[k] = std::floor(fp[k]);
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < nx; k++) {
-      fp[k] = std::floor(fp[k]);
-    }
-  }
-  //  FFT bin_0 i contributes to filters_1 fp(1+i-b1)+[0 1]
-  // 'melbankm:229' pm = pf - fp;
-  pf.set_size(1, pf.size(1));
-  nxout = pf.size(1) - 1;
-  loop_ub = pf.size(1) - 1;
-  if (static_cast<int>(pf.size(1) < 1200)) {
-    for (k = 0; k <= nxout; k++) {
-      pf[k] = pf[k] - fp[k];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k <= loop_ub; k++) {
-      pf[k] = pf[k] - fp[k];
-    }
-  }
-  //  multiplier for upper filter
-  // 'melbankm:230' k2 = find(fp > 0, 1);
-  b_fp.set_size(1, fp.size(1));
-  loop_ub = fp.size(1);
-  if (static_cast<int>(fp.size(1) < 1200)) {
-    for (k = 0; k < loop_ub; k++) {
-      b_fp[k] = (fp[k] > 0.0);
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < loop_ub; k++) {
-      b_fp[k] = (fp[k] > 0.0);
-    }
-  }
-  coder::eml_find(b_fp, (int *)&nx, i_size);
-  k2_size_idx_1 = i_size[1];
-  loop_ub = i_size[1];
-  for (i = 0; i < loop_ub; i++) {
-    k2_data = nx;
-  }
-  //  FFT bin_1 k2+b1 is the first to contribute to both upper and lower filters
-  // 'melbankm:231' k3 = find(fp < p, 1, 'last');
-  b_fp.set_size(1, fp.size(1));
-  loop_ub = fp.size(1);
-  if (static_cast<int>(fp.size(1) < 1200)) {
-    for (k = 0; k < loop_ub; k++) {
-      b_fp[k] = (fp[k] < 16.0);
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < loop_ub; k++) {
-      b_fp[k] = (fp[k] < 16.0);
-    }
-  }
-  b_k = (1 <= b_fp.size(1));
-  nxout = b_fp.size(1);
-  b_loop_ub = 0;
-  i_size[1] = b_k;
-  exitg1 = false;
-  while ((!exitg1) && (nxout > 0)) {
-    if (b_fp[nxout - 1]) {
-      b_loop_ub = 1;
-      nx = nxout;
-      exitg1 = true;
+    //  filter number_1
+    // 'melbankm:250' c = [1:k3 k2:k4];
+    b_i = ii[0];
+    if (coder::b_isnan(static_cast<double>(b_i))) {
+        y.set_size(1, 1);
+        y[0] = rtNaN;
+    } else if (ii[0] < 1) {
+        y.set_size(1, 0);
+    } else if (coder::b_isinf(static_cast<double>(b_i)) && (1 == ii[0])) {
+        y.set_size(1, 1);
+        y[0] = rtNaN;
     } else {
-      nxout--;
+        y.set_size(1, b_i);
+        b_loop_ub = b_i - 1;
+        for (b_i = 0; b_i <= b_loop_ub; b_i++) {
+            y[b_i] = static_cast<double>(b_i) + 1.0;
+        }
     }
-  }
-  if (b_k == 1) {
-    if (b_loop_ub == 0) {
-      i_size[1] = 0;
-    }
-  } else {
-    i_size[1] = (1 <= b_loop_ub);
-  }
-  loop_ub = i_size[1];
-  for (i = 0; i < loop_ub; i++) {
-    k3_data = static_cast<unsigned int>(nx);
-  }
-  //  FFT bin_1 k3+b1 is the last to contribute to both upper and lower filters
-  // 'melbankm:232' k4 = numel(fp);
-  //  FFT bin_1 k4+b1 is the last to contribute to any filters
-  // 'melbankm:234' if isempty(k2)
-  if (k2_size_idx_1 == 0) {
-    // 'melbankm:235' k2 = k4 + 1;
-    k2_data = static_cast<double>(fp.size(1)) + 1.0;
-  }
-  // 'melbankm:238' if isempty(k3)
-  if (i_size[1] == 0) {
-    // 'melbankm:239' k3 = 0;
-    k3_data = 0U;
-  }
-  // 'melbankm:242' if any(w == 'y')
-  // 'melbankm:248' else
-  // 'melbankm:249' r = [1 + fp(1:k3(1)) fp(k2(1):k4)];
-  if (1 > static_cast<int>(k3_data)) {
-    loop_ub = 0;
-  } else {
-    loop_ub = static_cast<int>(k3_data);
-  }
-  if (k2_data > fp.size(1)) {
-    i = 0;
-    b_k = 0;
-  } else {
-    i = static_cast<int>(k2_data) - 1;
-    b_k = fp.size(1);
-  }
-  //  filter number_1
-  // 'melbankm:250' c = [1:k3 k2:k4];
-  if (static_cast<int>(k3_data) < 1) {
-    af.set_size(1, 0);
-  } else {
-    nx = static_cast<int>(k3_data);
-    af.set_size(1, nx);
-    b_loop_ub = static_cast<int>(k3_data) - 1;
-    if (static_cast<int>(static_cast<int>(k3_data) < 1200)) {
-      for (k = 0; k <= b_loop_ub; k++) {
-        af[k] = static_cast<double>(k) + 1.0;
-      }
+    if (coder::b_isnan(k2[0]) ||
+        coder::b_isnan(static_cast<double>(fp.size(1)))) {
+        b_y.set_size(1, 1);
+        b_y[0] = rtNaN;
+    } else if (fp.size(1) < k2[0]) {
+        b_y.set_size(1, 0);
+    } else if ((coder::b_isinf(k2[0]) ||
+                coder::b_isinf(static_cast<double>(fp.size(1)))) &&
+               (k2[0] == fp.size(1))) {
+        b_y.set_size(1, 1);
+        b_y[0] = rtNaN;
     } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-      for (k = 0; k <= b_loop_ub; k++) {
-        af[k] = static_cast<double>(k) + 1.0;
-      }
+        d = k2[0];
+        coder::b_floor(&d);
+        if (d == k2[0]) {
+            b_y.set_size(
+                    1, static_cast<int>(static_cast<double>(fp.size(1)) - k2[0]) + 1);
+            b_loop_ub = static_cast<int>(static_cast<double>(fp.size(1)) - k2[0]);
+            for (b_i = 0; b_i <= b_loop_ub; b_i++) {
+                b_y[b_i] = k2[0] + static_cast<double>(b_i);
+            }
+        } else {
+            coder::eml_float_colon(k2[0], static_cast<double>(fp.size(1)), b_y);
+        }
     }
-  }
-  if (fp.size(1) < k2_data) {
-    v.set_size(1, 0);
-  } else if (k2_data == k2_data) {
-    v.set_size(1, (fp.size(1) - static_cast<int>(k2_data)) + 1);
-    b_loop_ub = fp.size(1) - static_cast<int>(k2_data);
-    if (static_cast<int>(b_loop_ub + 1 < 1200)) {
-      for (k = 0; k <= b_loop_ub; k++) {
-        v[k] = k2_data + static_cast<double>(k);
-      }
+    c.set_size(1, y.size(1) + b_y.size(1));
+    b_loop_ub = y.size(1);
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
+        c[b_i] = y[b_i];
+    }
+    b_loop_ub = b_y.size(1);
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
+        c[b_i + y.size(1)] = b_y[b_i];
+    }
+    //  FFT bin_1 - b1
+    // 'melbankm:251' v = [pm(1:k3(1)) 1 - pm(k2(1):k4)];
+    if (1 > ii[0]) {
+        b_loop_ub = 0;
     } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-      for (k = 0; k <= b_loop_ub; k++) {
-        v[k] = k2_data + static_cast<double>(k);
-      }
+        b_loop_ub = ii[0];
     }
-  } else {
-    coder::eml_float_colon(k2_data, static_cast<double>(fp.size(1)), v);
-  }
-  c.set_size(1, af.size(1) + v.size(1));
-  b_loop_ub = af.size(1);
-  if (static_cast<int>(af.size(1) < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      c[k] = af[k];
+    if (k2[0] > fp.size(1)) {
+        b_i = 0;
+        i2 = 0;
+    } else {
+        b_i = static_cast<int>(k2[0]) - 1;
+        i2 = fp.size(1);
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      c[k] = af[k];
+    // 'melbankm:252' mn = b1 + 1;
+    //  lowest fft bin_1
+    // 'melbankm:253' mx = b4 + 1;
+    //  highest fft bin_1
+    // 'melbankm:256' if b1 < 0
+    if (b1 < 0.0) {
+        // 'melbankm:257' c = abs(c + b1 - 1) - b1 + 1;
+        b_y.set_size(1, c.size(1));
+        c_loop_ub = c.size(1);
+        for (i3 = 0; i3 < c_loop_ub; i3++) {
+            b_y[i3] = (c[i3] + b1) - 1.0;
+        }
+        coder::b_abs(b_y, c);
+        c.set_size(1, c.size(1));
+        c_loop_ub = c.size(1) - 1;
+        for (i3 = 0; i3 <= c_loop_ub; i3++) {
+            c[i3] = (c[i3] - b1) + 1.0;
+        }
+        //  convert negative frequencies into positive
     }
-  }
-  b_loop_ub = v.size(1);
-  if (static_cast<int>(v.size(1) < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      c[k + af.size(1)] = v[k];
+    //  end
+    // 'melbankm:261' if any(w == 'n')
+    // 'melbankm:263' elseif any(w == 'm')
+    // 'melbankm:264' v = 0.5 - 0.46/1.08 * cos(v * pi);
+    k2.set_size(1, (b_loop_ub + i2) - b_i);
+    for (i3 = 0; i3 < b_loop_ub; i3++) {
+        k2[i3] = pf[i3] * 3.1415926535897931;
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      c[k + af.size(1)] = v[k];
+    c_loop_ub = i2 - b_i;
+    for (i2 = 0; i2 < c_loop_ub; i2++) {
+        k2[i2 + b_loop_ub] = (1.0 - pf[b_i + i2]) * 3.1415926535897931;
     }
-  }
-  //  FFT bin_1 - b1
-  // 'melbankm:251' v = [pm(1:k3(1)) 1 - pm(k2(1):k4)];
-  if (1 > static_cast<int>(k3_data)) {
+    coder::b_cos(k2);
+    k2.set_size(1, k2.size(1));
+    b_loop_ub = k2.size(1) - 1;
+    for (b_i = 0; b_i <= b_loop_ub; b_i++) {
+        k2[b_i] = 0.5 - 0.42592592592592593 * k2[b_i];
+    }
+    //  convert triangles to Hamming
+    // 'melbankm:267' if sfact == 2
+    //  double all except the DC and Nyquist (if any) terms
+    // 'melbankm:268' msk = (c + mn > 2) & (c + mn < n - fn2 + 2);
+    y.set_size(1, c.size(1));
+    b_loop_ub = c.size(1);
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
+        y[b_i] = c[b_i] + (b1 + 1.0);
+    }
+    b_fp.set_size(1, y.size(1));
+    b_loop_ub = y.size(1);
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
+        b_fp[b_i] = (y[b_i] > 2.0);
+    }
+    r.set_size(1, y.size(1));
+    melinc = (n - fn2) + 2.0;
+    b_loop_ub = y.size(1);
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
+        r[b_i] = (y[b_i] < melinc);
+    }
+    //  there is no Nyquist term if n is odd
+    // 'melbankm:269' v(msk) = 2 * v(msk);
+    c_loop_ub = b_fp.size(1) - 1;
     b_loop_ub = 0;
-  } else {
-    b_loop_ub = static_cast<int>(k3_data);
-  }
-  if (k2_data > fp.size(1)) {
-    nx = 0;
-    nxout = 0;
-  } else {
-    nx = static_cast<int>(k2_data) - 1;
-    nxout = fp.size(1);
-  }
-  // 'melbankm:252' mn = b1 + 1;
-  //  lowest fft bin_1
-  // 'melbankm:253' mx = b4 + 1;
-  //  highest fft bin_1
-  // 'melbankm:256' if b1 < 0
-  //  end
-  // 'melbankm:261' if any(w == 'n')
-  // 'melbankm:263' elseif any(w == 'm')
-  // 'melbankm:264' v = 0.5 - 0.46/1.08 * cos(v * pi);
-  v.set_size(1, (b_loop_ub + nxout) - nx);
-  if (static_cast<int>(b_loop_ub < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      v[k] = pf[k] * 3.1415926535897931;
+    for (b_i = 0; b_i <= c_loop_ub; b_i++) {
+        if (b_fp[b_i] && r[b_i]) {
+            b_loop_ub++;
+        }
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      v[k] = pf[k] * 3.1415926535897931;
+    r1.set_size(1, b_loop_ub);
+    b_loop_ub = 0;
+    for (b_i = 0; b_i <= c_loop_ub; b_i++) {
+        if (b_fp[b_i] && r[b_i]) {
+            r1[b_loop_ub] = b_i + 1;
+            b_loop_ub++;
+        }
     }
-  }
-  nxout -= nx;
-  if (static_cast<int>(nxout < 1200)) {
-    for (k = 0; k < nxout; k++) {
-      v[k + b_loop_ub] = (1.0 - pf[nx + k]) * 3.1415926535897931;
+    y.set_size(1, r1.size(1));
+    b_loop_ub = r1.size(1);
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
+        y[b_i] = 2.0 * k2[r1[b_i] - 1];
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < nxout; k++) {
-      v[k + b_loop_ub] = (1.0 - pf[nx + k]) * 3.1415926535897931;
+    c_loop_ub = b_fp.size(1);
+    b_loop_ub = 0;
+    for (b_i = 0; b_i < c_loop_ub; b_i++) {
+        if (b_fp[b_i] && r[b_i]) {
+            k2[b_i] = y[b_loop_ub];
+            b_loop_ub++;
+        }
     }
-  }
-  nx = v.size(1);
-  if (static_cast<int>(v.size(1) < 1200)) {
-    for (k = 0; k < nx; k++) {
-      v[k] = std::cos(v[k]);
+    //
+    //  sort out the output argument options
+    //
+    // 'melbankm:275' if nargout > 2
+    // 'melbankm:283' else
+    // 'melbankm:284' x = sparse(r, c + mn - 1, v, p, 1 + fn2);
+    y.set_size(1, (loop_ub + i1) - i);
+    for (b_i = 0; b_i < loop_ub; b_i++) {
+        y[b_i] = fp[b_i] + 1.0;
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < nx; k++) {
-      v[k] = std::cos(v[k]);
+    b_loop_ub = i1 - i;
+    for (i1 = 0; i1 < b_loop_ub; i1++) {
+        y[i1 + loop_ub] = fp[i + i1];
     }
-  }
-  v.set_size(1, v.size(1));
-  nxout = v.size(1) - 1;
-  b_loop_ub = v.size(1) - 1;
-  if (static_cast<int>(v.size(1) < 1200)) {
-    for (k = 0; k <= nxout; k++) {
-      v[k] = 0.5 - 0.42592592592592593 * v[k];
+    b_y.set_size(1, c.size(1));
+    loop_ub = c.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        b_y[i] = (c[i] + (b1 + 1.0)) - 1.0;
     }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k <= b_loop_ub; k++) {
-      v[k] = 0.5 - 0.42592592592592593 * v[k];
-    }
-  }
-  //  convert triangles to Hamming
-  // 'melbankm:267' if sfact == 2
-  //  double all except the DC and Nyquist (if any) terms
-  // 'melbankm:268' msk = (c + mn > 2) & (c + mn < n - fn2 + 2);
-  af.set_size(1, c.size(1));
-  k2_data = b1 + 1.0;
-  b_loop_ub = c.size(1);
-  if (static_cast<int>(c.size(1) < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      af[k] = c[k] + (b1 + 1.0);
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      af[k] = c[k] + k2_data;
-    }
-  }
-  b_fp.set_size(1, af.size(1));
-  b_loop_ub = af.size(1);
-  if (static_cast<int>(af.size(1) < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      b_fp[k] = (af[k] > 2.0);
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      b_fp[k] = (af[k] > 2.0);
-    }
-  }
-  r.set_size(1, af.size(1));
-  k2_data = (n - fn2) + 2.0;
-  b_loop_ub = af.size(1);
-  if (static_cast<int>(af.size(1) < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      r[k] = (af[k] < k2_data);
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      r[k] = (af[k] < k2_data);
-    }
-  }
-  //  there is no Nyquist term if n is odd
-  // 'melbankm:269' v(msk) = 2 * v(msk);
-  nx = b_fp.size(1) - 1;
-  nxout = 0;
-  for (b_loop_ub = 0; b_loop_ub <= nx; b_loop_ub++) {
-    if (b_fp[b_loop_ub] && r[b_loop_ub]) {
-      nxout++;
-    }
-  }
-  r1.set_size(1, nxout);
-  nxout = 0;
-  for (b_loop_ub = 0; b_loop_ub <= nx; b_loop_ub++) {
-    if (b_fp[b_loop_ub] && r[b_loop_ub]) {
-      r1[nxout] = b_loop_ub + 1;
-      nxout++;
-    }
-  }
-  af.set_size(1, r1.size(1));
-  b_loop_ub = r1.size(1);
-  if (static_cast<int>(r1.size(1) < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      af[k] = 2.0 * v[r1[k] - 1];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      af[k] = 2.0 * v[r1[k] - 1];
-    }
-  }
-  nx = b_fp.size(1);
-  nxout = 0;
-  for (b_loop_ub = 0; b_loop_ub < nx; b_loop_ub++) {
-    if (b_fp[b_loop_ub] && r[b_loop_ub]) {
-      v[b_loop_ub] = af[nxout];
-      nxout++;
-    }
-  }
-  //
-  //  sort out the output argument options
-  //
-  // 'melbankm:275' if nargout > 2
-  // 'melbankm:283' else
-  // 'melbankm:284' x = sparse(r, c + mn - 1, v, p, 1 + fn2);
-  b1++;
-  af.set_size(1, (loop_ub + b_k) - i);
-  if (static_cast<int>(loop_ub < 1200)) {
-    for (k = 0; k < loop_ub; k++) {
-      af[k] = fp[k] + 1.0;
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < loop_ub; k++) {
-      af[k] = fp[k] + 1.0;
-    }
-  }
-  b_loop_ub = b_k - i;
-  if (static_cast<int>(b_loop_ub < 1200)) {
-    for (k = 0; k < b_loop_ub; k++) {
-      af[k + loop_ub] = fp[i + k];
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < b_loop_ub; k++) {
-      af[k + loop_ub] = fp[i + k];
-    }
-  }
-  pf.set_size(1, c.size(1));
-  loop_ub = c.size(1);
-  if (static_cast<int>(c.size(1) < 1200)) {
-    for (k = 0; k < loop_ub; k++) {
-      pf[k] = (c[k] + b1) - 1.0;
-    }
-  } else {
-#pragma omp parallel for num_threads(omp_get_max_threads()) private(k)
-
-    for (k = 0; k < loop_ub; k++) {
-      pf[k] = (c[k] + b1) - 1.0;
-    }
-  }
-  coder::b_sparse(af, pf, v, fn2 + 1.0, x);
-  // 'melbankm:287' if any(w == 'u')
-  //
-  //  plot results if no output arguments or g option given
-  //
-  // 'melbankm:295' if ~nargout || any(w == 'g')
+    coder::b_sparse(y, b_y, k2, fn2 + 1.0, x);
+    // 'melbankm:287' if any(w == 'u')
+    //
+    //  plot results if no output arguments or g option given
+    //
+    // 'melbankm:295' if ~nargout || any(w == 'g')
 }
 
 //

@@ -2,7 +2,7 @@
 // File: iseven.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 25-Dec-2021 13:54:41
+// C/C++ source code generated on  : 22-Feb-2022 23:42:31
 //
 
 #ifndef ISEVEN_H
@@ -10,13 +10,12 @@
 
 // Include Files
 #include "rtwtypes.h"
-#include "omp.h"
 #include <cstddef>
 #include <cstdlib>
 
 // Function Declarations
 namespace coder {
-boolean_T iseven(double x);
+    boolean_T iseven(double x);
 
 }
 
