@@ -46,4 +46,4 @@ cd "$src" || exit
 
 done
 
-#rm -f -r "$build"
+rm -f -r "$build"

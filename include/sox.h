@@ -290,7 +290,7 @@ written).
 @param filled The dereference of the parameter that receives the number of elements written to the array, or "return" if the value is returned.
 */
 #ifdef _Out_cap_post_count_
-#define LSX_PARAM_OUT_CAP_POST_COUNT(len,filled) _Out_cap_post_count_(len,filled) /* Required pointer to buffer for (len) elements (never NULL); on return, (filled) elements will have been initialized. */
+#define LSX_PARAM_OUT_CAP_POST_COUNT(len, filled) _Out_cap_post_count_(len,filled) /* Required pointer to buffer for (len) elements (never NULL); on return, (filled) elements will have been initialized. */
 #else
 #define LSX_PARAM_OUT_CAP_POST_COUNT(len, filled) /* Required pointer to buffer for (len) elements (never NULL); on return, (filled) elements will have been initialized. */
 #endif
@@ -308,7 +308,7 @@ the function returns the number of elements written).
 @param filled The dereference of the parameter that receives the number of elements written to the array (not counting the terminating null), or "return" if the value is returned.
 */
 #ifdef _Out_z_cap_post_count_
-#define LSX_PARAM_OUT_Z_CAP_POST_COUNT(len,filled) _Out_z_cap_post_count_(len,filled) /* Required pointer to buffer for (len) elements (never NULL); on return, (filled+1) elements will have been initialized, and the array will be 0-terminated. */
+#define LSX_PARAM_OUT_Z_CAP_POST_COUNT(len, filled) _Out_z_cap_post_count_(len,filled) /* Required pointer to buffer for (len) elements (never NULL); on return, (filled+1) elements will have been initialized, and the array will be 0-terminated. */
 #else
 #define LSX_PARAM_OUT_Z_CAP_POST_COUNT(len, filled) /* Required pointer to buffer for (len) elements (never NULL); on return, (filled+1) elements will have been initialized, and the array will be 0-terminated. */
 #endif

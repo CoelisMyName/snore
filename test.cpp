@@ -28,8 +28,8 @@ int main() {
     F64pcm dst;
     dst.length = src.length;
     dst.fs = src.fs;
-    dst.raw = (double *)malloc(sizeof(double) * dst.length);
-    for(int i = 0; i < dst.length; ++i) {
+    dst.raw = (double *) malloc(sizeof(double) * dst.length);
+    for (int i = 0; i < dst.length; ++i) {
         dst.raw[i] = src.raw[i] / 32768.0;
     }
     printf("%d\n", dst.length);
