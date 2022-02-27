@@ -430,22 +430,6 @@ private:
     coder::array<double, 1U> mSEVar;
 };
 
-SNORE_UNUSED SNORE_ModelResult *newModelResult() {
-    return new SNORE_ModelResultImpl();
-}
-
-SNORE_UNUSED void deleteModelResult(SNORE_ModelResult *ptr) {
-    delete ptr;
-}
-
-SNORE_UNUSED extern SNORE_PatientModel *newPatientModel() {
-    return new SNORE_PatientModelImpl;
-}
-
-SNORE_UNUSED extern void deletePatientModel(SNORE_PatientModel *ptr) {
-    delete ptr;
-}
-
 void initialSox() {
     int res = sox_init();
     assert(res == SOX_SUCCESS);
@@ -629,11 +613,27 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
     }
 }
 
-SNORE_UNUSED  void snore::calculateSPL(SNORE_F64pcm &src, SNORE_SPL &spl) {
+SNORE_UNUSED void snore::calculateSPL(SNORE_F64pcm &src, SNORE_SPL &spl) {
     coder::array<double, 1U> x;
     x.set(src.raw, src.length);
     SnoringRecognition_initialize();
     aweight(x, spl.a_pow, spl.freq, &spl.a_sum);
     cweight(x, spl.c_pow, spl.freq, &spl.c_sum);
     zweight(x, spl.z_pow, spl.freq, &spl.z_sum);
+}
+
+SNORE_UNUSED SNORE_ModelResult *newModelResult() {
+    return new SNORE_ModelResultImpl();
+}
+
+SNORE_UNUSED void deleteModelResult(SNORE_ModelResult *ptr) {
+    delete ptr;
+}
+
+SNORE_UNUSED SNORE_PatientModel *newPatientModel() {
+    return new SNORE_PatientModelImpl;
+}
+
+SNORE_UNUSED void deletePatientModel(SNORE_PatientModel *ptr) {
+    delete ptr;
 }
