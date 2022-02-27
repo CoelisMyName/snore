@@ -46,7 +46,7 @@ namespace snore {
 
         virtual SNORE_UNUSED void print() const = 0;
 
-        virtual void clear() = 0;
+        virtual SNORE_UNUSED void clear() = 0;
 
         virtual SNORE_UNUSED int64_t getSignalIndexSize() = 0;
 
