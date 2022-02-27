@@ -2,7 +2,7 @@
 // File: abs.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef ABS_H
@@ -16,15 +16,17 @@
 
 // Function Declarations
 namespace coder {
-    void b_abs(const ::coder::array<double, 1U> &x, ::coder::array<double, 1U> &y);
-
-    void b_abs(const ::coder::array<creal_T, 2U> &x, ::coder::array<double, 2U> &y);
-
-    void b_abs(const ::coder::array<creal_T, 1U> &x, ::coder::array<double, 1U> &y);
-
     void b_abs(const double x[2], double y[2]);
 
     void b_abs(const ::coder::array<double, 2U> &x, ::coder::array<double, 2U> &y);
+
+    void b_abs(const ::coder::array<creal_T, 2U> &x, ::coder::array<double, 2U> &y);
+
+    double b_abs(const creal_T x);
+
+    void b_abs(const ::coder::array<creal_T, 1U> &x, ::coder::array<double, 1U> &y);
+
+    void b_abs(const ::coder::array<double, 1U> &x, ::coder::array<double, 1U> &y);
 
     double b_abs(double x);
 

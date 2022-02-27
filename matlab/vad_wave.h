@@ -2,7 +2,7 @@
 // File: vad_wave.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef VAD_WAVE_H
@@ -15,11 +15,11 @@
 #include <cstdlib>
 
 // Function Declarations
-void vad_wave(const coder::array<double, 2U> &array,
-              const coder::array<double, 2U> &s_starts,
-              const coder::array<double, 2U> &s_ends,
-              coder::array<double, 2U> &w_starts,
-              coder::array<double, 2U> &w_ends);
+void vad_wave(const coder::array<double, 1U> &array,
+              const coder::array<long long, 1U> &starts,
+              const coder::array<long long, 1U> &ends,
+              coder::array<long long, 1U> &ostarts,
+              coder::array<long long, 1U> &oends);
 
 #endif
 //

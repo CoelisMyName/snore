@@ -2,7 +2,7 @@
 // File: aggregatePredict.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -19,7 +19,6 @@
 //                const double learnerWeights[400]
 //                const boolean_T isCached[400]
 //                const double classNames[2]
-//                const boolean_T classlogicalindices[2]
 //                const boolean_T learners[400]
 //                const ::coder::array<boolean_T, 2U> &useObsForLearner
 // Return Type  : void
@@ -29,14 +28,15 @@ namespace coder {
         namespace learning {
             namespace coder {
                 namespace ensembleutils {
-                    void aggregatePredict(const ::coder::array<double, 2U> &X, ::coder::
-                    array<double, 2U> &score, const double
-                                          learnerWeights[400], const boolean_T isCached
-                    [400], const double classNames[2], const
-                                          boolean_T classlogicalindices[2], const
-                                          boolean_T learners[400], const ::coder::array<
+                    void aggregatePredict(const ::coder::array<double, 2U> &X, ::
+                    coder::array<double, 2U> &score, const
+                                          double learnerWeights[400], const
+                                          boolean_T isCached[400], const double
+                                          classNames[2], const boolean_T
+                                          learners[400], const ::coder::array<
                             boolean_T, 2U> &useObsForLearner) {
-                        ::coder::classreg::learning::classif::CompactClassificationTree r;
+                        ::coder::classreg::learning::classif::
+                        CompactClassificationTree r;
                         array<double, 2U> cachedScore;
                         array<double, 1U> cachedWeights;
                         array<boolean_T, 1U> b_useObsForLearner;
@@ -60,7 +60,7 @@ namespace coder {
                         firstCache = true;
                         if (learners[0]) {
                             firstCache = false;
-                            b = isCached[0];
+                            b = false;
                             loop_ub = useObsForLearner.size(0);
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
@@ -68,10 +68,10 @@ namespace coder {
                             }
 
                             r.init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[0], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner, true,
-                                                score);
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[0], &b,
+                                                classNames, b_useObsForLearner,
+                                                true, score);
                         }
 
                         if (learners[1]) {
@@ -91,9 +91,9 @@ namespace coder {
                             }
 
                             r.b_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[1], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[1], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -114,9 +114,9 @@ namespace coder {
                             }
 
                             r.c_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[2], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[2], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -137,9 +137,9 @@ namespace coder {
                             }
 
                             r.d_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[3], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[3], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -160,9 +160,9 @@ namespace coder {
                             }
 
                             r.e_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[4], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[4], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -183,9 +183,9 @@ namespace coder {
                             }
 
                             r.f_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[5], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[5], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -206,9 +206,9 @@ namespace coder {
                             }
 
                             r.g_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[6], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[6], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -229,9 +229,9 @@ namespace coder {
                             }
 
                             r.h_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[7], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[7], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -252,9 +252,9 @@ namespace coder {
                             }
 
                             r.i_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[8], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[8], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -275,9 +275,9 @@ namespace coder {
                             }
 
                             r.j_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[9], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[9], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -298,9 +298,9 @@ namespace coder {
                             }
 
                             r.k_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[10], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[10], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -321,9 +321,9 @@ namespace coder {
                             }
 
                             r.l_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[11], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[11], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -344,9 +344,9 @@ namespace coder {
                             }
 
                             r.m_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[12], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[12], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -367,9 +367,9 @@ namespace coder {
                             }
 
                             r.n_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[13], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[13], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -390,9 +390,9 @@ namespace coder {
                             }
 
                             r.o_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[14], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[14], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -413,9 +413,9 @@ namespace coder {
                             }
 
                             r.p_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[15], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[15], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -436,9 +436,9 @@ namespace coder {
                             }
 
                             r.q_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[16], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[16], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -459,9 +459,9 @@ namespace coder {
                             }
 
                             r.r_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[17], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[17], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -482,9 +482,9 @@ namespace coder {
                             }
 
                             r.s_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[18], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[18], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -505,9 +505,9 @@ namespace coder {
                             }
 
                             r.t_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[19], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[19], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -528,9 +528,9 @@ namespace coder {
                             }
 
                             r.u_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[20], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[20], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -551,9 +551,9 @@ namespace coder {
                             }
 
                             r.v_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[21], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[21], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -574,9 +574,9 @@ namespace coder {
                             }
 
                             r.w_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[22], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[22], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -597,9 +597,9 @@ namespace coder {
                             }
 
                             r.x_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[23], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[23], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -620,9 +620,9 @@ namespace coder {
                             }
 
                             r.y_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[24], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[24], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -643,9 +643,9 @@ namespace coder {
                             }
 
                             r.ab_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[25], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[25], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -666,9 +666,9 @@ namespace coder {
                             }
 
                             r.bb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[26], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[26], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -689,9 +689,9 @@ namespace coder {
                             }
 
                             r.cb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[27], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[27], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -712,9 +712,9 @@ namespace coder {
                             }
 
                             r.db_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[28], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[28], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -735,9 +735,9 @@ namespace coder {
                             }
 
                             r.eb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[29], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[29], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -758,9 +758,9 @@ namespace coder {
                             }
 
                             r.fb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[30], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[30], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -781,9 +781,9 @@ namespace coder {
                             }
 
                             r.gb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[31], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[31], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -804,9 +804,9 @@ namespace coder {
                             }
 
                             r.hb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[32], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[32], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -827,9 +827,9 @@ namespace coder {
                             }
 
                             r.ib_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[33], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[33], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -850,9 +850,9 @@ namespace coder {
                             }
 
                             r.jb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[34], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[34], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -873,9 +873,9 @@ namespace coder {
                             }
 
                             r.kb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[35], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[35], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -896,9 +896,9 @@ namespace coder {
                             }
 
                             r.lb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[36], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[36], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -919,9 +919,9 @@ namespace coder {
                             }
 
                             r.mb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[37], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[37], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -942,9 +942,9 @@ namespace coder {
                             }
 
                             r.nb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[38], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[38], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -965,9 +965,9 @@ namespace coder {
                             }
 
                             r.ob_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[39], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[39], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -988,9 +988,9 @@ namespace coder {
                             }
 
                             r.pb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[40], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[40], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1011,9 +1011,9 @@ namespace coder {
                             }
 
                             r.qb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[41], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[41], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1034,9 +1034,9 @@ namespace coder {
                             }
 
                             r.rb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[42], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[42], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1057,9 +1057,9 @@ namespace coder {
                             }
 
                             r.sb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[43], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[43], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1080,9 +1080,9 @@ namespace coder {
                             }
 
                             r.tb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[44], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[44], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1103,9 +1103,9 @@ namespace coder {
                             }
 
                             r.ub_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[45], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[45], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1126,9 +1126,9 @@ namespace coder {
                             }
 
                             r.vb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[46], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[46], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1149,9 +1149,9 @@ namespace coder {
                             }
 
                             r.wb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[47], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[47], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1172,9 +1172,9 @@ namespace coder {
                             }
 
                             r.xb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[48], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[48], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1195,9 +1195,9 @@ namespace coder {
                             }
 
                             r.yb_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[49], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[49], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1218,9 +1218,9 @@ namespace coder {
                             }
 
                             r.ac_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[50], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[50], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1241,9 +1241,9 @@ namespace coder {
                             }
 
                             r.bc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[51], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[51], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1264,9 +1264,9 @@ namespace coder {
                             }
 
                             r.cc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[52], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[52], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1287,9 +1287,9 @@ namespace coder {
                             }
 
                             r.dc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[53], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[53], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1310,9 +1310,9 @@ namespace coder {
                             }
 
                             r.ec_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[54], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[54], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1333,9 +1333,9 @@ namespace coder {
                             }
 
                             r.fc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[55], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[55], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1356,9 +1356,9 @@ namespace coder {
                             }
 
                             r.gc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[56], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[56], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1379,9 +1379,9 @@ namespace coder {
                             }
 
                             r.hc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[57], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[57], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1402,9 +1402,9 @@ namespace coder {
                             }
 
                             r.ic_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[58], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[58], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1425,9 +1425,9 @@ namespace coder {
                             }
 
                             r.jc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[59], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[59], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1448,9 +1448,9 @@ namespace coder {
                             }
 
                             r.kc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[60], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[60], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1471,9 +1471,9 @@ namespace coder {
                             }
 
                             r.lc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[61], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[61], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1494,9 +1494,9 @@ namespace coder {
                             }
 
                             r.mc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[62], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[62], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1517,9 +1517,9 @@ namespace coder {
                             }
 
                             r.nc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[63], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[63], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1540,9 +1540,9 @@ namespace coder {
                             }
 
                             r.oc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[64], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[64], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1563,9 +1563,9 @@ namespace coder {
                             }
 
                             r.pc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[65], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[65], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1586,9 +1586,9 @@ namespace coder {
                             }
 
                             r.qc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[66], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[66], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1609,9 +1609,9 @@ namespace coder {
                             }
 
                             r.rc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[67], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[67], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1632,9 +1632,9 @@ namespace coder {
                             }
 
                             r.sc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[68], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[68], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1655,9 +1655,9 @@ namespace coder {
                             }
 
                             r.tc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[69], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[69], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1678,9 +1678,9 @@ namespace coder {
                             }
 
                             r.uc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[70], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[70], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1701,9 +1701,9 @@ namespace coder {
                             }
 
                             r.vc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[71], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[71], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1724,9 +1724,9 @@ namespace coder {
                             }
 
                             r.wc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[72], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[72], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1747,9 +1747,9 @@ namespace coder {
                             }
 
                             r.xc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[73], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[73], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1770,9 +1770,9 @@ namespace coder {
                             }
 
                             r.yc_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[74], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[74], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1793,9 +1793,9 @@ namespace coder {
                             }
 
                             r.ad_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[75], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[75], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1816,9 +1816,9 @@ namespace coder {
                             }
 
                             r.bd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[76], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[76], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1839,9 +1839,9 @@ namespace coder {
                             }
 
                             r.cd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[77], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[77], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1862,9 +1862,9 @@ namespace coder {
                             }
 
                             r.dd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[78], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[78], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1885,9 +1885,9 @@ namespace coder {
                             }
 
                             r.ed_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[79], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[79], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1908,9 +1908,9 @@ namespace coder {
                             }
 
                             r.fd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[80], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[80], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1931,9 +1931,9 @@ namespace coder {
                             }
 
                             r.gd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[81], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[81], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1954,9 +1954,9 @@ namespace coder {
                             }
 
                             r.hd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[82], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[82], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -1977,9 +1977,9 @@ namespace coder {
                             }
 
                             r.id_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[83], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[83], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2000,9 +2000,9 @@ namespace coder {
                             }
 
                             r.jd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[84], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[84], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2023,9 +2023,9 @@ namespace coder {
                             }
 
                             r.kd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[85], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[85], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2046,9 +2046,9 @@ namespace coder {
                             }
 
                             r.ld_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[86], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[86], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2069,9 +2069,9 @@ namespace coder {
                             }
 
                             r.md_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[87], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[87], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2092,9 +2092,9 @@ namespace coder {
                             }
 
                             r.nd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[88], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[88], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2115,9 +2115,9 @@ namespace coder {
                             }
 
                             r.od_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[89], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[89], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2138,9 +2138,9 @@ namespace coder {
                             }
 
                             r.pd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[90], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[90], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2161,9 +2161,9 @@ namespace coder {
                             }
 
                             r.qd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[91], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[91], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2184,9 +2184,9 @@ namespace coder {
                             }
 
                             r.rd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[92], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[92], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2207,9 +2207,9 @@ namespace coder {
                             }
 
                             r.sd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[93], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[93], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2230,9 +2230,9 @@ namespace coder {
                             }
 
                             r.td_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[94], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[94], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2253,9 +2253,9 @@ namespace coder {
                             }
 
                             r.ud_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[95], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[95], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2276,9 +2276,9 @@ namespace coder {
                             }
 
                             r.vd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[96], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[96], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2299,9 +2299,9 @@ namespace coder {
                             }
 
                             r.wd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[97], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[97], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2322,9 +2322,9 @@ namespace coder {
                             }
 
                             r.xd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[98], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[98], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2345,9 +2345,9 @@ namespace coder {
                             }
 
                             r.yd_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[99], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[99], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2368,9 +2368,9 @@ namespace coder {
                             }
 
                             r.ae_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[100], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[100], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2391,9 +2391,9 @@ namespace coder {
                             }
 
                             r.be_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[101], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[101], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2414,9 +2414,9 @@ namespace coder {
                             }
 
                             r.ce_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[102], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[102], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2437,9 +2437,9 @@ namespace coder {
                             }
 
                             r.de_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[103], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[103], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2460,9 +2460,9 @@ namespace coder {
                             }
 
                             r.ee_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[104], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[104], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2483,9 +2483,9 @@ namespace coder {
                             }
 
                             r.fe_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[105], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[105], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2506,9 +2506,9 @@ namespace coder {
                             }
 
                             r.ge_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[106], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[106], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2529,9 +2529,9 @@ namespace coder {
                             }
 
                             r.he_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[107], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[107], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2552,9 +2552,9 @@ namespace coder {
                             }
 
                             r.ie_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[108], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[108], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2575,9 +2575,9 @@ namespace coder {
                             }
 
                             r.je_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[109], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[109], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2598,9 +2598,9 @@ namespace coder {
                             }
 
                             r.ke_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[110], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[110], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2621,9 +2621,9 @@ namespace coder {
                             }
 
                             r.le_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[111], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[111], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2644,9 +2644,9 @@ namespace coder {
                             }
 
                             r.me_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[112], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[112], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2667,9 +2667,9 @@ namespace coder {
                             }
 
                             r.ne_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[113], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[113], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2690,9 +2690,9 @@ namespace coder {
                             }
 
                             r.oe_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[114], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[114], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2713,9 +2713,9 @@ namespace coder {
                             }
 
                             r.pe_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[115], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[115], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2736,9 +2736,9 @@ namespace coder {
                             }
 
                             r.qe_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[116], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[116], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2759,9 +2759,9 @@ namespace coder {
                             }
 
                             r.re_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[117], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[117], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2782,9 +2782,9 @@ namespace coder {
                             }
 
                             r.se_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[118], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[118], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2805,9 +2805,9 @@ namespace coder {
                             }
 
                             r.te_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[119], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[119], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2828,9 +2828,9 @@ namespace coder {
                             }
 
                             r.ue_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[120], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[120], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2851,9 +2851,9 @@ namespace coder {
                             }
 
                             r.ve_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[121], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[121], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2874,9 +2874,9 @@ namespace coder {
                             }
 
                             r.we_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[122], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[122], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2897,9 +2897,9 @@ namespace coder {
                             }
 
                             r.xe_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[123], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[123], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2920,9 +2920,9 @@ namespace coder {
                             }
 
                             r.ye_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[124], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[124], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2943,9 +2943,9 @@ namespace coder {
                             }
 
                             r.af_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[125], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[125], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2966,9 +2966,9 @@ namespace coder {
                             }
 
                             r.bf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[126], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[126], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -2989,9 +2989,9 @@ namespace coder {
                             }
 
                             r.cf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[127], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[127], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3012,9 +3012,9 @@ namespace coder {
                             }
 
                             r.df_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[128], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[128], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3035,9 +3035,9 @@ namespace coder {
                             }
 
                             r.ef_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[129], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[129], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3058,9 +3058,9 @@ namespace coder {
                             }
 
                             r.ff_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[130], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[130], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3081,9 +3081,9 @@ namespace coder {
                             }
 
                             r.gf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[131], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[131], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3104,9 +3104,9 @@ namespace coder {
                             }
 
                             r.hf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[132], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[132], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3127,9 +3127,9 @@ namespace coder {
                             }
 
                             r.if_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[133], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[133], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3150,9 +3150,9 @@ namespace coder {
                             }
 
                             r.jf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[134], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[134], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3173,9 +3173,9 @@ namespace coder {
                             }
 
                             r.kf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[135], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[135], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3196,9 +3196,9 @@ namespace coder {
                             }
 
                             r.lf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[136], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[136], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3219,9 +3219,9 @@ namespace coder {
                             }
 
                             r.mf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[137], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[137], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3242,9 +3242,9 @@ namespace coder {
                             }
 
                             r.nf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[138], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[138], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3265,9 +3265,9 @@ namespace coder {
                             }
 
                             r.of_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[139], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[139], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3288,9 +3288,9 @@ namespace coder {
                             }
 
                             r.pf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[140], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[140], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3311,9 +3311,9 @@ namespace coder {
                             }
 
                             r.qf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[141], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[141], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3334,9 +3334,9 @@ namespace coder {
                             }
 
                             r.rf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[142], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[142], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3357,9 +3357,9 @@ namespace coder {
                             }
 
                             r.sf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[143], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[143], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3380,9 +3380,9 @@ namespace coder {
                             }
 
                             r.tf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[144], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[144], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3403,9 +3403,9 @@ namespace coder {
                             }
 
                             r.uf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[145], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[145], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3426,9 +3426,9 @@ namespace coder {
                             }
 
                             r.vf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[146], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[146], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3449,9 +3449,9 @@ namespace coder {
                             }
 
                             r.wf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[147], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[147], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3472,9 +3472,9 @@ namespace coder {
                             }
 
                             r.xf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[148], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[148], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3495,9 +3495,9 @@ namespace coder {
                             }
 
                             r.yf_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[149], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[149], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3518,9 +3518,9 @@ namespace coder {
                             }
 
                             r.ag_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[150], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[150], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3541,9 +3541,9 @@ namespace coder {
                             }
 
                             r.bg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[151], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[151], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3564,9 +3564,9 @@ namespace coder {
                             }
 
                             r.cg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[152], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[152], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3587,9 +3587,9 @@ namespace coder {
                             }
 
                             r.dg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[153], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[153], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3610,9 +3610,9 @@ namespace coder {
                             }
 
                             r.eg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[154], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[154], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3633,9 +3633,9 @@ namespace coder {
                             }
 
                             r.fg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[155], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[155], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3656,9 +3656,9 @@ namespace coder {
                             }
 
                             r.gg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[156], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[156], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3679,9 +3679,9 @@ namespace coder {
                             }
 
                             r.hg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[157], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[157], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3702,9 +3702,9 @@ namespace coder {
                             }
 
                             r.ig_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[158], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[158], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3725,9 +3725,9 @@ namespace coder {
                             }
 
                             r.jg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[159], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[159], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3748,9 +3748,9 @@ namespace coder {
                             }
 
                             r.kg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[160], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[160], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3771,9 +3771,9 @@ namespace coder {
                             }
 
                             r.lg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[161], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[161], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3794,9 +3794,9 @@ namespace coder {
                             }
 
                             r.mg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[162], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[162], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3817,9 +3817,9 @@ namespace coder {
                             }
 
                             r.ng_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[163], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[163], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3840,9 +3840,9 @@ namespace coder {
                             }
 
                             r.og_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[164], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[164], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3863,9 +3863,9 @@ namespace coder {
                             }
 
                             r.pg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[165], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[165], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3886,9 +3886,9 @@ namespace coder {
                             }
 
                             r.qg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[166], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[166], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3909,9 +3909,9 @@ namespace coder {
                             }
 
                             r.rg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[167], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[167], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3932,9 +3932,9 @@ namespace coder {
                             }
 
                             r.sg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[168], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[168], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3955,9 +3955,9 @@ namespace coder {
                             }
 
                             r.tg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[169], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[169], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -3978,9 +3978,9 @@ namespace coder {
                             }
 
                             r.ug_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[170], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[170], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4001,9 +4001,9 @@ namespace coder {
                             }
 
                             r.vg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[171], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[171], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4024,9 +4024,9 @@ namespace coder {
                             }
 
                             r.wg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[172], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[172], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4047,9 +4047,9 @@ namespace coder {
                             }
 
                             r.xg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[173], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[173], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4070,9 +4070,9 @@ namespace coder {
                             }
 
                             r.yg_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[174], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[174], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4093,9 +4093,9 @@ namespace coder {
                             }
 
                             r.ah_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[175], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[175], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4116,9 +4116,9 @@ namespace coder {
                             }
 
                             r.bh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[176], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[176], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4139,9 +4139,9 @@ namespace coder {
                             }
 
                             r.ch_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[177], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[177], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4162,9 +4162,9 @@ namespace coder {
                             }
 
                             r.dh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[178], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[178], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4185,9 +4185,9 @@ namespace coder {
                             }
 
                             r.eh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[179], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[179], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4208,9 +4208,9 @@ namespace coder {
                             }
 
                             r.fh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[180], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[180], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4231,9 +4231,9 @@ namespace coder {
                             }
 
                             r.gh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[181], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[181], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4254,9 +4254,9 @@ namespace coder {
                             }
 
                             r.hh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[182], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[182], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4277,9 +4277,9 @@ namespace coder {
                             }
 
                             r.ih_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[183], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[183], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4300,9 +4300,9 @@ namespace coder {
                             }
 
                             r.jh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[184], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[184], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4323,9 +4323,9 @@ namespace coder {
                             }
 
                             r.kh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[185], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[185], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4346,9 +4346,9 @@ namespace coder {
                             }
 
                             r.lh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[186], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[186], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4369,9 +4369,9 @@ namespace coder {
                             }
 
                             r.mh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[187], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[187], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4392,9 +4392,9 @@ namespace coder {
                             }
 
                             r.nh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[188], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[188], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4415,9 +4415,9 @@ namespace coder {
                             }
 
                             r.oh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[189], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[189], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4438,9 +4438,9 @@ namespace coder {
                             }
 
                             r.ph_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[190], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[190], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4461,9 +4461,9 @@ namespace coder {
                             }
 
                             r.qh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[191], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[191], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4484,9 +4484,9 @@ namespace coder {
                             }
 
                             r.rh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[192], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[192], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4507,9 +4507,9 @@ namespace coder {
                             }
 
                             r.sh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[193], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[193], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4530,9 +4530,9 @@ namespace coder {
                             }
 
                             r.th_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[194], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[194], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4553,9 +4553,9 @@ namespace coder {
                             }
 
                             r.uh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[195], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[195], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4576,9 +4576,9 @@ namespace coder {
                             }
 
                             r.vh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[196], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[196], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4599,9 +4599,9 @@ namespace coder {
                             }
 
                             r.wh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[197], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[197], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4622,9 +4622,9 @@ namespace coder {
                             }
 
                             r.xh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[198], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[198], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4645,9 +4645,9 @@ namespace coder {
                             }
 
                             r.yh_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[199], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[199], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4668,9 +4668,9 @@ namespace coder {
                             }
 
                             r.ai_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[200], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[200], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4691,9 +4691,9 @@ namespace coder {
                             }
 
                             r.bi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[201], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[201], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4714,9 +4714,9 @@ namespace coder {
                             }
 
                             r.ci_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[202], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[202], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4737,9 +4737,9 @@ namespace coder {
                             }
 
                             r.di_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[203], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[203], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4760,9 +4760,9 @@ namespace coder {
                             }
 
                             r.ei_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[204], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[204], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4783,9 +4783,9 @@ namespace coder {
                             }
 
                             r.fi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[205], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[205], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4806,9 +4806,9 @@ namespace coder {
                             }
 
                             r.gi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[206], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[206], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4829,9 +4829,9 @@ namespace coder {
                             }
 
                             r.hi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[207], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[207], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4852,9 +4852,9 @@ namespace coder {
                             }
 
                             r.ii_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[208], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[208], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4875,9 +4875,9 @@ namespace coder {
                             }
 
                             r.ji_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[209], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[209], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4898,9 +4898,9 @@ namespace coder {
                             }
 
                             r.ki_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[210], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[210], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4921,9 +4921,9 @@ namespace coder {
                             }
 
                             r.li_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[211], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[211], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4944,9 +4944,9 @@ namespace coder {
                             }
 
                             r.mi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[212], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[212], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4967,9 +4967,9 @@ namespace coder {
                             }
 
                             r.ni_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[213], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[213], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -4990,9 +4990,9 @@ namespace coder {
                             }
 
                             r.oi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[214], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[214], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5013,9 +5013,9 @@ namespace coder {
                             }
 
                             r.pi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[215], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[215], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5036,9 +5036,9 @@ namespace coder {
                             }
 
                             r.qi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[216], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[216], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5059,9 +5059,9 @@ namespace coder {
                             }
 
                             r.ri_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[217], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[217], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5082,9 +5082,9 @@ namespace coder {
                             }
 
                             r.si_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[218], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[218], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5105,9 +5105,9 @@ namespace coder {
                             }
 
                             r.ti_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[219], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[219], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5128,9 +5128,9 @@ namespace coder {
                             }
 
                             r.ui_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[220], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[220], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5151,9 +5151,9 @@ namespace coder {
                             }
 
                             r.vi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[221], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[221], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5174,9 +5174,9 @@ namespace coder {
                             }
 
                             r.wi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[222], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[222], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5197,9 +5197,9 @@ namespace coder {
                             }
 
                             r.xi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[223], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[223], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5220,9 +5220,9 @@ namespace coder {
                             }
 
                             r.yi_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[224], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[224], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5243,9 +5243,9 @@ namespace coder {
                             }
 
                             r.aj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[225], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[225], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5266,9 +5266,9 @@ namespace coder {
                             }
 
                             r.bj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[226], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[226], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5289,9 +5289,9 @@ namespace coder {
                             }
 
                             r.cj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[227], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[227], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5312,9 +5312,9 @@ namespace coder {
                             }
 
                             r.dj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[228], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[228], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5335,9 +5335,9 @@ namespace coder {
                             }
 
                             r.ej_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[229], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[229], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5358,9 +5358,9 @@ namespace coder {
                             }
 
                             r.fj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[230], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[230], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5381,9 +5381,9 @@ namespace coder {
                             }
 
                             r.gj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[231], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[231], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5404,9 +5404,9 @@ namespace coder {
                             }
 
                             r.hj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[232], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[232], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5427,9 +5427,9 @@ namespace coder {
                             }
 
                             r.ij_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[233], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[233], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5450,9 +5450,9 @@ namespace coder {
                             }
 
                             r.jj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[234], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[234], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5473,9 +5473,9 @@ namespace coder {
                             }
 
                             r.kj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[235], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[235], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5496,9 +5496,9 @@ namespace coder {
                             }
 
                             r.lj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[236], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[236], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5519,9 +5519,9 @@ namespace coder {
                             }
 
                             r.mj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[237], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[237], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5542,9 +5542,9 @@ namespace coder {
                             }
 
                             r.nj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[238], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[238], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5565,9 +5565,9 @@ namespace coder {
                             }
 
                             r.oj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[239], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[239], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5588,9 +5588,9 @@ namespace coder {
                             }
 
                             r.pj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[240], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[240], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5611,9 +5611,9 @@ namespace coder {
                             }
 
                             r.qj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[241], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[241], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5634,9 +5634,9 @@ namespace coder {
                             }
 
                             r.rj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[242], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[242], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5657,9 +5657,9 @@ namespace coder {
                             }
 
                             r.sj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[243], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[243], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5680,9 +5680,9 @@ namespace coder {
                             }
 
                             r.tj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[244], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[244], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5703,9 +5703,9 @@ namespace coder {
                             }
 
                             r.uj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[245], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[245], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5726,9 +5726,9 @@ namespace coder {
                             }
 
                             r.vj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[246], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[246], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5749,9 +5749,9 @@ namespace coder {
                             }
 
                             r.wj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[247], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[247], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5772,9 +5772,9 @@ namespace coder {
                             }
 
                             r.xj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[248], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[248], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5795,9 +5795,9 @@ namespace coder {
                             }
 
                             r.yj_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[249], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[249], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5818,9 +5818,9 @@ namespace coder {
                             }
 
                             r.ak_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[250], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[250], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5841,9 +5841,9 @@ namespace coder {
                             }
 
                             r.bk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[251], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[251], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5864,9 +5864,9 @@ namespace coder {
                             }
 
                             r.ck_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[252], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[252], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5887,9 +5887,9 @@ namespace coder {
                             }
 
                             r.dk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[253], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[253], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5910,9 +5910,9 @@ namespace coder {
                             }
 
                             r.ek_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[254], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[254], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5933,9 +5933,9 @@ namespace coder {
                             }
 
                             r.fk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[255], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[255], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5956,9 +5956,9 @@ namespace coder {
                             }
 
                             r.gk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[256], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[256], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -5979,9 +5979,9 @@ namespace coder {
                             }
 
                             r.hk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[257], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[257], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6002,9 +6002,9 @@ namespace coder {
                             }
 
                             r.ik_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[258], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[258], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6025,9 +6025,9 @@ namespace coder {
                             }
 
                             r.jk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[259], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[259], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6048,9 +6048,9 @@ namespace coder {
                             }
 
                             r.kk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[260], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[260], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6071,9 +6071,9 @@ namespace coder {
                             }
 
                             r.lk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[261], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[261], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6094,9 +6094,9 @@ namespace coder {
                             }
 
                             r.mk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[262], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[262], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6117,9 +6117,9 @@ namespace coder {
                             }
 
                             r.nk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[263], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[263], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6140,9 +6140,9 @@ namespace coder {
                             }
 
                             r.ok_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[264], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[264], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6163,9 +6163,9 @@ namespace coder {
                             }
 
                             r.pk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[265], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[265], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6186,9 +6186,9 @@ namespace coder {
                             }
 
                             r.qk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[266], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[266], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6209,9 +6209,9 @@ namespace coder {
                             }
 
                             r.rk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[267], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[267], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6232,9 +6232,9 @@ namespace coder {
                             }
 
                             r.sk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[268], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[268], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6255,9 +6255,9 @@ namespace coder {
                             }
 
                             r.tk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[269], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[269], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6278,9 +6278,9 @@ namespace coder {
                             }
 
                             r.uk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[270], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[270], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6301,9 +6301,9 @@ namespace coder {
                             }
 
                             r.vk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[271], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[271], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6324,9 +6324,9 @@ namespace coder {
                             }
 
                             r.wk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[272], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[272], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6347,9 +6347,9 @@ namespace coder {
                             }
 
                             r.xk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[273], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[273], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6370,9 +6370,9 @@ namespace coder {
                             }
 
                             r.yk_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[274], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[274], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6393,9 +6393,9 @@ namespace coder {
                             }
 
                             r.al_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[275], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[275], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6416,9 +6416,9 @@ namespace coder {
                             }
 
                             r.bl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[276], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[276], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6439,9 +6439,9 @@ namespace coder {
                             }
 
                             r.cl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[277], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[277], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6462,9 +6462,9 @@ namespace coder {
                             }
 
                             r.dl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[278], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[278], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6485,9 +6485,9 @@ namespace coder {
                             }
 
                             r.el_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[279], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[279], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6508,9 +6508,9 @@ namespace coder {
                             }
 
                             r.fl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[280], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[280], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6531,9 +6531,9 @@ namespace coder {
                             }
 
                             r.gl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[281], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[281], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6554,9 +6554,9 @@ namespace coder {
                             }
 
                             r.hl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[282], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[282], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6577,9 +6577,9 @@ namespace coder {
                             }
 
                             r.il_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[283], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[283], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6600,9 +6600,9 @@ namespace coder {
                             }
 
                             r.jl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[284], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[284], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6623,9 +6623,9 @@ namespace coder {
                             }
 
                             r.kl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[285], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[285], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6646,9 +6646,9 @@ namespace coder {
                             }
 
                             r.ll_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[286], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[286], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6669,9 +6669,9 @@ namespace coder {
                             }
 
                             r.ml_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[287], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[287], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6692,9 +6692,9 @@ namespace coder {
                             }
 
                             r.nl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[288], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[288], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6715,9 +6715,9 @@ namespace coder {
                             }
 
                             r.ol_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[289], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[289], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6738,9 +6738,9 @@ namespace coder {
                             }
 
                             r.pl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[290], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[290], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6761,9 +6761,9 @@ namespace coder {
                             }
 
                             r.ql_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[291], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[291], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6784,9 +6784,9 @@ namespace coder {
                             }
 
                             r.rl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[292], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[292], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6807,9 +6807,9 @@ namespace coder {
                             }
 
                             r.sl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[293], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[293], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6830,9 +6830,9 @@ namespace coder {
                             }
 
                             r.tl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[294], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[294], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6853,9 +6853,9 @@ namespace coder {
                             }
 
                             r.ul_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[295], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[295], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6876,9 +6876,9 @@ namespace coder {
                             }
 
                             r.vl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[296], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[296], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6899,9 +6899,9 @@ namespace coder {
                             }
 
                             r.wl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[297], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[297], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6922,9 +6922,9 @@ namespace coder {
                             }
 
                             r.xl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[298], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[298], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6945,9 +6945,9 @@ namespace coder {
                             }
 
                             r.yl_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[299], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[299], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6968,9 +6968,9 @@ namespace coder {
                             }
 
                             r.am_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[300], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[300], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -6991,9 +6991,9 @@ namespace coder {
                             }
 
                             r.bm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[301], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[301], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7014,9 +7014,9 @@ namespace coder {
                             }
 
                             r.cm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[302], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[302], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7037,9 +7037,9 @@ namespace coder {
                             }
 
                             r.dm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[303], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[303], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7060,9 +7060,9 @@ namespace coder {
                             }
 
                             r.em_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[304], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[304], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7083,9 +7083,9 @@ namespace coder {
                             }
 
                             r.fm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[305], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[305], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7106,9 +7106,9 @@ namespace coder {
                             }
 
                             r.gm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[306], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[306], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7129,9 +7129,9 @@ namespace coder {
                             }
 
                             r.hm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[307], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[307], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7152,9 +7152,9 @@ namespace coder {
                             }
 
                             r.im_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[308], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[308], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7175,9 +7175,9 @@ namespace coder {
                             }
 
                             r.jm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[309], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[309], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7198,9 +7198,9 @@ namespace coder {
                             }
 
                             r.km_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[310], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[310], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7221,9 +7221,9 @@ namespace coder {
                             }
 
                             r.lm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[311], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[311], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7244,9 +7244,9 @@ namespace coder {
                             }
 
                             r.mm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[312], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[312], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7267,9 +7267,9 @@ namespace coder {
                             }
 
                             r.nm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[313], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[313], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7290,9 +7290,9 @@ namespace coder {
                             }
 
                             r.om_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[314], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[314], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7313,9 +7313,9 @@ namespace coder {
                             }
 
                             r.pm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[315], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[315], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7336,9 +7336,9 @@ namespace coder {
                             }
 
                             r.qm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[316], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[316], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7359,9 +7359,9 @@ namespace coder {
                             }
 
                             r.rm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[317], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[317], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7382,9 +7382,9 @@ namespace coder {
                             }
 
                             r.sm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[318], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[318], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7405,9 +7405,9 @@ namespace coder {
                             }
 
                             r.tm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[319], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[319], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7428,9 +7428,9 @@ namespace coder {
                             }
 
                             r.um_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[320], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[320], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7451,9 +7451,9 @@ namespace coder {
                             }
 
                             r.vm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[321], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[321], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7474,9 +7474,9 @@ namespace coder {
                             }
 
                             r.wm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[322], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[322], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7497,9 +7497,9 @@ namespace coder {
                             }
 
                             r.xm_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[323], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[323], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7520,9 +7520,9 @@ namespace coder {
                             }
 
                             r.ym_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[324], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[324], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7543,9 +7543,9 @@ namespace coder {
                             }
 
                             r.an_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[325], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[325], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7566,9 +7566,9 @@ namespace coder {
                             }
 
                             r.bn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[326], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[326], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7589,9 +7589,9 @@ namespace coder {
                             }
 
                             r.cn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[327], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[327], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7612,9 +7612,9 @@ namespace coder {
                             }
 
                             r.dn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[328], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[328], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7635,9 +7635,9 @@ namespace coder {
                             }
 
                             r.en_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[329], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[329], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7658,9 +7658,9 @@ namespace coder {
                             }
 
                             r.fn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[330], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[330], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7681,9 +7681,9 @@ namespace coder {
                             }
 
                             r.gn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[331], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[331], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7704,9 +7704,9 @@ namespace coder {
                             }
 
                             r.hn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[332], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[332], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7727,9 +7727,9 @@ namespace coder {
                             }
 
                             r.in_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[333], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[333], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7750,9 +7750,9 @@ namespace coder {
                             }
 
                             r.jn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[334], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[334], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7773,9 +7773,9 @@ namespace coder {
                             }
 
                             r.kn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[335], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[335], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7796,9 +7796,9 @@ namespace coder {
                             }
 
                             r.ln_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[336], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[336], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7819,9 +7819,9 @@ namespace coder {
                             }
 
                             r.mn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[337], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[337], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7842,9 +7842,9 @@ namespace coder {
                             }
 
                             r.nn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[338], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[338], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7865,9 +7865,9 @@ namespace coder {
                             }
 
                             r.on_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[339], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[339], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7888,9 +7888,9 @@ namespace coder {
                             }
 
                             r.pn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[340], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[340], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7911,9 +7911,9 @@ namespace coder {
                             }
 
                             r.qn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[341], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[341], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7934,9 +7934,9 @@ namespace coder {
                             }
 
                             r.rn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[342], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[342], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7957,9 +7957,9 @@ namespace coder {
                             }
 
                             r.sn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[343], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[343], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -7980,9 +7980,9 @@ namespace coder {
                             }
 
                             r.tn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[344], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[344], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8003,9 +8003,9 @@ namespace coder {
                             }
 
                             r.un_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[345], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[345], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8026,9 +8026,9 @@ namespace coder {
                             }
 
                             r.vn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[346], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[346], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8049,9 +8049,9 @@ namespace coder {
                             }
 
                             r.wn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[347], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[347], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8072,9 +8072,9 @@ namespace coder {
                             }
 
                             r.xn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[348], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[348], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8095,9 +8095,9 @@ namespace coder {
                             }
 
                             r.yn_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[349], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[349], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8118,9 +8118,9 @@ namespace coder {
                             }
 
                             r.ao_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[350], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[350], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8141,9 +8141,9 @@ namespace coder {
                             }
 
                             r.bo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[351], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[351], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8164,9 +8164,9 @@ namespace coder {
                             }
 
                             r.co_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[352], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[352], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8187,9 +8187,9 @@ namespace coder {
                             }
 
                             r.do_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[353], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[353], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8210,9 +8210,9 @@ namespace coder {
                             }
 
                             r.eo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[354], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[354], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8233,9 +8233,9 @@ namespace coder {
                             }
 
                             r.fo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[355], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[355], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8256,9 +8256,9 @@ namespace coder {
                             }
 
                             r.go_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[356], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[356], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8279,9 +8279,9 @@ namespace coder {
                             }
 
                             r.ho_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[357], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[357], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8302,9 +8302,9 @@ namespace coder {
                             }
 
                             r.io_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[358], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[358], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8325,9 +8325,9 @@ namespace coder {
                             }
 
                             r.jo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[359], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[359], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8348,9 +8348,9 @@ namespace coder {
                             }
 
                             r.ko_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[360], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[360], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8371,9 +8371,9 @@ namespace coder {
                             }
 
                             r.lo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[361], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[361], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8394,9 +8394,9 @@ namespace coder {
                             }
 
                             r.mo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[362], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[362], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8417,9 +8417,9 @@ namespace coder {
                             }
 
                             r.no_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[363], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[363], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8440,9 +8440,9 @@ namespace coder {
                             }
 
                             r.oo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[364], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[364], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8463,9 +8463,9 @@ namespace coder {
                             }
 
                             r.po_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[365], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[365], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8486,9 +8486,9 @@ namespace coder {
                             }
 
                             r.qo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[366], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[366], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8509,9 +8509,9 @@ namespace coder {
                             }
 
                             r.ro_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[367], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[367], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8532,9 +8532,9 @@ namespace coder {
                             }
 
                             r.so_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[368], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[368], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8555,9 +8555,9 @@ namespace coder {
                             }
 
                             r.to_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[369], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[369], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8578,9 +8578,9 @@ namespace coder {
                             }
 
                             r.uo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[370], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[370], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8601,9 +8601,9 @@ namespace coder {
                             }
 
                             r.vo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[371], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[371], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8624,9 +8624,9 @@ namespace coder {
                             }
 
                             r.wo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[372], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[372], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8647,9 +8647,9 @@ namespace coder {
                             }
 
                             r.xo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[373], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[373], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8670,9 +8670,9 @@ namespace coder {
                             }
 
                             r.yo_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[374], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[374], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8693,9 +8693,9 @@ namespace coder {
                             }
 
                             r.ap_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[375], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[375], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8716,9 +8716,9 @@ namespace coder {
                             }
 
                             r.bp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[376], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[376], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8739,9 +8739,9 @@ namespace coder {
                             }
 
                             r.cp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[377], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[377], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8762,9 +8762,9 @@ namespace coder {
                             }
 
                             r.dp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[378], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[378], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8785,9 +8785,9 @@ namespace coder {
                             }
 
                             r.ep_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[379], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[379], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8808,9 +8808,9 @@ namespace coder {
                             }
 
                             r.fp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[380], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[380], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8831,9 +8831,9 @@ namespace coder {
                             }
 
                             r.gp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[381], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[381], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8854,9 +8854,9 @@ namespace coder {
                             }
 
                             r.hp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[382], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[382], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8877,9 +8877,9 @@ namespace coder {
                             }
 
                             r.ip_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[383], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[383], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8900,9 +8900,9 @@ namespace coder {
                             }
 
                             r.jp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[384], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[384], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8923,9 +8923,9 @@ namespace coder {
                             }
 
                             r.kp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[385], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[385], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8946,9 +8946,9 @@ namespace coder {
                             }
 
                             r.lp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[386], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[386], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8969,9 +8969,9 @@ namespace coder {
                             }
 
                             r.mp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[387], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[387], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -8992,9 +8992,9 @@ namespace coder {
                             }
 
                             r.np_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[388], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[388], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9015,9 +9015,9 @@ namespace coder {
                             }
 
                             r.op_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[389], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[389], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9038,9 +9038,9 @@ namespace coder {
                             }
 
                             r.pp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[390], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[390], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9061,9 +9061,9 @@ namespace coder {
                             }
 
                             r.qp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[391], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[391], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9084,9 +9084,9 @@ namespace coder {
                             }
 
                             r.rp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[392], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[392], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9107,9 +9107,9 @@ namespace coder {
                             }
 
                             r.sp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[393], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[393], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9130,9 +9130,9 @@ namespace coder {
                             }
 
                             r.tp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[394], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[394], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9153,9 +9153,9 @@ namespace coder {
                             }
 
                             r.up_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[395], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[395], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9176,9 +9176,9 @@ namespace coder {
                             }
 
                             r.vp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[396], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[396], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9199,9 +9199,9 @@ namespace coder {
                             }
 
                             r.wp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[397], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[397], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9222,9 +9222,9 @@ namespace coder {
                             }
 
                             r.xp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[398], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[398], &b,
+                                                classNames, b_useObsForLearner,
                                                 initCache, score);
                         }
 
@@ -9238,9 +9238,9 @@ namespace coder {
                             }
 
                             r.yp_init();
-                            predictOneWithCache(X, cachedScore, cachedWeights, &r,
-                                                learnerWeights[399], &b, classNames,
-                                                classlogicalindices, b_useObsForLearner,
+                            predictOneWithCache(X, cachedScore, cachedWeights,
+                                                &r, learnerWeights[399], &b,
+                                                classNames, b_useObsForLearner,
                                                 firstCache, score);
                         }
                     }

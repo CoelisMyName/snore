@@ -2,7 +2,7 @@
 // File: xdlanv2.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -113,7 +113,8 @@ namespace coder {
                             scale = -*c * *sn + *d * *cs;
                             *b = bcmis * *cs + scale * *sn;
                             *c = -bcmax * *sn + z * *cs;
-                            z = 0.5 * ((bcmax * *cs + z * *sn) + (-bcmis * *sn + scale * *cs));
+                            z = 0.5 *
+                                ((bcmax * *cs + z * *sn) + (-bcmis * *sn + scale * *cs));
                             *a = z;
                             *d = z;
                             if (*c != 0.0) {

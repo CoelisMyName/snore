@@ -2,12 +2,11 @@
 // File: melbankm.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "melbankm.h"
-#include "SnoringRecognition_types.h"
 #include "abs.h"
 #include "ceil.h"
 #include "colon.h"
@@ -118,41 +117,43 @@
 //      IEEE Trans Acoustics Speech and Signal Processing, 28 (4): 357�366, Aug.
 //      1980.
 //
-// Arguments    : SnoringRecognitionStackData *SD
-//                double n
+// Arguments    : double n
 //                double fs
 //                coder::sparse *x
 // Return Type  : void
 //
-void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
-              coder::sparse *x) {
+void melbankm(double n, double fs, coder::sparse *x) {
+    coder::array<double, 2U> b_c;
     coder::array<double, 2U> b_y;
     coder::array<double, 2U> c;
     coder::array<double, 2U> fp;
-    coder::array<double, 2U> k2;
     coder::array<double, 2U> pf;
+    coder::array<double, 2U> pm;
+    coder::array<double, 2U> v;
     coder::array<double, 2U> y;
-    coder::array<int, 2U> ii;
     coder::array<int, 2U> r1;
     coder::array<boolean_T, 2U> b_fp;
     coder::array<boolean_T, 2U> r;
+    double b_dv1[4];
     double b_mflh[4];
-    double blim[4];
     double b_dv[2];
     double mflh[2];
     double b;
     double b1;
+    double b_n;
     double d;
-    double d1;
     double fn2;
+    double k2_data;
     double melinc;
+    int k3_size[2];
     int b_i;
     int b_loop_ub;
-    int c_loop_ub;
     int i;
     int i1;
     int i2;
     int i3;
+    int k2_size_idx_1;
+    int k3_data;
     int loop_ub;
     //       Copyright (C) Mike Brookes 1997-2009
     //       Version: $Id: melbankm.m,v 1.11 2010/01/02 20:02:22 dmb Exp $
@@ -192,7 +193,7 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     // 'melbankm:151' mflh = frq2mel(mflh);
     b_dv[0] = 0.0 * fs;
     b_dv[1] = 0.5 * fs;
-    frq2mel(SD, b_dv, mflh);
+    frq2mel(b_dv, mflh);
     //  convert frequency limits into mel
     // 'melbankm:156' melrng = mflh * (-1:2:1)';
     //  mel range
@@ -217,20 +218,18 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     b_mflh[1] = mflh[0] + melinc;
     b_mflh[2] = mflh[0] + 16.0 * melinc;
     b_mflh[3] = mflh[0] + 17.0 * melinc;
-    mel2frq(SD, b_mflh, blim);
-    blim[0] = blim[0] * n / fs;
-    blim[3] = blim[3] * n / fs;
+    mel2frq(b_mflh, b_dv1);
     // 'melbankm:196' mc = mflh(1) + (1:p) * melinc;
     //  mel centre frequencies
     // 'melbankm:197' b1 = floor(blim(1)) + 1;
-    d = blim[0];
+    d = b_dv1[0] * n / fs;
     coder::b_floor(&d);
     b1 = d + 1.0;
     //  lowest FFT bin_0 required might be negative)
     // 'melbankm:198' b4 = min(fn2, ceil(blim(4)) - 1);
-    d1 = blim[3];
-    coder::b_ceil(&d1);
-    b = coder::internal::minimum2(fn2, d1 - 1.0);
+    b_n = b_dv1[3] * n / fs;
+    coder::b_ceil(&b_n);
+    b = coder::internal::minimum2(fn2, b_n - 1.0);
     //  highest FFT bin_0 required
     //
     //  now map all the useful FFT bins_0 to filter1 centres
@@ -243,13 +242,14 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
         y[0] = rtNaN;
     } else if (b < d + 1.0) {
         y.set_size(1, 0);
-    } else if ((coder::b_isinf(d + 1.0) || coder::b_isinf(b)) && (d + 1.0 == b)) {
+    } else if ((coder::b_isinf(d + 1.0) || coder::b_isinf(b)) &&
+               (d + 1.0 == b)) {
         y.set_size(1, 1);
         y[0] = rtNaN;
     } else {
-        d1 = d + 1.0;
-        coder::b_floor(&d1);
-        if (d1 == d + 1.0) {
+        b_n = d + 1.0;
+        coder::b_floor(&b_n);
+        if (b_n == d + 1.0) {
             loop_ub = static_cast<int>(floor(b - (d + 1.0)));
             y.set_size(1, loop_ub + 1);
             for (i = 0; i <= loop_ub; i++) {
@@ -264,11 +264,11 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     for (i = 0; i < loop_ub; i++) {
         b_y[i] = y[i] * fs / n;
     }
-    frq2mel(SD, b_y, pf);
-    pf.set_size(1, pf.size(1));
-    loop_ub = pf.size(1) - 1;
-    for (i = 0; i <= loop_ub; i++) {
-        pf[i] = (pf[i] - mflh[0]) / melinc;
+    frq2mel(b_y, y);
+    pf.set_size(1, y.size(1));
+    loop_ub = y.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        pf[i] = (y[i] - mflh[0]) / melinc;
     }
     //
     //   remove any incorrect entries in pf due to rounding errors
@@ -295,10 +295,10 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     coder::b_floor(fp);
     //  FFT bin_0 i contributes to filters_1 fp(1+i-b1)+[0 1]
     // 'melbankm:229' pm = pf - fp;
-    pf.set_size(1, pf.size(1));
-    loop_ub = pf.size(1) - 1;
-    for (i = 0; i <= loop_ub; i++) {
-        pf[i] = pf[i] - fp[i];
+    pm.set_size(1, pf.size(1));
+    loop_ub = pf.size(1);
+    for (i = 0; i < loop_ub; i++) {
+        pm[i] = pf[i] - fp[i];
     }
     //  multiplier for upper filter
     // 'melbankm:230' k2 = find(fp > 0, 1);
@@ -307,115 +307,114 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     for (i = 0; i < loop_ub; i++) {
         b_fp[i] = (fp[i] > 0.0);
     }
-    coder::eml_find(b_fp, ii);
-    k2.set_size(1, ii.size(1));
-    loop_ub = ii.size(1);
+    coder::eml_find(b_fp, (int *) &k3_data, k3_size);
+    k2_size_idx_1 = k3_size[1];
+    loop_ub = k3_size[1];
     for (i = 0; i < loop_ub; i++) {
-        k2[i] = ii[i];
+        k2_data = k3_data;
     }
-    //  FFT bin_1 k2+b1 is the first to contribute to both upper and lower filters
+    //  FFT bin_1 k2+b1 is the first to contribute to both upper and lower
+    //  filters
     // 'melbankm:231' k3 = find(fp < p, 1, 'last');
     b_fp.set_size(1, fp.size(1));
     loop_ub = fp.size(1);
     for (i = 0; i < loop_ub; i++) {
         b_fp[i] = (fp[i] < 16.0);
     }
-    coder::b_eml_find(b_fp, ii);
-    //  FFT bin_1 k3+b1 is the last to contribute to both upper and lower filters
+    coder::b_eml_find(b_fp, (int *) &k3_data, k3_size);
+    //  FFT bin_1 k3+b1 is the last to contribute to both upper and lower
+    //  filters
     // 'melbankm:232' k4 = numel(fp);
     //  FFT bin_1 k4+b1 is the last to contribute to any filters
     // 'melbankm:234' if isempty(k2)
-    if (k2.size(1) == 0) {
+    if (k2_size_idx_1 == 0) {
         // 'melbankm:235' k2 = k4 + 1;
-        k2.set_size(1, 1);
-        k2[0] = static_cast<double>(fp.size(1)) + 1.0;
+        k2_data = static_cast<double>(fp.size(1)) + 1.0;
     }
     // 'melbankm:238' if isempty(k3)
-    if (ii.size(1) == 0) {
+    if (k3_size[1] == 0) {
         // 'melbankm:239' k3 = 0;
-        ii.set_size(1, 1);
-        ii[0] = 0;
+        k3_data = 0;
     }
     // 'melbankm:242' if any(w == 'y')
     // 'melbankm:248' else
     // 'melbankm:249' r = [1 + fp(1:k3(1)) fp(k2(1):k4)];
-    if (1 > ii[0]) {
+    if (1 > k3_data) {
         loop_ub = 0;
     } else {
-        loop_ub = ii[0];
+        loop_ub = k3_data;
     }
-    if (k2[0] > fp.size(1)) {
+    if (k2_data > fp.size(1)) {
         i = 0;
         i1 = 0;
     } else {
-        i = static_cast<int>(k2[0]) - 1;
+        i = static_cast<int>(k2_data) - 1;
         i1 = fp.size(1);
     }
     //  filter number_1
     // 'melbankm:250' c = [1:k3 k2:k4];
-    b_i = ii[0];
-    if (coder::b_isnan(static_cast<double>(b_i))) {
+    if (coder::b_isnan(static_cast<double>(k3_data))) {
         y.set_size(1, 1);
         y[0] = rtNaN;
-    } else if (ii[0] < 1) {
+    } else if (k3_data < 1) {
         y.set_size(1, 0);
-    } else if (coder::b_isinf(static_cast<double>(b_i)) && (1 == ii[0])) {
+    } else if (coder::b_isinf(static_cast<double>(k3_data)) && (1 == k3_data)) {
         y.set_size(1, 1);
         y[0] = rtNaN;
     } else {
-        y.set_size(1, b_i);
-        b_loop_ub = b_i - 1;
-        for (b_i = 0; b_i <= b_loop_ub; b_i++) {
-            y[b_i] = static_cast<double>(b_i) + 1.0;
+        y.set_size(1, k3_data);
+        b_loop_ub = k3_data - 1;
+        for (i2 = 0; i2 <= b_loop_ub; i2++) {
+            y[i2] = static_cast<double>(i2) + 1.0;
         }
     }
-    if (coder::b_isnan(k2[0]) ||
+    if (coder::b_isnan(k2_data) ||
         coder::b_isnan(static_cast<double>(fp.size(1)))) {
         b_y.set_size(1, 1);
         b_y[0] = rtNaN;
-    } else if (fp.size(1) < k2[0]) {
+    } else if (fp.size(1) < k2_data) {
         b_y.set_size(1, 0);
-    } else if ((coder::b_isinf(k2[0]) ||
+    } else if ((coder::b_isinf(k2_data) ||
                 coder::b_isinf(static_cast<double>(fp.size(1)))) &&
-               (k2[0] == fp.size(1))) {
+               (static_cast<int>(k2_data) == fp.size(1))) {
         b_y.set_size(1, 1);
         b_y[0] = rtNaN;
     } else {
-        d = k2[0];
+        d = k2_data;
         coder::b_floor(&d);
-        if (d == k2[0]) {
-            b_y.set_size(
-                    1, static_cast<int>(static_cast<double>(fp.size(1)) - k2[0]) + 1);
-            b_loop_ub = static_cast<int>(static_cast<double>(fp.size(1)) - k2[0]);
-            for (b_i = 0; b_i <= b_loop_ub; b_i++) {
-                b_y[b_i] = k2[0] + static_cast<double>(b_i);
+        if (d == k2_data) {
+            b_y.set_size(1, (fp.size(1) - static_cast<int>(k2_data)) + 1);
+            b_loop_ub = fp.size(1) - static_cast<int>(k2_data);
+            for (i2 = 0; i2 <= b_loop_ub; i2++) {
+                b_y[i2] = k2_data + static_cast<double>(i2);
             }
         } else {
-            coder::eml_float_colon(k2[0], static_cast<double>(fp.size(1)), b_y);
+            coder::eml_float_colon(k2_data, static_cast<double>(fp.size(1)),
+                                   b_y);
         }
     }
     c.set_size(1, y.size(1) + b_y.size(1));
     b_loop_ub = y.size(1);
-    for (b_i = 0; b_i < b_loop_ub; b_i++) {
-        c[b_i] = y[b_i];
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        c[i2] = y[i2];
     }
     b_loop_ub = b_y.size(1);
-    for (b_i = 0; b_i < b_loop_ub; b_i++) {
-        c[b_i + y.size(1)] = b_y[b_i];
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        c[i2 + y.size(1)] = b_y[i2];
     }
     //  FFT bin_1 - b1
     // 'melbankm:251' v = [pm(1:k3(1)) 1 - pm(k2(1):k4)];
-    if (1 > ii[0]) {
+    if (1 > k3_data) {
         b_loop_ub = 0;
     } else {
-        b_loop_ub = ii[0];
+        b_loop_ub = k3_data;
     }
-    if (k2[0] > fp.size(1)) {
-        b_i = 0;
+    if (k2_data > fp.size(1)) {
         i2 = 0;
+        b_i = 0;
     } else {
-        b_i = static_cast<int>(k2[0]) - 1;
-        i2 = fp.size(1);
+        i2 = static_cast<int>(k2_data) - 1;
+        b_i = fp.size(1);
     }
     // 'melbankm:252' mn = b1 + 1;
     //  lowest fft bin_1
@@ -424,16 +423,16 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     // 'melbankm:256' if b1 < 0
     if (b1 < 0.0) {
         // 'melbankm:257' c = abs(c + b1 - 1) - b1 + 1;
-        b_y.set_size(1, c.size(1));
-        c_loop_ub = c.size(1);
-        for (i3 = 0; i3 < c_loop_ub; i3++) {
-            b_y[i3] = (c[i3] + b1) - 1.0;
+        b_c.set_size(1, c.size(1));
+        k2_size_idx_1 = c.size(1);
+        for (i3 = 0; i3 < k2_size_idx_1; i3++) {
+            b_c[i3] = (c[i3] + b1) - 1.0;
         }
-        coder::b_abs(b_y, c);
-        c.set_size(1, c.size(1));
-        c_loop_ub = c.size(1) - 1;
-        for (i3 = 0; i3 <= c_loop_ub; i3++) {
-            c[i3] = (c[i3] - b1) + 1.0;
+        coder::b_abs(b_c, y);
+        c.set_size(1, y.size(1));
+        k2_size_idx_1 = y.size(1);
+        for (i3 = 0; i3 < k2_size_idx_1; i3++) {
+            c[i3] = (y[i3] - b1) + 1.0;
         }
         //  convert negative frequencies into positive
     }
@@ -441,19 +440,19 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     // 'melbankm:261' if any(w == 'n')
     // 'melbankm:263' elseif any(w == 'm')
     // 'melbankm:264' v = 0.5 - 0.46/1.08 * cos(v * pi);
-    k2.set_size(1, (b_loop_ub + i2) - b_i);
+    y.set_size(1, (b_loop_ub + b_i) - i2);
     for (i3 = 0; i3 < b_loop_ub; i3++) {
-        k2[i3] = pf[i3] * 3.1415926535897931;
+        y[i3] = pm[i3] * 3.1415926535897931;
     }
-    c_loop_ub = i2 - b_i;
-    for (i2 = 0; i2 < c_loop_ub; i2++) {
-        k2[i2 + b_loop_ub] = (1.0 - pf[b_i + i2]) * 3.1415926535897931;
+    k2_size_idx_1 = b_i - i2;
+    for (b_i = 0; b_i < k2_size_idx_1; b_i++) {
+        y[b_i + b_loop_ub] = (1.0 - pm[i2 + b_i]) * 3.1415926535897931;
     }
-    coder::b_cos(k2);
-    k2.set_size(1, k2.size(1));
-    b_loop_ub = k2.size(1) - 1;
-    for (b_i = 0; b_i <= b_loop_ub; b_i++) {
-        k2[b_i] = 0.5 - 0.42592592592592593 * k2[b_i];
+    coder::b_cos(y);
+    v.set_size(1, y.size(1));
+    b_loop_ub = y.size(1);
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        v[i2] = 0.5 - 0.42592592592592593 * y[i2];
     }
     //  convert triangles to Hamming
     // 'melbankm:267' if sfact == 2
@@ -461,48 +460,48 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     // 'melbankm:268' msk = (c + mn > 2) & (c + mn < n - fn2 + 2);
     y.set_size(1, c.size(1));
     b_loop_ub = c.size(1);
-    for (b_i = 0; b_i < b_loop_ub; b_i++) {
-        y[b_i] = c[b_i] + (b1 + 1.0);
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        y[i2] = c[i2] + (b1 + 1.0);
     }
     b_fp.set_size(1, y.size(1));
     b_loop_ub = y.size(1);
-    for (b_i = 0; b_i < b_loop_ub; b_i++) {
-        b_fp[b_i] = (y[b_i] > 2.0);
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        b_fp[i2] = (y[i2] > 2.0);
     }
     r.set_size(1, y.size(1));
-    melinc = (n - fn2) + 2.0;
+    b_n = (n - fn2) + 2.0;
     b_loop_ub = y.size(1);
-    for (b_i = 0; b_i < b_loop_ub; b_i++) {
-        r[b_i] = (y[b_i] < melinc);
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        r[i2] = (y[i2] < b_n);
     }
     //  there is no Nyquist term if n is odd
     // 'melbankm:269' v(msk) = 2 * v(msk);
-    c_loop_ub = b_fp.size(1) - 1;
-    b_loop_ub = 0;
-    for (b_i = 0; b_i <= c_loop_ub; b_i++) {
+    b_loop_ub = b_fp.size(1) - 1;
+    k2_size_idx_1 = 0;
+    for (b_i = 0; b_i <= b_loop_ub; b_i++) {
         if (b_fp[b_i] && r[b_i]) {
-            b_loop_ub++;
+            k2_size_idx_1++;
         }
     }
-    r1.set_size(1, b_loop_ub);
-    b_loop_ub = 0;
-    for (b_i = 0; b_i <= c_loop_ub; b_i++) {
+    r1.set_size(1, k2_size_idx_1);
+    k2_size_idx_1 = 0;
+    for (b_i = 0; b_i <= b_loop_ub; b_i++) {
         if (b_fp[b_i] && r[b_i]) {
-            r1[b_loop_ub] = b_i + 1;
-            b_loop_ub++;
+            r1[k2_size_idx_1] = b_i + 1;
+            k2_size_idx_1++;
         }
     }
     y.set_size(1, r1.size(1));
     b_loop_ub = r1.size(1);
-    for (b_i = 0; b_i < b_loop_ub; b_i++) {
-        y[b_i] = 2.0 * k2[r1[b_i] - 1];
+    for (i2 = 0; i2 < b_loop_ub; i2++) {
+        y[i2] = 2.0 * v[r1[i2] - 1];
     }
-    c_loop_ub = b_fp.size(1);
-    b_loop_ub = 0;
-    for (b_i = 0; b_i < c_loop_ub; b_i++) {
+    b_loop_ub = b_fp.size(1);
+    k2_size_idx_1 = 0;
+    for (b_i = 0; b_i < b_loop_ub; b_i++) {
         if (b_fp[b_i] && r[b_i]) {
-            k2[b_i] = y[b_loop_ub];
-            b_loop_ub++;
+            v[b_i] = y[k2_size_idx_1];
+            k2_size_idx_1++;
         }
     }
     //
@@ -511,20 +510,20 @@ void melbankm(SnoringRecognitionStackData *SD, double n, double fs,
     // 'melbankm:275' if nargout > 2
     // 'melbankm:283' else
     // 'melbankm:284' x = sparse(r, c + mn - 1, v, p, 1 + fn2);
-    y.set_size(1, (loop_ub + i1) - i);
-    for (b_i = 0; b_i < loop_ub; b_i++) {
-        y[b_i] = fp[b_i] + 1.0;
+    b_y.set_size(1, (loop_ub + i1) - i);
+    for (i2 = 0; i2 < loop_ub; i2++) {
+        b_y[i2] = fp[i2] + 1.0;
     }
     b_loop_ub = i1 - i;
     for (i1 = 0; i1 < b_loop_ub; i1++) {
-        y[i1 + loop_ub] = fp[i + i1];
+        b_y[i1 + loop_ub] = fp[i + i1];
     }
-    b_y.set_size(1, c.size(1));
+    b_c.set_size(1, c.size(1));
     loop_ub = c.size(1);
     for (i = 0; i < loop_ub; i++) {
-        b_y[i] = (c[i] + (b1 + 1.0)) - 1.0;
+        b_c[i] = (c[i] + (b1 + 1.0)) - 1.0;
     }
-    coder::b_sparse(y, b_y, k2, fn2 + 1.0, x);
+    coder::b_sparse(b_y, b_c, v, fn2 + 1.0, x);
     // 'melbankm:287' if any(w == 'u')
     //
     //  plot results if no output arguments or g option given

@@ -2,7 +2,7 @@
 // File: zweight.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -19,13 +19,13 @@
 //
 // function [p, f, s] = zweight(x)
 //
-// Arguments    : const coder::array<double, 2U> &x
+// Arguments    : const coder::array<double, 1U> &x
 //                double p[8]
 //                double f[8]
 //                double *s
 // Return Type  : void
 //
-void zweight(const coder::array<double, 2U> &x, double p[8], double f[8],
+void zweight(const coder::array<double, 1U> &x, double p[8], double f[8],
              double *s) {
     double b_dv[8];
     double b_dv1[8];
@@ -41,7 +41,7 @@ void zweight(const coder::array<double, 2U> &x, double p[8], double f[8],
     for (i = 0; i < 8; i++) {
         b_dv[i] = 0.1 * p[i];
     }
-    coder::power(10.0, b_dv, b_dv1);
+    coder::power(b_dv, b_dv1);
     d = coder::sum(b_dv1);
     coder::b_log10(&d);
     *s = 10.0 * d;

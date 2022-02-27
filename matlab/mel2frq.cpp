@@ -2,12 +2,11 @@
 // File: mel2frq.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "mel2frq.h"
-#include "SnoringRecognition_types.h"
 #include "abs.h"
 #include "exp.h"
 #include "rt_nonfinite.h"
@@ -23,14 +22,13 @@
 //    mr gives the corresponding gradients in Hz/mel.
 //  The Mel scale corresponds to the perceived pitch of a tone
 //
-// Arguments    : SnoringRecognitionStackData *SD
-//                const double mel[4]
+// Arguments    : const double mel[4]
 //                double frq[4]
 // Return Type  : void
 //
-void mel2frq(SnoringRecognitionStackData *SD, const double mel[4],
-             double frq[4]) {
+void mel2frq(const double mel[4], double frq[4]) {
     double b_dv[4];
+    double b_dv1[4];
     // 	The relationship between mel and frq is given by:
     //
     // 	m = ln(1 + f/700) * 1000 / ln(1+1000/700)
@@ -76,40 +74,23 @@ void mel2frq(SnoringRecognitionStackData *SD, const double mel[4],
     // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     // 'mel2frq:54' if isempty(k)
     // 'mel2frq:58' frq = 700 * sign(mel) .* (exp(abs(mel) / k) - 1);
-    frq[0] = mel[0];
-    frq[1] = mel[1];
-    frq[2] = mel[2];
-    frq[3] = mel[3];
-    coder::c_sign(frq);
-    coder::c_abs(mel, b_dv);
-    b_dv[0] /= SD->pd->b_k;
-    b_dv[1] /= SD->pd->b_k;
-    b_dv[2] /= SD->pd->b_k;
-    b_dv[3] /= SD->pd->b_k;
-    coder::b_exp(b_dv);
-    frq[0] = 700.0 * frq[0] * (b_dv[0] - 1.0);
-    frq[1] = 700.0 * frq[1] * (b_dv[1] - 1.0);
-    frq[2] = 700.0 * frq[2] * (b_dv[2] - 1.0);
-    frq[3] = 700.0 * frq[3] * (b_dv[3] - 1.0);
+    b_dv[0] = mel[0];
+    b_dv[1] = mel[1];
+    b_dv[2] = mel[2];
+    b_dv[3] = mel[3];
+    coder::c_sign(b_dv);
+    coder::c_abs(mel, b_dv1);
+    b_dv1[0] /= 1127.01048;
+    b_dv1[1] /= 1127.01048;
+    b_dv1[2] /= 1127.01048;
+    b_dv1[3] /= 1127.01048;
+    coder::b_exp(b_dv1);
+    frq[0] = 700.0 * b_dv[0] * (b_dv1[0] - 1.0);
+    frq[1] = 700.0 * b_dv[1] * (b_dv1[1] - 1.0);
+    frq[2] = 700.0 * b_dv[2] * (b_dv1[2] - 1.0);
+    frq[3] = 700.0 * b_dv[3] * (b_dv1[3] - 1.0);
     // 'mel2frq:59' mr = (700 + abs(frq)) / k;
     // 'mel2frq:61' if ~nargout
-}
-
-//
-// function [frq, mr] = mel2frq(mel)
-//
-// MEL2FRQ  Convert Mel frequency scale to Hertz FRQ=(MEL)
-//  frq = mel2frq(mel) converts a vector of Mel frequencies
-//  to the corresponding real frequencies.
-//    mr gives the corresponding gradients in Hz/mel.
-//  The Mel scale corresponds to the perceived pitch of a tone
-//
-// Arguments    : SnoringRecognitionStackData *SD
-// Return Type  : void
-//
-void mel2frq_init(SnoringRecognitionStackData *SD) {
-    // 'mel2frq:55' k = 1127.01048;
-    SD->pd->b_k = 1127.01048;
 }
 
 //

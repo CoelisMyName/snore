@@ -2,7 +2,7 @@
 // File: mtimes.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef MTIMES_H
@@ -19,9 +19,14 @@ namespace coder {
     namespace internal {
         namespace blas {
             void mtimes(const ::coder::array<double, 2U> &A,
-                        const ::coder::array<double, 2U> &B, ::coder::array<double, 1U> &C);
+                        const ::coder::array<double, 2U> &B, ::coder::array<double, 2U> &C);
 
-        }
+            void mtimes(const ::coder::array<double, 2U> &B, ::coder::array<double, 2U> &C);
+
+            void mtimes(const ::coder::array<double, 2U> &A,
+                        const ::coder::array<double, 2U> &B, double C_data[], int *C_size);
+
+        } // namespace blas
     } // namespace internal
 } // namespace coder
 

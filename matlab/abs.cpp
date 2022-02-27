@@ -2,7 +2,7 @@
 // File: abs.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -14,15 +14,25 @@
 
 // Function Definitions
 //
-// Arguments    : const ::coder::array<double, 1U> &x
-//                ::coder::array<double, 1U> &y
+// Arguments    : const double x[2]
+//                double y[2]
 // Return Type  : void
 //
 namespace coder {
-    void b_abs(const ::coder::array<double, 1U> &x, ::coder::array<double, 1U> &y) {
+    void b_abs(const double x[2], double y[2]) {
+        y[0] = fabs(x[0]);
+        y[1] = fabs(x[1]);
+    }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &x
+//                ::coder::array<double, 2U> &y
+// Return Type  : void
+//
+    void b_abs(const ::coder::array<double, 2U> &x, ::coder::array<double, 2U> &y) {
         int nx;
-        nx = x.size(0);
-        y.set_size(x.size(0));
+        nx = x.size(1);
+        y.set_size(1, x.size(1));
         for (int k = 0; k < nx; k++) {
             y[k] = fabs(x[k]);
         }
@@ -43,6 +53,14 @@ namespace coder {
     }
 
 //
+// Arguments    : const creal_T x
+// Return Type  : double
+//
+    double b_abs(const creal_T x) {
+        return rt_hypotd_snf(x.re, x.im);
+    }
+
+//
 // Arguments    : const ::coder::array<creal_T, 1U> &x
 //                ::coder::array<double, 1U> &y
 // Return Type  : void
@@ -57,24 +75,14 @@ namespace coder {
     }
 
 //
-// Arguments    : const double x[2]
-//                double y[2]
+// Arguments    : const ::coder::array<double, 1U> &x
+//                ::coder::array<double, 1U> &y
 // Return Type  : void
 //
-    void b_abs(const double x[2], double y[2]) {
-        y[0] = fabs(x[0]);
-        y[1] = fabs(x[1]);
-    }
-
-//
-// Arguments    : const ::coder::array<double, 2U> &x
-//                ::coder::array<double, 2U> &y
-// Return Type  : void
-//
-    void b_abs(const ::coder::array<double, 2U> &x, ::coder::array<double, 2U> &y) {
+    void b_abs(const ::coder::array<double, 1U> &x, ::coder::array<double, 1U> &y) {
         int nx;
-        nx = x.size(1);
-        y.set_size(1, x.size(1));
+        nx = x.size(0);
+        y.set_size(x.size(0));
         for (int k = 0; k < nx; k++) {
             y[k] = fabs(x[k]);
         }

@@ -2,7 +2,7 @@
 // File: median.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -38,9 +38,9 @@ namespace coder {
                 }
             } else {
                 memcpy(&v[0], &x[0], 10U * sizeof(double));
-                internal::quickselect(v, 6, 1, 10, &y, &k, &ilast);
+                internal::quickselect(v, 6, 10, &y, &k, &ilast);
                 if (5 < k) {
-                    internal::quickselect(v, 5, 1, ilast - 1, &b, &k, &a__3);
+                    internal::quickselect(v, 5, ilast - 1, &b, &k, &a__3);
                     if (((y < 0.0) != (b < 0.0)) || rtIsInf(y)) {
                         y = (y + b) / 2.0;
                     } else {

@@ -2,7 +2,7 @@
 // File: diff.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -18,7 +18,6 @@
 //
 namespace coder {
     void diff(const ::coder::array<double, 1U> &x, ::coder::array<double, 1U> &y) {
-        array<double, 1U> work;
         int dimSize;
         dimSize = x.size(0);
         if (x.size(0) == 0) {
@@ -32,19 +31,17 @@ namespace coder {
             if (u0 < 1) {
                 y.set_size(0);
             } else {
-                work.set_size(1);
                 y.set_size(x.size(0) - 1);
                 if (x.size(0) - 1 != 0) {
-                    work[0] = x[0];
+                    double work_data;
+                    work_data = x[0];
                     for (u0 = 2; u0 <= dimSize; u0++) {
+                        double d;
                         double tmp1;
                         tmp1 = x[u0 - 1];
-                        for (int k = 0; k < 1; k++) {
-                            double tmp2;
-                            tmp2 = work[0];
-                            work[0] = tmp1;
-                            tmp1 -= tmp2;
-                        }
+                        d = tmp1;
+                        tmp1 -= work_data;
+                        work_data = d;
                         y[u0 - 2] = tmp1;
                     }
                 }

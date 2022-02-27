@@ -2,221 +2,308 @@
 // File: vad_wave.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "vad_wave.h"
 #include "abs.h"
+#include "eml_i64relops.h"
 #include "minOrMax.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
 
 // Function Definitions
 //
-// function [w_starts, w_ends] = vad_wave(array, s_starts, s_ends)
+// function [ostarts, oends] = vad_wave(array, starts, ends)
 //
-// Arguments    : const coder::array<double, 2U> &array
-//                const coder::array<double, 2U> &s_starts
-//                const coder::array<double, 2U> &s_ends
-//                coder::array<double, 2U> &w_starts
-//                coder::array<double, 2U> &w_ends
+// Arguments    : const coder::array<double, 1U> &array
+//                const coder::array<long long, 1U> &starts
+//                const coder::array<long long, 1U> &ends
+//                coder::array<long long, 1U> &ostarts
+//                coder::array<long long, 1U> &oends
 // Return Type  : void
 //
-void vad_wave(const coder::array<double, 2U> &array,
-              const coder::array<double, 2U> &s_starts,
-              const coder::array<double, 2U> &s_ends,
-              coder::array<double, 2U> &w_starts,
-              coder::array<double, 2U> &w_ends) {
+void vad_wave(const coder::array<double, 1U> &array,
+              const coder::array<long long, 1U> &starts,
+              const coder::array<long long, 1U> &ends,
+              coder::array<long long, 1U> &ostarts,
+              coder::array<long long, 1U> &oends) {
+    coder::array<long long, 1U> b_ostarts;
+    double bufferHeight;
+    long long k;
+    long long qY;
     int i;
-    int islow;
-    unsigned int k;
+    int loop_ub;
     //  按波形重新分段
-    // 'vad_wave:3' w_starts = zeros(1, length(s_starts));
-    w_starts.set_size(1, s_starts.size(1));
-    islow = s_starts.size(1);
-    for (i = 0; i < islow; i++) {
-        w_starts[i] = 0.0;
+    // 'vad_wave:3' bufferHeight = min(length(starts), length(ends));
+    bufferHeight = coder::internal::minimum2(
+            static_cast<double>(starts.size(0)), static_cast<double>(ends.size(0)));
+    // 'vad_wave:4' ostarts = zeros(bufferHeight, 1, 'int64');
+    ostarts.set_size(static_cast<int>(bufferHeight));
+    loop_ub = static_cast<int>(bufferHeight);
+    for (i = 0; i < loop_ub; i++) {
+        ostarts[i] = 0LL;
     }
-    // 'vad_wave:4' w_ends = zeros(1, length(s_ends));
-    w_ends.set_size(1, s_ends.size(1));
-    islow = s_ends.size(1);
-    for (i = 0; i < islow; i++) {
-        w_ends[i] = 0.0;
+    // 'vad_wave:5' oends = zeros(bufferHeight, 1, 'int64');
+    oends.set_size(static_cast<int>(bufferHeight));
+    loop_ub = static_cast<int>(bufferHeight);
+    for (i = 0; i < loop_ub; i++) {
+        oends[i] = 0LL;
     }
-    // 'vad_wave:5' coder.varsize('w_starts');
-    // 'vad_wave:6' coder.varsize('w_ends');
-    // 'vad_wave:7' k = 1;
-    k = 1U;
-    // 'vad_wave:9' for i = 1:min(length(s_starts), length(s_ends))
-    i = static_cast<int>(
-            coder::internal::minimum2(static_cast<double>(s_starts.size(1)),
-                                      static_cast<double>(s_ends.size(1))));
+    // 'vad_wave:6' coder.varsize('ostarts');
+    // 'vad_wave:7' coder.varsize('oends');
+    // 'vad_wave:8' k = int64(1);
+    k = 1LL;
+    // 'vad_wave:10' for i = 1:bufferHeight
+    i = static_cast<int>(bufferHeight);
     for (int b_i = 0; b_i < i; b_i++) {
         double count;
-        double d;
+        long long lowb;
+        long long q0;
         int i1;
         int i2;
-        int lowb;
-        // 'vad_wave:10' if(k > length(w_ends))
-        if (k > static_cast<unsigned int>(w_ends.size(1))) {
-            // 'vad_wave:11' w_ends = [w_ends zeros(1, k)];
-            islow = static_cast<int>(k);
-            i1 = w_ends.size(1);
-            w_ends.set_size(w_ends.size(0), w_ends.size(1) + static_cast<int>(k));
-            for (i2 = 0; i2 < islow; i2++) {
-                w_ends[i1 + i2] = 0.0;
+        int islow;
+        // 'vad_wave:12' if (k > length(oends))
+        if (coder::eml_i64relops(k, static_cast<double>(oends.size(0)))) {
+            // 'vad_wave:13' ostarts = [ostarts; zeros(k, 1, 'int64')];
+            i1 = ostarts.size(0);
+            ostarts.set_size(ostarts.size(0) + static_cast<int>(k));
+            loop_ub = static_cast<int>(k);
+            for (i2 = 0; i2 < loop_ub; i2++) {
+                ostarts[i1 + i2] = 0LL;
             }
-            // 'vad_wave:12' w_starts = [w_starts zeros(1, k)];
-            i1 = w_starts.size(1);
-            w_starts.set_size(w_starts.size(0),
-                              w_starts.size(1) + static_cast<int>(k));
-            for (i2 = 0; i2 < islow; i2++) {
-                w_starts[i1 + i2] = 0.0;
+            // 'vad_wave:14' oends = [oends; zeros(k, 1, 'int64')];
+            i1 = oends.size(0);
+            oends.set_size(oends.size(0) + static_cast<int>(k));
+            loop_ub = static_cast<int>(k);
+            for (i2 = 0; i2 < loop_ub; i2++) {
+                oends[i1 + i2] = 0LL;
             }
         }
-        // 'vad_wave:14' w_starts(k) = s_starts(i);
-        d = s_starts[b_i];
-        w_starts[static_cast<int>(k) - 1] = d;
-        // 'vad_wave:15' islow = 0;
+        // 'vad_wave:17' ostarts(k) = starts(i);
+        ostarts[static_cast<int>(k) - 1] = starts[b_i];
+        // 'vad_wave:18' islow = 0;
         islow = 0;
-        // 'vad_wave:16' count = 0;
+        // 'vad_wave:19' count = 0;
         count = 0.0;
-        // 'vad_wave:17' lowb = -1;
-        lowb = -1;
-        // 'vad_wave:19' for j = s_starts(i) + 1:s_ends(i)
-        i1 = static_cast<int>(s_ends[b_i] + (1.0 - (d + 1.0)));
-        for (int j = 0; j < i1; j++) {
-            double b_j;
-            b_j = (s_starts[b_i] + 1.0) + static_cast<double>(j);
-            // 'vad_wave:21' if array(j) - array(j - 1) < -0.01
-            d = array[static_cast<int>(b_j) - 1];
-            if (d - array[static_cast<int>(b_j - 1.0) - 1] < -0.01) {
-                // 'vad_wave:22' islow = 1;
+        // 'vad_wave:20' lowb = int64(-1);
+        lowb = -1LL;
+        // 'vad_wave:22' for j = starts(i) + 1:ends(i)
+        q0 = starts[b_i];
+        if (q0 > 9223372036854775806LL) {
+            qY = MAX_int64_T;
+        } else {
+            qY = q0 + 1LL;
+        }
+        for (long long j = qY; j <= ends[b_i]; j++) {
+            double d;
+            boolean_T guard1 = false;
+            // 'vad_wave:24' if array(j) - array(j - 1) < -0.01
+            if (j < -9223372036854775807LL) {
+                qY = MIN_int64_T;
+            } else {
+                qY = j - 1LL;
+            }
+            d = array[static_cast<int>(j) - 1];
+            if (d - array[static_cast<int>(qY) - 1] < -0.01) {
+                // 'vad_wave:25' islow = 1;
                 islow = 1;
             }
-            // 'vad_wave:25' if islow == 1 && abs(array(j) - array(j - 1)) <= 0.01
-            if ((islow == 1) &&
-                (coder::b_abs(d - array[static_cast<int>(b_j) - 2]) <= 0.01)) {
-                // 'vad_wave:26' count = count + 1;
-                count++;
-                // 'vad_wave:28' if (lowb == -1)
-                if (lowb == -1) {
-                    // 'vad_wave:29' lowb = j;
-                    lowb = static_cast<int>(b_j);
+            // 'vad_wave:28' if islow == 1 && abs(array(j) - array(j - 1)) <=
+            // 0.01
+            guard1 = false;
+            if (islow == 1) {
+                if (j < -9223372036854775807LL) {
+                    qY = MIN_int64_T;
+                } else {
+                    qY = j - 1LL;
                 }
-            } else if (islow == 1) {
-                // 'vad_wave:32' elseif islow == 1
-                // 连续下降的特殊情况
-                // 'vad_wave:34' if array(j) < array(j - 1)
-                if (d < array[static_cast<int>(b_j) - 2]) {
-                    // 后一个点抬升
-                    // 'vad_wave:36' if (j + 1 < s_ends(i) && array(j + 1) - array(j) <=
-                    // 0.01)
-                    if ((b_j + 1.0 < s_ends[b_i]) &&
-                        (array[static_cast<int>(static_cast<unsigned int>(b_j))] - d <=
-                         0.01)) {
-                        // 'vad_wave:37' lowb = j;
-                        lowb = static_cast<int>(b_j);
-                        // j+1;
-                        // %lowb针对连续下降不断往后推，直到碰到抬升点，lowb记录的是最后一个非上升点，波谷的前一个点
+                if (coder::b_abs(d - array[static_cast<int>(qY) - 1]) <= 0.01) {
+                    // 'vad_wave:29' count = count + 1;
+                    count++;
+                    // 'vad_wave:31' if (lowb == int64(-1))
+                    if (lowb == -1LL) {
+                        // 'vad_wave:32' lowb = j;
+                        lowb = j;
                     }
                 } else {
-                    // 'vad_wave:40' else
-                    // 'vad_wave:42' if (count >= 3)
-                    if (count >= 3.0) {
-                        int i3;
-                        // 'vad_wave:43' if(k > length(w_ends))
-                        if (static_cast<int>(k) > w_ends.size(1)) {
-                            // 'vad_wave:44' w_ends = [w_ends zeros(1, k)];
-                            islow = static_cast<int>(k);
-                            i2 = w_ends.size(1);
-                            w_ends.set_size(w_ends.size(0),
-                                            w_ends.size(1) + static_cast<int>(k));
-                            for (i3 = 0; i3 < islow; i3++) {
-                                w_ends[i2 + i3] = 0.0;
-                            }
-                            // 'vad_wave:45' w_starts = [w_starts zeros(1, k)];
-                            islow = static_cast<int>(k);
-                            i2 = w_starts.size(1);
-                            w_starts.set_size(w_starts.size(0),
-                                              w_starts.size(1) + static_cast<int>(k));
-                            for (i3 = 0; i3 < islow; i3++) {
-                                w_starts[i2 + i3] = 0.0;
-                            }
-                        }
-                        // 'vad_wave:47' w_ends(k) = lowb;
-                        w_ends[static_cast<int>(k) - 1] = lowb;
-                        // 'vad_wave:48' k = k + 1;
-                        k++;
-                        // 'vad_wave:49' if(k > length(w_ends))
-                        if (k > static_cast<unsigned int>(w_ends.size(1))) {
-                            // 'vad_wave:50' w_ends = [w_ends zeros(1, k)];
-                            islow = static_cast<int>(k);
-                            i2 = w_ends.size(1);
-                            w_ends.set_size(w_ends.size(0),
-                                            w_ends.size(1) + static_cast<int>(k));
-                            for (i3 = 0; i3 < islow; i3++) {
-                                w_ends[i2 + i3] = 0.0;
-                            }
-                            // 'vad_wave:51' w_starts = [w_starts zeros(1, k)];
-                            islow = static_cast<int>(k);
-                            i2 = w_starts.size(1);
-                            w_starts.set_size(w_starts.size(0),
-                                              w_starts.size(1) + static_cast<int>(k));
-                            for (i3 = 0; i3 < islow; i3++) {
-                                w_starts[i2 + i3] = 0.0;
-                            }
-                        }
-                        // 'vad_wave:53' w_starts(k) = j - 1;
-                        w_starts[static_cast<int>(k) - 1] = b_j - 1.0;
-                        // 'vad_wave:54' islow = 0;
-                        islow = 0;
-                        // 'vad_wave:55' lowb = -1;
-                        lowb = -1;
+                    guard1 = true;
+                }
+            } else {
+                guard1 = true;
+            }
+            if (guard1 && (islow == 1)) {
+                // 'vad_wave:35' elseif islow == 1
+                // 连续下降的特殊情况
+                // 'vad_wave:37' if array(j) < array(j - 1)
+                if (j < -9223372036854775807LL) {
+                    qY = MIN_int64_T;
+                } else {
+                    qY = j - 1LL;
+                }
+                if (d < array[static_cast<int>(qY) - 1]) {
+                    // 后一个点抬升
+                    // 'vad_wave:39' if (j + 1 < ends(i) && array(j + 1) -
+                    // array(j) <= 0.01)
+                    if (j > 9223372036854775806LL) {
+                        qY = MAX_int64_T;
+                    } else {
+                        qY = j + 1LL;
                     }
-                    // 'vad_wave:58' count = 0;
+                    if (qY < ends[b_i]) {
+                        if (j > 9223372036854775806LL) {
+                            qY = MAX_int64_T;
+                        } else {
+                            qY = j + 1LL;
+                        }
+                        if (array[static_cast<int>(qY) - 1] - d <= 0.01) {
+                            // 'vad_wave:40' lowb = j;
+                            lowb = j;
+                            // j+1;
+                            // %lowb针对连续下降不断往后推，直到碰到抬升点，lowb记录的是最后一个非上升点，波谷的前一个点
+                        }
+                    }
+                } else {
+                    // 'vad_wave:43' else
+                    // 'vad_wave:45' if (count >= 3)
+                    if (count >= 3.0) {
+                        // 'vad_wave:47' if (k > length(oends))
+                        if (coder::eml_i64relops(
+                                k, static_cast<double>(oends.size(0)))) {
+                            // 'vad_wave:48' ostarts = [ostarts; zeros(k, 1,
+                            // 'int64')];
+                            i1 = ostarts.size(0);
+                            ostarts.set_size(ostarts.size(0) +
+                                             static_cast<int>(k));
+                            loop_ub = static_cast<int>(k);
+                            for (i2 = 0; i2 < loop_ub; i2++) {
+                                ostarts[i1 + i2] = 0LL;
+                            }
+                            // 'vad_wave:49' oends = [oends; zeros(k, 1,
+                            // 'int64')];
+                            i1 = oends.size(0);
+                            oends.set_size(oends.size(0) + static_cast<int>(k));
+                            loop_ub = static_cast<int>(k);
+                            for (i2 = 0; i2 < loop_ub; i2++) {
+                                oends[i1 + i2] = 0LL;
+                            }
+                        }
+                        // 'vad_wave:52' oends(k) = lowb;
+                        oends[static_cast<int>(k) - 1] = lowb;
+                        // 'vad_wave:53' k = k + 1;
+                        if (k > 9223372036854775806LL) {
+                            qY = MAX_int64_T;
+                        } else {
+                            qY = k + 1LL;
+                        }
+                        k = qY;
+                        // 'vad_wave:55' if (k > length(oends))
+                        if (coder::eml_i64relops(
+                                qY, static_cast<double>(oends.size(0)))) {
+                            // 'vad_wave:56' ostarts = [ostarts; zeros(k, 1,
+                            // 'int64')];
+                            i1 = ostarts.size(0);
+                            ostarts.set_size(ostarts.size(0) +
+                                             static_cast<int>(qY));
+                            loop_ub = static_cast<int>(qY);
+                            for (i2 = 0; i2 < loop_ub; i2++) {
+                                ostarts[i1 + i2] = 0LL;
+                            }
+                            // 'vad_wave:57' oends = [oends; zeros(k, 1,
+                            // 'int64')];
+                            i1 = oends.size(0);
+                            oends.set_size(oends.size(0) +
+                                           static_cast<int>(qY));
+                            loop_ub = static_cast<int>(qY);
+                            for (i2 = 0; i2 < loop_ub; i2++) {
+                                oends[i1 + i2] = 0LL;
+                            }
+                        }
+                        // 'vad_wave:60' ostarts(k) = j - 1;
+                        if (j < -9223372036854775807LL) {
+                            q0 = MIN_int64_T;
+                        } else {
+                            q0 = j - 1LL;
+                        }
+                        ostarts[static_cast<int>(qY) - 1] = q0;
+                        // 'vad_wave:61' islow = 0;
+                        islow = 0;
+                        // 'vad_wave:62' lowb = int64(-1);
+                        lowb = -1LL;
+                    }
+                    // 'vad_wave:65' count = 0;
                     count = 0.0;
                 }
             }
         }
-        // 'vad_wave:64' if(k > length(w_ends))
-        if (static_cast<int>(k) > w_ends.size(1)) {
-            // 'vad_wave:65' w_ends = [w_ends zeros(1, k)];
-            islow = static_cast<int>(k);
-            i1 = w_ends.size(1);
-            w_ends.set_size(w_ends.size(0), w_ends.size(1) + static_cast<int>(k));
-            for (i2 = 0; i2 < islow; i2++) {
-                w_ends[i1 + i2] = 0.0;
+        // 'vad_wave:72' if (k > length(oends))
+        if (coder::eml_i64relops(k, static_cast<double>(oends.size(0)))) {
+            // 'vad_wave:73' ostarts = [ostarts; zeros(k, 1, 'int64')];
+            i1 = ostarts.size(0);
+            ostarts.set_size(ostarts.size(0) + static_cast<int>(k));
+            loop_ub = static_cast<int>(k);
+            for (i2 = 0; i2 < loop_ub; i2++) {
+                ostarts[i1 + i2] = 0LL;
             }
-            // 'vad_wave:66' w_starts = [w_starts zeros(1, k)];
-            islow = static_cast<int>(k);
-            i1 = w_starts.size(1);
-            w_starts.set_size(w_starts.size(0),
-                              w_starts.size(1) + static_cast<int>(k));
-            for (i2 = 0; i2 < islow; i2++) {
-                w_starts[i1 + i2] = 0.0;
+            // 'vad_wave:74' oends = [oends; zeros(k, 1, 'int64')];
+            i1 = oends.size(0);
+            oends.set_size(oends.size(0) + static_cast<int>(k));
+            loop_ub = static_cast<int>(k);
+            for (i2 = 0; i2 < loop_ub; i2++) {
+                oends[i1 + i2] = 0LL;
             }
         }
-        // 'vad_wave:68' w_ends(k) = s_ends(i);
-        w_ends[static_cast<int>(k) - 1] = s_ends[b_i];
-        // 'vad_wave:69' k = k + 1;
-        k++;
+        // 'vad_wave:77' oends(k) = ends(i);
+        oends[static_cast<int>(k) - 1] = ends[b_i];
+        // 'vad_wave:78' k = k + 1;
+        if (k > 9223372036854775806LL) {
+            qY = MAX_int64_T;
+        } else {
+            qY = k + 1LL;
+        }
+        k = qY;
     }
-    // 'vad_wave:73' w_starts = w_starts(1:k - 1);
-    if (1 > static_cast<int>(k - 1U)) {
-        i = 0;
+    // 'vad_wave:82' ostarts = ostarts(1:k - 1);
+    if (k < -9223372036854775807LL) {
+        qY = MIN_int64_T;
     } else {
-        i = static_cast<int>(k - 1U);
+        qY = k - 1LL;
     }
-    w_starts.set_size(w_starts.size(0), i);
-    // 'vad_wave:74' w_ends = w_ends(1:k - 1);
-    if (1 > static_cast<int>(k - 1U)) {
-        i = 0;
+    if (1LL > qY) {
+        loop_ub = 0;
     } else {
-        i = static_cast<int>(k - 1U);
+        loop_ub = static_cast<int>(qY);
     }
-    w_ends.set_size(w_ends.size(0), i);
+    b_ostarts.set_size(loop_ub);
+    for (i = 0; i < loop_ub; i++) {
+        b_ostarts[i] = ostarts[i];
+    }
+    ostarts.set_size(b_ostarts.size(0));
+    loop_ub = b_ostarts.size(0);
+    for (i = 0; i < loop_ub; i++) {
+        ostarts[i] = b_ostarts[i];
+    }
+    // 'vad_wave:83' oends = oends(1:k - 1);
+    if (k < -9223372036854775807LL) {
+        qY = MIN_int64_T;
+    } else {
+        qY = k - 1LL;
+    }
+    if (1LL > qY) {
+        loop_ub = 0;
+    } else {
+        loop_ub = static_cast<int>(qY);
+    }
+    b_ostarts.set_size(loop_ub);
+    for (i = 0; i < loop_ub; i++) {
+        b_ostarts[i] = oends[i];
+    }
+    oends.set_size(b_ostarts.size(0));
+    loop_ub = b_ostarts.size(0);
+    for (i = 0; i < loop_ub; i++) {
+        oends[i] = b_ostarts[i];
+    }
 }
 
 //

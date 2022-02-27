@@ -2,7 +2,7 @@
 // File: nullAssignment.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -18,26 +18,19 @@
 namespace coder {
     namespace internal {
         void nullAssignment(::coder::array<double, 2U> &x) {
-            array<double, 2U> b_x;
             int nxin;
             int nxout;
-            nxin = x.size(1) - 1;
-            nxout = x.size(1);
-            for (int k = 0; k <= nxout - 2; k++) {
+            nxin = x.size(1);
+            nxout = x.size(1) - 1;
+            for (int k = 0; k < nxout; k++) {
                 x[k] = x[k + 1];
             }
-            if (1 > nxin) {
+            if (1 > nxout) {
                 nxin = 0;
+            } else {
+                nxin--;
             }
-            b_x.set_size(1, nxin);
-            for (nxout = 0; nxout < nxin; nxout++) {
-                b_x[nxout] = x[nxout];
-            }
-            x.set_size(1, b_x.size(1));
-            nxin = b_x.size(1);
-            for (nxout = 0; nxout < nxin; nxout++) {
-                x[nxout] = b_x[nxout];
-            }
+            x.set_size(x.size(0), nxin);
         }
 
 //
@@ -46,26 +39,19 @@ namespace coder {
 // Return Type  : void
 //
         void nullAssignment(::coder::array<double, 2U> &x, int idx) {
-            array<double, 2U> b_x;
             int nxin;
             int nxout;
-            nxin = x.size(1) - 1;
+            nxin = x.size(1);
             nxout = x.size(1) - 1;
             for (int k = idx; k <= nxout; k++) {
                 x[k - 1] = x[k];
             }
-            if (1 > nxin) {
+            if (1 > nxout) {
                 nxin = 0;
+            } else {
+                nxin--;
             }
-            b_x.set_size(1, nxin);
-            for (nxout = 0; nxout < nxin; nxout++) {
-                b_x[nxout] = x[nxout];
-            }
-            x.set_size(1, b_x.size(1));
-            nxin = b_x.size(1);
-            for (nxout = 0; nxout < nxin; nxout++) {
-                x[nxout] = b_x[nxout];
-            }
+            x.set_size(x.size(0), nxin);
         }
 
     } // namespace internal

@@ -2,7 +2,7 @@
 // File: quickselect.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef QUICKSELECT_H
@@ -16,8 +16,8 @@
 // Function Declarations
 namespace coder {
     namespace internal {
-        void quickselect(double v[10], int n, int idx0, int vlen, double *vn,
-                         int *nfirst, int *nlast);
+        void quickselect(double v[10], int n, int vlen, double *vn, int *nfirst,
+                         int *nlast);
 
     }
 } // namespace coder

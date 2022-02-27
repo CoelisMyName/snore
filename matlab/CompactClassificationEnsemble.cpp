@@ -2,17 +2,15 @@
 // File: CompactClassificationEnsemble.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "CompactClassificationEnsemble.h"
-#include "SnoringRecognition_data.h"
 #include "aggregatePredict.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
 #include "rt_nonfinite.h"
-#include <math.h>
 
 // Function Definitions
 //
@@ -186,7 +184,6 @@ namespace coder {
                 void CompactClassificationEnsemble::predict(
                         const ::coder::array<double, 2U> &Xin,
                         ::coder::array<double, 1U> &labels) const {
-                    array<double, 2U> score;
                     array<double, 2U> scoreIn;
                     array<double, 1U> classnum;
                     array<boolean_T, 2U> b;
@@ -198,147 +195,54 @@ namespace coder {
                     } else {
                         int i1;
                         int i2;
-                        int inmaxind;
                         int ix;
+                        int outsize_idx_0;
                         scoreIn.set_size(Xin.size(0), 2);
-                        inmaxind = Xin.size(0) << 1;
-                        for (ix = 0; ix < inmaxind; ix++) {
+                        outsize_idx_0 = Xin.size(0) << 1;
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
                             scoreIn[ix] = 0.0;
                         }
                         for (ix = 0; ix < 400; ix++) {
                             bv[ix] = true;
                         }
                         r.set_size(Xin.size(0), 400);
-                        inmaxind = Xin.size(0) * 400;
-                        for (ix = 0; ix < inmaxind; ix++) {
+                        outsize_idx_0 = Xin.size(0) * 400;
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
                             r[ix] = true;
                         }
-                        coder::ensembleutils::aggregatePredict(Xin, scoreIn, this->LearnerWeights,
-                                                               this->IsCached, this->ClassNames,
-                                                               this->ClassLogicalIndices, bv, r);
-                        switch (this->ScoreTransform) {
-                            case coderutils::Logit:
-                                score.set_size(scoreIn.size(0), 2);
-                                ix = (scoreIn.size(0) << 1) - 1;
-                                for (inmaxind = 0; inmaxind <= ix; inmaxind++) {
-                                    score[inmaxind] = 1.0 / (exp(-scoreIn[inmaxind]) + 1.0);
-                                }
-                                break;
-                            case coderutils::Doublelogit:
-                                score.set_size(scoreIn.size(0), 2);
-                                ix = (scoreIn.size(0) << 1) - 1;
-                                for (inmaxind = 0; inmaxind <= ix; inmaxind++) {
-                                    score[inmaxind] = 1.0 / (exp(-2.0 * scoreIn[inmaxind]) + 1.0);
-                                }
-                                break;
-                            case coderutils::Invlogit:
-                                score.set_size(scoreIn.size(0), 2);
-                                ix = scoreIn.size(0) << 1;
-                                for (inmaxind = 0; inmaxind < ix; inmaxind++) {
-                                    if (scoreIn[inmaxind] == 0.0) {
-                                        score[inmaxind] = rtMinusInf;
-                                    } else if (scoreIn[inmaxind] == 1.0) {
-                                        score[inmaxind] = rtInf;
-                                    } else if (rtIsNaN(scoreIn[inmaxind])) {
-                                        score[inmaxind] = rtNaN;
-                                    } else {
-                                        score[inmaxind] = log(scoreIn[inmaxind] / (1.0 - scoreIn[inmaxind]));
-                                    }
-                                }
-                                break;
-                            case coderutils::Ismax:
-                                score.set_size(scoreIn.size(0), 2);
-                                inmaxind = scoreIn.size(0) << 1;
-                                for (ix = 0; ix < inmaxind; ix++) {
-                                    score[ix] = 0.0;
-                                }
-                                ix = scoreIn.size(0);
-                                for (i2 = 0; i2 < ix; i2++) {
-                                    inmaxind = 0;
-                                    if (scoreIn[i2 + scoreIn.size(0)] > scoreIn[i2]) {
-                                        inmaxind = 1;
-                                    }
-                                    score[i2 + score.size(0) * inmaxind] = 1.0;
-                                }
-                                break;
-                            case coderutils::Sign:
-                                score.set_size(scoreIn.size(0), 2);
-                                ix = (scoreIn.size(0) << 1) - 1;
-                                for (inmaxind = 0; inmaxind <= ix; inmaxind++) {
-                                    if (scoreIn[inmaxind] < 0.0) {
-                                        score[inmaxind] = -1.0;
-                                    } else {
-                                        score[inmaxind] = (scoreIn[inmaxind] > 0.0);
-                                    }
-                                }
-                                break;
-                            case coderutils::Symmetric:
-                                score.set_size(scoreIn.size(0), 2);
-                                inmaxind = scoreIn.size(0) * 2;
-                                for (ix = 0; ix < inmaxind; ix++) {
-                                    score[ix] = 2.0 * scoreIn[ix] - 1.0;
-                                }
-                                break;
-                            case coderutils::Symmetricismax:
-                                score.set_size(scoreIn.size(0), 2);
-                                inmaxind = scoreIn.size(0) << 1;
-                                for (ix = 0; ix < inmaxind; ix++) {
-                                    score[ix] = -1.0;
-                                }
-                                ix = scoreIn.size(0);
-                                for (i2 = 0; i2 < ix; i2++) {
-                                    inmaxind = 0;
-                                    if (scoreIn[i2 + scoreIn.size(0)] > scoreIn[i2]) {
-                                        inmaxind = 1;
-                                    }
-                                    score[i2 + score.size(0) * inmaxind] = 1.0;
-                                }
-                                break;
-                            case coderutils::Symmetriclogit:
-                                score.set_size(scoreIn.size(0), 2);
-                                ix = (scoreIn.size(0) << 1) - 1;
-                                for (inmaxind = 0; inmaxind <= ix; inmaxind++) {
-                                    score[inmaxind] = 2.0 * (1.0 / (exp(-scoreIn[inmaxind]) + 1.0)) - 1.0;
-                                }
-                                break;
-                            default:
-                                score.set_size(scoreIn.size(0), 2);
-                                inmaxind = scoreIn.size(0) * 2;
-                                for (ix = 0; ix < inmaxind; ix++) {
-                                    score[ix] = scoreIn[ix];
-                                }
-                                break;
+                        coder::ensembleutils::aggregatePredict(
+                                Xin, scoreIn, this->LearnerWeights, this->IsCached,
+                                this->ClassNames, bv, r);
+                        b.set_size(scoreIn.size(0), 2);
+                        outsize_idx_0 = scoreIn.size(0) * 2;
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
+                            b[ix] = rtIsNaN(scoreIn[ix]);
                         }
-                        b.set_size(score.size(0), 2);
-                        inmaxind = score.size(0) * 2;
-                        for (ix = 0; ix < inmaxind; ix++) {
-                            b[ix] = rtIsNaN(score[ix]);
-                        }
-                        inmaxind = b.size(0);
+                        outsize_idx_0 = b.size(0);
                         notNaN.set_size(b.size(0));
-                        for (ix = 0; ix < inmaxind; ix++) {
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
                             notNaN[ix] = true;
                         }
-                        inmaxind = b.size(0);
+                        outsize_idx_0 = b.size(0);
                         i2 = b.size(0);
                         i1 = 0;
-                        for (int j = 0; j < inmaxind; j++) {
+                        for (int j = 0; j < outsize_idx_0; j++) {
                             boolean_T exitg1;
                             i1++;
                             i2++;
                             ix = i1;
                             exitg1 = false;
-                            while ((!exitg1) && ((inmaxind > 0) && (ix <= i2))) {
+                            while ((!exitg1) && ((outsize_idx_0 > 0) && (ix <= i2))) {
                                 if (!b[ix - 1]) {
                                     notNaN[j] = false;
                                     exitg1 = true;
                                 } else {
-                                    ix += inmaxind;
+                                    ix += outsize_idx_0;
                                 }
                             }
                         }
-                        inmaxind = notNaN.size(0);
-                        for (ix = 0; ix < inmaxind; ix++) {
+                        outsize_idx_0 = notNaN.size(0);
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
                             notNaN[ix] = !notNaN[ix];
                         }
                         if ((this->Prior[0] < this->Prior[1]) ||
@@ -347,26 +251,27 @@ namespace coder {
                         } else {
                             i2 = 0;
                         }
-                        classnum.set_size(score.size(0));
-                        inmaxind = score.size(0);
-                        for (ix = 0; ix < inmaxind; ix++) {
+                        classnum.set_size(scoreIn.size(0));
+                        outsize_idx_0 = scoreIn.size(0);
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
                             classnum[ix] = rtNaN;
                         }
                         ix = notNaN.size(0);
                         for (i1 = 0; i1 < ix; i1++) {
                             if (notNaN[i1]) {
-                                if ((score[i1] < score[i1 + score.size(0)]) ||
-                                    (rtIsNaN(score[i1]) && (!rtIsNaN(score[i1 + score.size(0)])))) {
-                                    inmaxind = 2;
+                                if ((scoreIn[i1] < scoreIn[i1 + scoreIn.size(0)]) ||
+                                    (rtIsNaN(scoreIn[i1]) &&
+                                     (!rtIsNaN(scoreIn[i1 + scoreIn.size(0)])))) {
+                                    outsize_idx_0 = 2;
                                 } else {
-                                    inmaxind = 1;
+                                    outsize_idx_0 = 1;
                                 }
-                                classnum[i1] = inmaxind;
+                                classnum[i1] = outsize_idx_0;
                             }
                         }
-                        labels.set_size(score.size(0));
-                        inmaxind = score.size(0);
-                        for (ix = 0; ix < inmaxind; ix++) {
+                        labels.set_size(scoreIn.size(0));
+                        outsize_idx_0 = scoreIn.size(0);
+                        for (ix = 0; ix < outsize_idx_0; ix++) {
                             labels[ix] = this->ClassNames[i2];
                         }
                         ix = notNaN.size(0);

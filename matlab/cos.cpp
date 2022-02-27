@@ -2,7 +2,7 @@
 // File: cos.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -13,24 +13,24 @@
 
 // Function Definitions
 //
-// Arguments    : double x[16]
+// Arguments    : ::coder::array<double, 2U> &x
 // Return Type  : void
 //
 namespace coder {
-    void b_cos(double x[16]) {
-        for (int k = 0; k < 16; k++) {
+    void b_cos(::coder::array<double, 2U> &x) {
+        int nx;
+        nx = x.size(1);
+        for (int k = 0; k < nx; k++) {
             x[k] = cos(x[k]);
         }
     }
 
 //
-// Arguments    : ::coder::array<double, 2U> &x
+// Arguments    : double x[16]
 // Return Type  : void
 //
-    void b_cos(::coder::array<double, 2U> &x) {
-        int nx;
-        nx = x.size(1);
-        for (int k = 0; k < nx; k++) {
+    void b_cos(double x[16]) {
+        for (int k = 0; k < 16; k++) {
             x[k] = cos(x[k]);
         }
     }

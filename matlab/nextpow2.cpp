@@ -2,7 +2,7 @@
 // File: nextpow2.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -30,45 +30,6 @@ namespace coder {
             }
         }
         return p;
-    }
-
-//
-// Arguments    : int n
-// Return Type  : int
-//
-    int nextpow2(int n) {
-        int b_n;
-        int p;
-        int pmax;
-        b_n = n;
-        pmax = 31;
-        if (n > MIN_int32_T) {
-            if (n < 0) {
-                b_n = -n;
-            }
-            if (b_n <= 1) {
-                pmax = 0;
-            } else {
-                int pmin;
-                boolean_T exitg1;
-                pmin = 0;
-                exitg1 = false;
-                while ((!exitg1) && (pmax - pmin > 1)) {
-                    int pow2p;
-                    p = (pmin + pmax) >> 1;
-                    pow2p = 1 << p;
-                    if (pow2p == b_n) {
-                        pmax = p;
-                        exitg1 = true;
-                    } else if (pow2p > b_n) {
-                        pmax = p;
-                    } else {
-                        pmin = p;
-                    }
-                }
-            }
-        }
-        return pmax;
     }
 
 } // namespace coder

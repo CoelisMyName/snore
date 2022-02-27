@@ -2,7 +2,7 @@
 // File: sparse1.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -30,7 +30,7 @@ namespace coder {
             cend = this->colidx[c + 1] - 1;
             i1 = this->colidx[c];
             for (int idx = i1; idx <= cend; idx++) {
-                y[(this->rowidx[idx - 1] + y.size(0) * c) - 1] = this->d[idx - 1];
+                y[(this->rowidx[idx - 1] + 16 * c) - 1] = this->d[idx - 1];
             }
         }
     }

@@ -2,7 +2,7 @@
 // File: m_lpc.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef M_LPC_H
@@ -15,7 +15,9 @@
 #include <cstdlib>
 
 // Function Declarations
-void m_lpc(const coder::array<double, 1U> &x, coder::array<double, 2U> &a);
+void b_m_lpc(const coder::array<double, 1U> &x, double a_data[], int a_size[2]);
+
+void m_lpc(const coder::array<double, 1U> &x, double a_data[], int a_size[2]);
 
 #endif
 //

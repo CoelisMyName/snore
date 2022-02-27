@@ -2,7 +2,7 @@
 // File: vad_below_threshold.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef VAD_BELOW_THRESHOLD_H
@@ -15,9 +15,9 @@
 #include <cstdlib>
 
 // Function Declarations
-void vad_below_threshold(const coder::array<double, 2U> &xn, double dth,
-                         coder::array<double, 2U> &starts,
-                         coder::array<double, 2U> &ends);
+void vad_below_threshold(const coder::array<double, 1U> &xn, double dth,
+                         coder::array<long long, 1U> &ostarts,
+                         coder::array<long long, 1U> &oends);
 
 #endif
 //

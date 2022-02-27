@@ -2,7 +2,7 @@
 // File: octbank.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -32,20 +32,25 @@
 //
 //     See also OCT3DSGN, OCT3SPEC, OCTDSGN, OCTSPEC.
 //
-// Arguments    : const coder::array<double, 2U> &x
+// Arguments    : const coder::array<double, 1U> &x
 //                double p[8]
 // Return Type  : void
 //
-void octbank(const coder::array<double, 2U> &x, double p[8]) {
+void octbank(const coder::array<double, 1U> &x, double p[8]) {
     static const double b_dv[8] = {62.5, 125.0, 250.0, 500.0,
                                    1000.0, 2000.0, 4000.0, 8000.0};
-    coder::array<double, 2U> r;
-    coder::array<double, 2U> r1;
-    coder::array<signed char, 2U> r2;
+    coder::array<double, 2U> y;
+    coder::array<double, 1U> r;
+    coder::array<double, 1U> r1;
+    double tmp_data[8];
     double A[7];
     double B[7];
+    int tmp_size[2];
+    int b_i;
     int i;
+    int partialTrueCount;
     int trueCount;
+    signed char b_tmp_data[8];
     boolean_T idx[8];
     //  Author: Christophe Couvreur, Faculte Polytechnique de Mons (Belgium)
     //          couvreur@thor.fpms.ac.be
@@ -75,13 +80,15 @@ void octbank(const coder::array<double, 2U> &x, double p[8]) {
         // 'octbank:38' P(i) = sum(y.^2) / m;
         coder::filter(B, A, x, r);
         coder::power(r, r1);
-        p[7 - i] = coder::sum(r1) / static_cast<double>(x.size(1));
+        p[7 - i] = coder::sum(r1) / static_cast<double>(x.size(0));
     }
     //  1250 Hz to 100 Hz, multirate filter implementation (see [2]).
-    // [Bu,Au] = oct3dsgn(ff(18),Fs,N); 	% Upper 1/3-oct. band in last octave.
-    // [Bc,Ac] = oct3dsgn(ff(17),Fs,N); 	% Center 1/3-oct. band in last octave.
-    // [Bl,Al] = oct3dsgn(ff(16),Fs,N); 	% Lower 1/3-oct. band in last octave.
-    // for j = 4:-1:0
+    // [Bu,Au] = oct3dsgn(ff(18),Fs,N); 	% Upper 1/3-oct. band in last
+    // octave.
+    // [Bc,Ac] = oct3dsgn(ff(17),Fs,N); 	% Center 1/3-oct. band in last
+    // octave.
+    // [Bl,Al] = oct3dsgn(ff(16),Fs,N); 	% Lower 1/3-oct. band in last
+    // octave. for j = 4:-1:0
     //    x = decimate(x,2);
     //    m = length(x);
     //    y = filter(Bu,Au,x);
@@ -97,39 +104,34 @@ void octbank(const coder::array<double, 2U> &x, double p[8]) {
     // 'octbank:58' idx = (P > 0);
     // 'octbank:59' P(idx) = 10 * log10(P(idx) / Pref);
     trueCount = 0;
+    partialTrueCount = 0;
     for (i = 0; i < 8; i++) {
         double d;
         d = p[i];
         idx[i] = (d > 0.0);
         if (d > 0.0) {
             trueCount++;
+            b_tmp_data[partialTrueCount] = static_cast<signed char>(i + 1);
+            partialTrueCount++;
         }
     }
-    r2.set_size(1, trueCount);
-    trueCount = 0;
-    for (i = 0; i < 8; i++) {
-        if (p[i] > 0.0) {
-            r2[trueCount] = static_cast<signed char>(i + 1);
-            trueCount++;
-        }
+    tmp_size[0] = 1;
+    tmp_size[1] = trueCount;
+    for (b_i = 0; b_i < trueCount; b_i++) {
+        tmp_data[b_i] = p[b_tmp_data[b_i] - 1];
     }
-    r.set_size(1, r2.size(1));
-    trueCount = r2.size(1);
-    for (i = 0; i < trueCount; i++) {
-        r[i] = p[r2[i] - 1];
+    coder::b_log10(tmp_data, tmp_size);
+    y.set_size(1, tmp_size[1]);
+    partialTrueCount = tmp_size[1];
+    for (b_i = 0; b_i < partialTrueCount; b_i++) {
+        y[b_i] = 10.0 * tmp_data[b_i];
     }
-    coder::b_log10(r);
-    r.set_size(1, r.size(1));
-    trueCount = r.size(1) - 1;
-    for (i = 0; i <= trueCount; i++) {
-        r[i] = 10.0 * r[i];
-    }
-    trueCount = 0;
+    partialTrueCount = 0;
     // 'octbank:60' P(~idx) = NaN * ones(sum(~idx), 1);
     for (i = 0; i < 8; i++) {
         if (p[i] > 0.0) {
-            p[i] = r[trueCount];
-            trueCount++;
+            p[i] = y[partialTrueCount];
+            partialTrueCount++;
         }
         if (!idx[i]) {
             p[i] = rtNaN;

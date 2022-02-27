@@ -2,7 +2,7 @@
 // File: power.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef POWER_H
@@ -16,11 +16,20 @@
 
 // Function Declarations
 namespace coder {
-    void power(const ::coder::array<double, 1U> &a, ::coder::array<double, 1U> &y);
+    void b_power(const ::coder::array<double, 2U> &b,
+                 ::coder::array<double, 2U> &y);
+
+    void c_power(const ::coder::array<double, 2U> &a,
+                 ::coder::array<double, 2U> &y);
+
+    void d_power(const ::coder::array<double, 2U> &a,
+                 ::coder::array<double, 2U> &y);
 
     void power(const ::coder::array<double, 2U> &a, ::coder::array<double, 2U> &y);
 
-    void power(double a, const double b[8], double y[8]);
+    void power(const ::coder::array<double, 1U> &a, ::coder::array<double, 1U> &y);
+
+    void power(const double b[8], double y[8]);
 
 } // namespace coder
 

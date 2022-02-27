@@ -2,26 +2,26 @@
 // File: log10.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "log10.h"
 #include "rt_nonfinite.h"
-#include "coder_array.h"
 #include <math.h>
 
 // Function Definitions
 //
-// Arguments    : ::coder::array<double, 2U> &x
+// Arguments    : double x_data[]
+//                const int x_size[2]
 // Return Type  : void
 //
 namespace coder {
-    void b_log10(::coder::array<double, 2U> &x) {
+    void b_log10(double x_data[], const int x_size[2]) {
         int nx;
-        nx = x.size(1);
+        nx = x_size[1];
         for (int k = 0; k < nx; k++) {
-            x[k] = log10(x[k]);
+            x_data[k] = log10(x_data[k]);
         }
     }
 

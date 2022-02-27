@@ -2,7 +2,7 @@
 // File: nextpow2.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef NEXTPOW2_H
@@ -17,9 +17,7 @@
 namespace coder {
     double nextpow2(double n);
 
-    int nextpow2(int n);
-
-} // namespace coder
+}
 
 #endif
 //

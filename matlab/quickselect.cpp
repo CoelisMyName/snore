@@ -2,7 +2,7 @@
 // File: quickselect.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -119,51 +119,47 @@ namespace coder {
 //
 // Arguments    : double v[10]
 //                int n
-//                int idx0
 //                int vlen
 //                double *vn
 //                int *nfirst
 //                int *nlast
 // Return Type  : void
 //
-        void quickselect(double v[10], int n, int idx0, int vlen, double *vn,
-                         int *nfirst, int *nlast) {
-            if ((n < 1) || (n > vlen)) {
+        void quickselect(double v[10], int n, int vlen, double *vn, int *nfirst,
+                         int *nlast) {
+            if (n > vlen) {
                 *vn = rtNaN;
                 *nfirst = 0;
                 *nlast = 0;
             } else {
                 int ia;
                 int ib;
-                int ifirst;
                 int ilast;
                 int ipiv;
-                int itarget;
                 int oldnv;
                 boolean_T checkspeed;
                 boolean_T exitg1;
                 boolean_T isslow;
-                itarget = (idx0 + n) - 1;
-                ipiv = itarget;
-                ia = idx0;
-                ib = (idx0 + vlen) - 2;
-                ifirst = idx0;
-                ilast = ib;
+                ipiv = n;
+                ia = 0;
+                ib = vlen - 1;
+                *nfirst = 1;
+                ilast = vlen - 1;
                 oldnv = vlen;
                 checkspeed = false;
                 isslow = false;
                 exitg1 = false;
-                while ((!exitg1) && (ia < ib + 1)) {
-                    double d;
+                while ((!exitg1) && (ia + 1 < ib + 1)) {
                     double vref;
                     int k;
                     boolean_T guard1 = false;
                     vref = v[ipiv - 1];
                     v[ipiv - 1] = v[ib];
                     v[ib] = vref;
-                    ilast = ia - 1;
+                    ilast = ia;
                     ipiv = -1;
-                    for (k = ia; k <= ib; k++) {
+                    for (k = ia + 1; k <= ib; k++) {
+                        double d;
                         double vk;
                         vk = v[k - 1];
                         d = v[k - 1];
@@ -181,79 +177,79 @@ namespace coder {
                     v[ib] = v[ilast];
                     v[ilast] = vref;
                     guard1 = false;
-                    if (itarget <= ilast + 1) {
-                        ifirst = ilast - ipiv;
-                        if (itarget >= ifirst) {
+                    if (n <= ilast + 1) {
+                        *nfirst = ilast - ipiv;
+                        if (n >= *nfirst) {
                             exitg1 = true;
                         } else {
                             ib = ilast - 1;
                             guard1 = true;
                         }
                     } else {
-                        ia = ilast + 2;
+                        ia = ilast + 1;
                         guard1 = true;
                     }
                     if (guard1) {
-                        ilast = (ib - ia) + 2;
+                        int c;
+                        c = (ib - ia) + 1;
                         if (checkspeed) {
-                            isslow = (ilast > oldnv / 2);
-                            oldnv = ilast;
+                            isslow = (c > oldnv / 2);
+                            oldnv = c;
                         }
                         checkspeed = !checkspeed;
                         if (isslow) {
-                            while (ilast > 1) {
+                            while (c > 1) {
                                 int ngroupsof5;
-                                ngroupsof5 = ilast / 5;
-                                *nlast = ilast - ngroupsof5 * 5;
-                                ilast = ngroupsof5;
+                                ngroupsof5 = c / 5;
+                                *nlast = c - ngroupsof5 * 5;
+                                c = ngroupsof5;
                                 for (k = 0; k < ngroupsof5; k++) {
-                                    ipiv = ia + k * 5;
+                                    ipiv = (ia + k * 5) + 1;
                                     ipiv = thirdOfFive(v, ipiv, ipiv + 4) - 1;
-                                    ifirst = (ia + k) - 1;
-                                    vref = v[ifirst];
-                                    v[ifirst] = v[ipiv];
+                                    ilast = ia + k;
+                                    vref = v[ilast];
+                                    v[ilast] = v[ipiv];
                                     v[ipiv] = vref;
                                 }
                                 if (*nlast > 0) {
-                                    ipiv = ia + ngroupsof5 * 5;
-                                    ipiv = thirdOfFive(v, ipiv, (ipiv + *nlast) - 1) - 1;
-                                    ifirst = (ia + ngroupsof5) - 1;
-                                    vref = v[ifirst];
-                                    v[ifirst] = v[ipiv];
+                                    ipiv = (ia + ngroupsof5 * 5) + 1;
+                                    ipiv =
+                                            thirdOfFive(v, ipiv, (ipiv + *nlast) - 1) - 1;
+                                    ilast = ia + ngroupsof5;
+                                    vref = v[ilast];
+                                    v[ilast] = v[ipiv];
                                     v[ipiv] = vref;
-                                    ilast = ngroupsof5 + 1;
+                                    c = ngroupsof5 + 1;
                                 }
                             }
-                        } else if (ilast >= 3) {
-                            ipiv = ia + (ilast - 1) / 2;
-                            d = v[ia - 1];
-                            vref = v[ipiv - 1];
-                            if (d < vref) {
-                                if (!(vref < v[ib])) {
-                                    if (d < v[ib]) {
-                                        ipiv = ib + 1;
+                        } else if (c >= 3) {
+                            ipiv = ia + (c - 1) / 2;
+                            if (v[ia] < v[ipiv]) {
+                                if (!(v[ipiv] < v[ib])) {
+                                    if (v[ia] < v[ib]) {
+                                        ipiv = ib;
                                     } else {
                                         ipiv = ia;
                                     }
                                 }
-                            } else if (d < v[ib]) {
+                            } else if (v[ia] < v[ib]) {
                                 ipiv = ia;
-                            } else if (vref < v[ib]) {
-                                ipiv = ib + 1;
+                            } else if (v[ipiv] < v[ib]) {
+                                ipiv = ib;
                             }
-                            if (ipiv > ia) {
-                                v[ia - 1] = v[ipiv - 1];
-                                v[ipiv - 1] = d;
+                            if (ipiv + 1 > ia + 1) {
+                                vref = v[ia];
+                                v[ia] = v[ipiv];
+                                v[ipiv] = vref;
                             }
                         }
-                        ipiv = ia;
-                        ifirst = ia;
+                        ipiv = ia + 1;
+                        *nfirst = ia + 1;
                         ilast = ib;
                     }
                 }
                 *vn = v[ilast];
-                *nfirst = (ifirst - idx0) + 1;
-                *nlast = (ilast - idx0) + 2;
+                *nlast = ilast + 1;
             }
         }
 

@@ -2,7 +2,7 @@
 // File: getCandidates.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef GETCANDIDATES_H
@@ -20,7 +20,7 @@ namespace coder {
         namespace internal {
             namespace pitch {
                 void getCandidates(::coder::array<double, 2U> &domain, const double edge[2],
-                                   double peakDistance, ::coder::array<double, 1U> &peaks,
+                                   ::coder::array<double, 1U> &peaks,
                                    ::coder::array<double, 1U> &locs);
 
             }

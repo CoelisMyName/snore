@@ -2,7 +2,7 @@
 // File: sum.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef SUM_H
@@ -20,9 +20,11 @@ namespace coder {
 
     void sum(const ::coder::array<double, 2U> &x, double y[17]);
 
-    double sum(const ::coder::array<double, 1U> &x);
+    void sum(const double x[4160], double y[32]);
 
-    double sum(const ::coder::array<double, 2U> &x);
+    void sum(const ::coder::array<double, 2U> &x, ::coder::array<double, 2U> &y);
+
+    double sum(const ::coder::array<double, 1U> &x);
 
     double sum(const double x[8]);
 

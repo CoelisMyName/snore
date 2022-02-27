@@ -2,14 +2,13 @@
 // File: octdsgn.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "octdsgn.h"
 #include "butter.h"
 #include "rt_nonfinite.h"
-#include "sqrt.h"
 
 // Function Definitions
 //
@@ -35,8 +34,6 @@
 //
 void octdsgn(double Fc, double B[7], double A[7]) {
     double b_Fc[2];
-    double d;
-    double d1;
     //  Author: Christophe Couvreur, Faculte Polytechnique de Mons (Belgium)
     //          couvreur@thor.fpms.ac.be
     //  Last modification: Aug. 22, 1997, 9:00pm.
@@ -57,12 +54,8 @@ void octdsgn(double Fc, double B[7], double A[7]) {
     // 'octdsgn:43' W1 = Fc / (Fs / 2) * sqrt(1/2) / alpha;
     // 'octdsgn:44' W2 = Fc / (Fs / 2) * sqrt(2) * alpha;
     // 'octdsgn:45' [B, A] = butter(N, [W1, W2]);
-    d = 0.5;
-    coder::b_sqrt(&d);
-    d1 = 2.0;
-    coder::b_sqrt(&d1);
-    b_Fc[0] = Fc / 22050.0 * d / 0.98505216233236492;
-    b_Fc[1] = Fc / 22050.0 * d1 * 0.98505216233236492;
+    b_Fc[0] = Fc / 22050.0 * 0.70710678118654757 / 0.98505216233236492;
+    b_Fc[1] = Fc / 22050.0 * 1.4142135623730951 * 0.98505216233236492;
     coder::butter(b_Fc, B, A);
 }
 

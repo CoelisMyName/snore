@@ -8,7 +8,7 @@
 
 using namespace snore;
 
-void readWav(const char *path, I16pcm &dst) {
+void readWav(const char *path, SNORE_I16pcm &dst) {
     dst.channel = 1;
     dst.fs = 44100;
     FILE *fp = fopen(path, "rb");
@@ -23,7 +23,7 @@ void readWav(const char *path, I16pcm &dst) {
 }
 
 int main() {
-    I16pcm src;
+    SNORE_I16pcm src;
     readWav("1min.wav", src);
     F64pcm dst;
     dst.length = src.length;

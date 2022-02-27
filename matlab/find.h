@@ -2,7 +2,7 @@
 // File: find.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef FIND_H
@@ -16,11 +16,11 @@
 
 // Function Declarations
 namespace coder {
-    void b_eml_find(const ::coder::array<boolean_T, 2U> &x,
-                    ::coder::array<int, 2U> &i);
+    void b_eml_find(const ::coder::array<boolean_T, 2U> &x, int i_data[],
+                    int i_size[2]);
 
-    void eml_find(const ::coder::array<boolean_T, 2U> &x,
-                  ::coder::array<int, 2U> &i);
+    void eml_find(const ::coder::array<boolean_T, 2U> &x, int i_data[],
+                  int i_size[2]);
 
 } // namespace coder
 

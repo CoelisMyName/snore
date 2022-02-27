@@ -2,7 +2,7 @@
 // File: log.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -26,6 +26,14 @@ namespace coder {
     }
 
 //
+// Arguments    : double *x
+// Return Type  : void
+//
+    void b_log(double *x) {
+        *x = log(*x);
+    }
+
+//
 // Arguments    : ::coder::array<double, 2U> &x
 // Return Type  : void
 //
@@ -41,9 +49,29 @@ namespace coder {
 // Arguments    : double x[2]
 // Return Type  : void
 //
-    void b_log(double x[2]) {
+    void c_log(double x[2]) {
         x[0] = log(x[0]);
         x[1] = log(x[1]);
+    }
+
+//
+// Arguments    : double x[4160]
+// Return Type  : void
+//
+    void d_log(double x[4160]) {
+        for (int k = 0; k < 4160; k++) {
+            x[k] = log(x[k]);
+        }
+    }
+
+//
+// Arguments    : double x[32]
+// Return Type  : void
+//
+    void e_log(double x[32]) {
+        for (int k = 0; k < 32; k++) {
+            x[k] = log(x[k]);
+        }
     }
 
 } // namespace coder

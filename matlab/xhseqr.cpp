@@ -2,7 +2,7 @@
 // File: xhseqr.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -28,10 +28,10 @@ namespace coder {
                 double ab;
                 double ba;
                 double bb;
+                double cs;
                 double rt1r;
                 double rt2r;
                 double s;
-                double s_tmp;
                 double tst;
                 int i;
                 int info;
@@ -133,7 +133,8 @@ namespace coder {
                                 aa = s;
                                 ba = tst;
                             } else if (its == 20) {
-                                s = fabs(h[i + 6 * (i - 1)]) + fabs(h[(i + 6 * (i - 2)) - 1]);
+                                s = fabs(h[i + 6 * (i - 1)]) +
+                                    fabs(h[(i + 6 * (i - 2)) - 1]);
                                 tst = 0.75 * s + h[i + 6 * i];
                                 ab = -0.4375 * s;
                                 aa = s;
@@ -183,14 +184,15 @@ namespace coder {
                             while ((!exitg3) && (m >= k + 1)) {
                                 iy = m + 6 * (m - 1);
                                 tst = h[iy];
-                                s_tmp = h[iy - 1];
-                                aa = s_tmp - rt2r;
+                                cs = h[iy - 1];
+                                aa = cs - rt2r;
                                 s = (fabs(aa) + fabs(ba)) + fabs(tst);
                                 ab = tst / s;
                                 iy = m + 6 * m;
-                                v[0] = (ab * h[iy - 1] + (s_tmp - rt1r) * (aa / s)) - bb * (ba / s);
+                                v[0] = (ab * h[iy - 1] + (cs - rt1r) * (aa / s)) -
+                                       bb * (ba / s);
                                 tst = h[iy];
-                                v[1] = ab * (((s_tmp + tst) - rt1r) - rt2r);
+                                v[1] = ab * (((cs + tst) - rt1r) - rt2r);
                                 v[2] = ab * h[iy + 1];
                                 s = (fabs(v[0]) + fabs(v[1])) + fabs(v[2]);
                                 v[0] /= s;
@@ -202,7 +204,7 @@ namespace coder {
                                     b_i = m + 6 * (m - 2);
                                     if (fabs(h[b_i - 1]) * (fabs(v[1]) + fabs(v[2])) <=
                                         2.2204460492503131E-16 * fabs(v[0]) *
-                                        ((fabs(h[b_i - 2]) + fabs(s_tmp)) + fabs(tst))) {
+                                        ((fabs(h[b_i - 2]) + fabs(cs)) + fabs(tst))) {
                                         exitg3 = true;
                                     } else {
                                         m--;
@@ -290,8 +292,8 @@ namespace coder {
                             iy = i + b_k;
                             rt1r = h[iy];
                             tst = h[b_i];
-                            reflapack::xdlanv2(&h[(i + 6 * (i - 1)) - 1], &s, &rt1r, &tst, &aa, &ab,
-                                               &bb, &ba, &s_tmp, &rt2r);
+                            reflapack::xdlanv2(&h[(i + 6 * (i - 1)) - 1], &s, &rt1r, &tst,
+                                               &aa, &ab, &bb, &ba, &cs, &rt2r);
                             h[b_i - 1] = s;
                             h[iy] = rt1r;
                             h[b_i] = tst;
@@ -302,8 +304,8 @@ namespace coder {
                                     nr = hoffset + k * 6;
                                     tst = h[nr];
                                     aa = h[nr - 1];
-                                    h[nr] = s_tmp * tst - rt2r * aa;
-                                    h[nr - 1] = s_tmp * aa + rt2r * tst;
+                                    h[nr] = cs * tst - rt2r * aa;
+                                    h[nr - 1] = cs * aa + rt2r * tst;
                                 }
                             }
                             if (i - 1 >= 1) {
@@ -311,8 +313,8 @@ namespace coder {
                                 for (k = 0; k <= i - 2; k++) {
                                     hoffset = iy + k;
                                     nr = b_k + k;
-                                    tst = s_tmp * h[nr] + rt2r * h[hoffset];
-                                    h[hoffset] = s_tmp * h[hoffset] - rt2r * h[nr];
+                                    tst = cs * h[nr] + rt2r * h[hoffset];
+                                    h[hoffset] = cs * h[hoffset] - rt2r * h[nr];
                                     h[nr] = tst;
                                 }
                             }

@@ -2,7 +2,7 @@
 // File: stack1.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef STACK1_H
@@ -10,7 +10,7 @@
 
 // Include Files
 #include "rtwtypes.h"
-#include "coder_array.h"
+#include "coder_bounded_array.h"
 #include <cstddef>
 #include <cstdlib>
 
@@ -25,7 +25,7 @@ namespace coder {
     namespace internal {
         class stack {
         public:
-            array<struct_T, 1U> d;
+            bounded_array<struct_T, 120U, 1U> d;
             int n;
         };
 

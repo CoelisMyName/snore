@@ -2,7 +2,7 @@
 // File: var.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -14,39 +14,39 @@
 // Function Definitions
 //
 // Arguments    : const ::coder::array<double, 2U> &x
-//                ::coder::array<double, 2U> &y
+//                double y_data[]
+//                int y_size[2]
 // Return Type  : void
 //
 namespace coder {
-    void var(const ::coder::array<double, 2U> &x, ::coder::array<double, 2U> &y) {
+    void var(const ::coder::array<double, 2U> &x, double y_data[], int y_size[2]) {
         array<double, 1U> xv;
-        int k;
         int loop_ub;
         int npages;
-        int nx;
         int outsize_idx_0;
-        y.set_size(1, x.size(1));
-        nx = x.size(1);
-        for (k = 0; k < nx; k++) {
-            y[k] = 0.0;
+        int szy_idx_1;
+        szy_idx_1 = x.size(1);
+        y_size[0] = 1;
+        y_size[1] = x.size(1);
+        if (0 <= szy_idx_1 - 1) {
+            y_data[0] = 0.0;
         }
-        nx = x.size(0);
+        szy_idx_1 = x.size(0);
         npages = x.size(1);
         if (0 <= x.size(1) - 1) {
             outsize_idx_0 = x.size(0);
             loop_ub = x.size(0);
         }
         for (int p = 0; p < npages; p++) {
-            int workspace_ixfirst;
-            workspace_ixfirst = p * nx;
+            int k;
             xv.set_size(outsize_idx_0);
             for (k = 0; k < loop_ub; k++) {
                 xv[k] = 0.0;
             }
-            for (k = 0; k < nx; k++) {
-                xv[k] = x[workspace_ixfirst + k];
+            for (k = 0; k < szy_idx_1; k++) {
+                xv[k] = x[k];
             }
-            y[p] = vvarstd(xv, x.size(0));
+            y_data[0] = vvarstd(xv, x.size(0));
         }
     }
 
@@ -86,6 +86,14 @@ namespace coder {
         b_x = x.size(1);
         c_x = x.reshape(b_x);
         return vvarstd(c_x, x.size(1));
+    }
+
+//
+// Arguments    : const ::coder::array<double, 1U> &x
+// Return Type  : double
+//
+    double var(const ::coder::array<double, 1U> &x) {
+        return vvarstd(x, x.size(0));
     }
 
 } // namespace coder

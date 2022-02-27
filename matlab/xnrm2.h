@@ -2,7 +2,7 @@
 // File: xnrm2.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef XNRM2_H
@@ -17,6 +17,10 @@
 namespace coder {
     namespace internal {
         namespace blas {
+            double b_xnrm2(int n, const double x_data[], int ix0);
+
+            double xnrm2(int n, const creal_T x_data[], int ix0);
+
             double xnrm2(int n, const double x[36], int ix0);
 
             double xnrm2(int n, const double x[3]);

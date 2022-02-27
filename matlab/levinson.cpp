@@ -2,189 +2,173 @@
 // File: levinson.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "levinson.h"
-#include "SnoringRecognition_data.h"
+#include "callLevinson.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
-#include <math.h>
+#include <string.h>
 
 // Function Definitions
 //
 // Arguments    : const ::coder::array<creal_T, 1U> &R
-//                ::coder::array<creal_T, 2U> &A
-//                ::coder::array<double, 2U> &E
+//                creal_T A_data[]
+//                int A_size[2]
+//                double E_data[]
+//                int E_size[2]
 // Return Type  : void
 //
 namespace coder {
-    void levinson(const ::coder::array<creal_T, 1U> &R,
-                  ::coder::array<creal_T, 2U> &A, ::coder::array<double, 2U> &E) {
-        array<creal_T, 2U> temp_a;
-        array<creal_T, 2U> temp_auf;
-        array<creal_T, 1U> temp_A;
-        array<creal_T, 1U> temp_r;
-        array<signed char, 1U> r;
+    void b_levinson(const ::coder::array<creal_T, 1U> &R, creal_T A_data[],
+                    int A_size[2], double E_data[], int E_size[2]) {
+        creal_T K_data[13];
+        creal_T b_A_data[13];
+        int K_size[2];
+        int b_A_size[2];
+        int N;
+        N = 10;
+        if ((10 == R.size(0)) || (10 > R.size(0))) {
+            N = R.size(0) - 1;
+        }
+        signal::internal::levinson::callLevinson(R, static_cast<double>(N),
+                                                 b_A_data, b_A_size, E_data, E_size,
+                                                 K_data, K_size);
+        A_size[0] = 1;
+        A_size[1] = b_A_size[1];
+        N = b_A_size[1];
+        if (0 <= N - 1) {
+            memcpy(&A_data[0], &b_A_data[0], N * sizeof(creal_T));
+        }
+    }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &R
+//                ::coder::array<double, 2U> &A
+//                ::coder::array<double, 1U> &E
+// Return Type  : void
+//
+    void levinson(const ::coder::array<double, 2U> &R,
+                  ::coder::array<double, 2U> &A, ::coder::array<double, 1U> &E) {
+        array<double, 2U> r;
+        array<double, 2U> temp_A;
+        array<double, 2U> temp_E;
+        double temp_a_data[12];
+        double temp_auf_data[12];
+        int N;
+        int i;
+        int i1;
+        int j;
+        int l;
+        signed char sizes_idx_0;
+        N = 12;
+        if (R.size(1) == 1) {
+            r.set_size(R.size(0), 1);
+            l = R.size(0);
+            for (i = 0; i < l; i++) {
+                r[i] = R[i];
+            }
+        } else {
+            r.set_size(R.size(0), R.size(1));
+            l = R.size(0) * R.size(1);
+            for (i = 0; i < l; i++) {
+                r[i] = R[i];
+            }
+        }
+        if ((12 == r.size(0)) || (12 > r.size(0))) {
+            N = r.size(0) - 1;
+        }
+        temp_E.set_size(1, r.size(1));
+        temp_A.set_size(N, r.size(1));
+        if (0 <= N - 1) {
+            memset(&temp_a_data[0], 0, N * sizeof(double));
+            memset(&temp_auf_data[0], 0, N * sizeof(double));
+        }
+        i = r.size(1);
+        for (int b_i = 0; b_i < i; b_i++) {
+            double temp_J;
+            temp_J = r[r.size(0) * b_i];
+            temp_a_data[0] = -temp_J;
+            for (l = 0; l < N; l++) {
+                double temp_kprod;
+                temp_kprod = 0.0;
+                for (j = 0; j < l; j++) {
+                    double d;
+                    d = temp_a_data[j];
+                    temp_auf_data[j] = d;
+                    temp_kprod += d * r[(l - j) + r.size(0) * b_i];
+                }
+                temp_kprod = -(r[(l + r.size(0) * b_i) + 1] + temp_kprod) / temp_J;
+                temp_J *= 1.0 - temp_kprod * temp_kprod;
+                for (j = 0; j < l; j++) {
+                    temp_a_data[j] =
+                            temp_auf_data[j] + temp_kprod * temp_auf_data[(l - j) - 1];
+                }
+                temp_a_data[l] = temp_kprod;
+            }
+            temp_E[b_i] = temp_J;
+            l = temp_A.size(0);
+            for (i1 = 0; i1 < l; i1++) {
+                temp_A[i1 + temp_A.size(0) * b_i] = temp_a_data[i1];
+            }
+        }
+        if ((temp_A.size(0) != 0) && (temp_A.size(1) != 0)) {
+            sizes_idx_0 = static_cast<signed char>(temp_A.size(0));
+        } else {
+            sizes_idx_0 = 0;
+        }
+        N = temp_A.size(0) - 1;
+        j = temp_A.size(1) - 1;
+        l = temp_A.size(0);
+        for (i = 0; i <= j; i++) {
+            for (i1 = 0; i1 < l; i1++) {
+                temp_A[i1 + (N + 1) * i] = temp_A[i1 + temp_A.size(0) * i];
+            }
+        }
+        temp_A.set_size(N + 1, j + 1);
+        N = sizes_idx_0;
+        j = r.size(1);
+        A.set_size(r.size(1), sizes_idx_0 + 1);
+        l = r.size(1);
+        for (i = 0; i < 1; i++) {
+            for (i1 = 0; i1 < l; i1++) {
+                A[i1] = 1.0;
+            }
+        }
+        for (i = 0; i < N; i++) {
+            for (i1 = 0; i1 < j; i1++) {
+                A[i1 + A.size(0) * (i + 1)] = temp_A[i + sizes_idx_0 * i1];
+            }
+        }
+        E.set_size(temp_E.size(1));
+        l = temp_E.size(1);
+        for (i = 0; i < l; i++) {
+            E[i] = temp_E[i];
+        }
+    }
+
+//
+// Arguments    : const ::coder::array<creal_T, 1U> &R
+//                creal_T A_data[]
+//                int A_size[2]
+//                double E_data[]
+//                int E_size[2]
+// Return Type  : void
+//
+    void levinson(const ::coder::array<creal_T, 1U> &R, creal_T A_data[],
+                  int A_size[2], double E_data[], int E_size[2]) {
+        creal_T K_data[13];
+        int K_size[2];
         int N;
         N = 12;
         if ((12 == R.size(0)) || (12 > R.size(0))) {
             N = R.size(0) - 1;
         }
-        if (N == 0) {
-            E.set_size(1, 1);
-            E[0] = R[0].re;
-            A.set_size(1, 1);
-            A[0].re = 1.0;
-            A[0].im = 0.0;
-        } else if (R.size(0) == 1) {
-            A.set_size(1, 1);
-            A[0].re = 1.0;
-            A[0].im = 0.0;
-            E.set_size(1, 1);
-            E[0] = R[0].re;
-        } else {
-            double temp_J_im;
-            double temp_J_re;
-            int idx;
-            int j;
-            int loop_ub;
-            temp_a.set_size(1, N);
-            temp_A.set_size(N);
-            temp_auf.set_size(1, N);
-            for (j = 0; j < N; j++) {
-                temp_a[j].re = 0.0;
-                temp_a[j].im = 0.0;
-                temp_A[j].re = 0.0;
-                temp_A[j].im = 0.0;
-                temp_auf[j].re = 0.0;
-                temp_auf[j].im = 0.0;
-            }
-            if (2 > N + 1) {
-                j = 0;
-                idx = -1;
-            } else {
-                j = 1;
-                idx = N;
-            }
-            loop_ub = idx - j;
-            temp_r.set_size(loop_ub + 1);
-            for (idx = 0; idx <= loop_ub; idx++) {
-                temp_r[idx] = R[j + idx];
-            }
-            temp_a[0].re = -R[0].re;
-            temp_a[0].im = -R[0].im;
-            temp_J_re = R[0].re;
-            temp_J_im = 0.0;
-            for (int l = 0; l < N; l++) {
-                double ar;
-                double im;
-                double re;
-                double s;
-                double temp_kprod_im;
-                double temp_kprod_re;
-                temp_kprod_re = 0.0;
-                temp_kprod_im = 0.0;
-                for (j = 0; j < l; j++) {
-                    temp_auf[j] = temp_a[j];
-                    loop_ub = (l - j) - 1;
-                    temp_kprod_re += temp_a[j].re * temp_r[loop_ub].re -
-                                     temp_a[j].im * temp_r[loop_ub].im;
-                    temp_kprod_im += temp_a[j].re * temp_r[loop_ub].im +
-                                     temp_a[j].im * temp_r[loop_ub].re;
-                }
-                ar = -(temp_r[l].re + temp_kprod_re);
-                im = -(temp_r[l].im + temp_kprod_im);
-                if (temp_J_im == 0.0) {
-                    if (im == 0.0) {
-                        re = ar / temp_J_re;
-                        im = 0.0;
-                    } else if (ar == 0.0) {
-                        re = 0.0;
-                        im /= temp_J_re;
-                    } else {
-                        re = ar / temp_J_re;
-                        im /= temp_J_re;
-                    }
-                } else if (temp_J_re == 0.0) {
-                    if (ar == 0.0) {
-                        re = im / temp_J_im;
-                        im = 0.0;
-                    } else if (im == 0.0) {
-                        re = 0.0;
-                        im = -(ar / temp_J_im);
-                    } else {
-                        re = im / temp_J_im;
-                        im = -(ar / temp_J_im);
-                    }
-                } else {
-                    temp_kprod_im = fabs(temp_J_re);
-                    temp_kprod_re = fabs(temp_J_im);
-                    if (temp_kprod_im > temp_kprod_re) {
-                        s = temp_J_im / temp_J_re;
-                        temp_kprod_re = temp_J_re + s * temp_J_im;
-                        re = (ar + s * im) / temp_kprod_re;
-                        im = (im - s * ar) / temp_kprod_re;
-                    } else if (temp_kprod_re == temp_kprod_im) {
-                        if (temp_J_re > 0.0) {
-                            temp_kprod_re = 0.5;
-                        } else {
-                            temp_kprod_re = -0.5;
-                        }
-                        if (temp_J_im > 0.0) {
-                            s = 0.5;
-                        } else {
-                            s = -0.5;
-                        }
-                        re = (ar * temp_kprod_re + im * s) / temp_kprod_im;
-                        im = (im * temp_kprod_re - ar * s) / temp_kprod_im;
-                    } else {
-                        s = temp_J_re / temp_J_im;
-                        temp_kprod_re = temp_J_im + s * temp_J_re;
-                        re = (s * ar + im) / temp_kprod_re;
-                        im = (s * im - ar) / temp_kprod_re;
-                    }
-                }
-                temp_kprod_re = re * re - im * -im;
-                temp_kprod_im = re * -im + im * re;
-                s = (1.0 - temp_kprod_re) * temp_J_re - (0.0 - temp_kprod_im) * temp_J_im;
-                temp_J_im =
-                        (1.0 - temp_kprod_re) * temp_J_im + (0.0 - temp_kprod_im) * temp_J_re;
-                temp_J_re = s;
-                for (idx = 0; idx < l; idx++) {
-                    loop_ub = (l - idx) - 1;
-                    temp_kprod_re = temp_auf[loop_ub].re;
-                    s = -temp_auf[loop_ub].im;
-                    temp_a[idx].re = temp_auf[idx].re + (re * temp_kprod_re - im * s);
-                    temp_a[idx].im = temp_auf[idx].im + (re * s + im * temp_kprod_re);
-                }
-                temp_a[l].re = re;
-                temp_a[l].im = im;
-            }
-            r.set_size(static_cast<signed char>(N - 1) + 1);
-            loop_ub = static_cast<signed char>(N - 1);
-            for (j = 0; j <= loop_ub; j++) {
-                r[j] = static_cast<signed char>(j);
-            }
-            loop_ub = r.size(0);
-            for (j = 0; j < loop_ub; j++) {
-                temp_A[static_cast<int>(r[j])] = temp_a[j];
-            }
-            if (1 > temp_A.size(0)) {
-                loop_ub = 0;
-            } else {
-                loop_ub = temp_A.size(0);
-            }
-            A.set_size(1, loop_ub + 1);
-            A[0].re = 1.0;
-            A[0].im = 0.0;
-            for (j = 0; j < loop_ub; j++) {
-                A[A.size(0) * (j + 1)] = temp_A[j];
-            }
-            E.set_size(1, 1);
-            E[0] = temp_J_re;
-        }
+        signal::internal::levinson::callLevinson(R, static_cast<double>(N), A_data,
+                                                 A_size, E_data, E_size, K_data,
+                                                 K_size);
     }
 
 } // namespace coder

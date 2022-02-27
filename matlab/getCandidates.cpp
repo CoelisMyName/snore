@@ -2,7 +2,7 @@
 // File: getCandidates.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -17,7 +17,6 @@
 //
 // Arguments    : ::coder::array<double, 2U> &domain
 //                const double edge[2]
-//                double peakDistance
 //                ::coder::array<double, 1U> &peaks
 //                ::coder::array<double, 1U> &locs
 // Return Type  : void
@@ -27,13 +26,14 @@ namespace coder {
         namespace internal {
             namespace pitch {
                 void getCandidates(::coder::array<double, 2U> &domain, const double edge[2],
-                                   double peakDistance, ::coder::array<double, 1U> &peaks,
+                                   ::coder::array<double, 1U> &peaks,
                                    ::coder::array<double, 1U> &locs) {
-                    array<double, 2U> idxToRemove;
-                    array<double, 2U> range;
-                    array<int, 1U> r;
+                    array<double, 2U> b_y;
+                    array<double, 2U> y;
+                    double varargin_1_data[941];
                     double lower;
                     double upper;
+                    int tmp_data[941];
                     int i;
                     int last;
                     locs.set_size(domain.size(1));
@@ -47,21 +47,21 @@ namespace coder {
                         peaks[i] = 0.0;
                     }
                     if (rtIsNaN(edge[0]) || rtIsNaN(edge[1])) {
-                        range.set_size(1, 1);
-                        range[0] = rtNaN;
+                        y.set_size(1, 1);
+                        y[0] = rtNaN;
                     } else if (edge[1] < edge[0]) {
-                        range.set_size(1, 0);
+                        y.set_size(1, 0);
                     } else if ((rtIsInf(edge[0]) || rtIsInf(edge[1])) && (edge[0] == edge[1])) {
-                        range.set_size(1, 1);
-                        range[0] = rtNaN;
+                        y.set_size(1, 1);
+                        y[0] = rtNaN;
                     } else if (floor(edge[0]) == edge[0]) {
                         last = static_cast<int>(floor(edge[1] - edge[0]));
-                        range.set_size(1, last + 1);
+                        y.set_size(1, last + 1);
                         for (i = 0; i <= last; i++) {
-                            range[i] = edge[0] + static_cast<double>(i);
+                            y[i] = edge[0] + static_cast<double>(i);
                         }
                     } else {
-                        eml_float_colon(edge[0], edge[1], range);
+                        eml_float_colon(edge[0], edge[1], y);
                     }
                     lower = edge[0];
                     upper = edge[1];
@@ -70,104 +70,107 @@ namespace coder {
                         double a;
                         double ex;
                         int i1;
-                        int idx;
-                        last = range.size(1);
-                        if (range.size(1) <= 2) {
-                            if (range.size(1) == 0) {
-                                peaks[c] = rtNaN;
-                                idx = 1;
-                            } else if (range.size(1) == 1) {
+                        int iindx;
+                        int k;
+                        last = y.size(1);
+                        for (i1 = 0; i1 < last; i1++) {
+                            varargin_1_data[i1] =
+                                    domain[(static_cast<int>(y[i1]) + domain.size(0) * c) - 1];
+                        }
+                        last = y.size(1);
+                        if (y.size(1) <= 2) {
+                            if (y.size(1) == 1) {
                                 peaks[c] =
-                                        domain[(static_cast<int>(range[0]) + domain.size(0) * c) - 1];
-                                idx = 1;
+                                        domain[(static_cast<int>(y[0]) + domain.size(0) * c) - 1];
+                                iindx = 1;
                             } else {
-                                i1 = static_cast<int>(range[0]) - 1;
-                                a = domain[(static_cast<int>(range[1]) + domain.size(0) * c) - 1];
-                                ex = domain[i1 + domain.size(0) * c];
-                                if ((ex < a) ||
-                                    (rtIsNaN(domain[i1 + domain.size(0) * c]) && (!rtIsNaN(a)))) {
-                                    peaks[c] = a;
-                                    idx = 2;
+                                a = domain[(static_cast<int>(y[0]) + domain.size(0) * c) - 1];
+                                if ((a < domain[(static_cast<int>(y[y.size(1) - 1]) +
+                                                 domain.size(0) * c) -
+                                                1]) ||
+                                    (rtIsNaN(a) &&
+                                     (!rtIsNaN(domain[(static_cast<int>(y[y.size(1) - 1]) +
+                                                       domain.size(0) * c) -
+                                                      1])))) {
+                                    peaks[c] = domain[(static_cast<int>(y[y.size(1) - 1]) +
+                                                       domain.size(0) * c) -
+                                                      1];
+                                    iindx = y.size(1);
                                 } else {
-                                    peaks[c] = ex;
-                                    idx = 1;
+                                    peaks[c] = a;
+                                    iindx = 1;
                                 }
                             }
                         } else {
-                            int k;
-                            a = domain[(static_cast<int>(range[0]) + domain.size(0) * c) - 1];
-                            if (!rtIsNaN(a)) {
-                                idx = 1;
+                            if (!rtIsNaN(varargin_1_data[0])) {
+                                iindx = 1;
                             } else {
                                 boolean_T exitg1;
-                                idx = 0;
+                                iindx = 0;
                                 k = 2;
                                 exitg1 = false;
                                 while ((!exitg1) && (k <= last)) {
-                                    if (!rtIsNaN(
-                                            domain[(static_cast<int>(range[k - 1]) + domain.size(0) * c) -
-                                                   1])) {
-                                        idx = k;
+                                    if (!rtIsNaN(varargin_1_data[k - 1])) {
+                                        iindx = k;
                                         exitg1 = true;
                                     } else {
                                         k++;
                                     }
                                 }
                             }
-                            if (idx == 0) {
-                                peaks[c] = a;
-                                idx = 1;
+                            if (iindx == 0) {
+                                peaks[c] =
+                                        domain[(static_cast<int>(y[0]) + domain.size(0) * c) - 1];
+                                iindx = 1;
                             } else {
-                                ex =
-                                        domain[(static_cast<int>(range[idx - 1]) + domain.size(0) * c) - 1];
-                                i1 = idx + 1;
+                                ex = varargin_1_data[iindx - 1];
+                                i1 = iindx + 1;
                                 for (k = i1; k <= last; k++) {
-                                    a = domain[(static_cast<int>(range[k - 1]) + domain.size(0) * c) - 1];
+                                    a = varargin_1_data[k - 1];
                                     if (ex < a) {
                                         ex = a;
-                                        idx = k;
+                                        iindx = k;
                                     }
                                 }
                                 peaks[c] = ex;
                             }
                         }
-                        ex = (static_cast<double>(idx) - peakDistance) + lower;
+                        ex = (static_cast<double>(iindx) - 1.0) + lower;
                         if ((ex > lower) || rtIsNaN(lower)) {
                             a = ex;
                         } else {
                             a = lower;
                         }
-                        ex = (static_cast<double>(idx) + peakDistance) + lower;
+                        ex = (static_cast<double>(iindx) + 1.0) + lower;
                         if ((!(ex < upper)) && (!rtIsNaN(upper))) {
                             ex = upper;
                         }
                         if (rtIsNaN(a) || rtIsNaN(ex)) {
-                            idxToRemove.set_size(1, 1);
-                            idxToRemove[0] = rtNaN;
+                            b_y.set_size(1, 1);
+                            b_y[0] = rtNaN;
                         } else if (ex < a) {
-                            idxToRemove.set_size(1, 0);
+                            b_y.set_size(1, 0);
                         } else if ((rtIsInf(a) || rtIsInf(ex)) && (a == ex)) {
-                            idxToRemove.set_size(1, 1);
-                            idxToRemove[0] = rtNaN;
+                            b_y.set_size(1, 1);
+                            b_y[0] = rtNaN;
                         } else if (floor(a) == a) {
                             last = static_cast<int>(floor(ex - a));
-                            idxToRemove.set_size(1, last + 1);
+                            b_y.set_size(1, last + 1);
                             for (i1 = 0; i1 <= last; i1++) {
-                                idxToRemove[i1] = a + static_cast<double>(i1);
+                                b_y[i1] = a + static_cast<double>(i1);
                             }
                         } else {
-                            eml_float_colon(a, ex, idxToRemove);
+                            eml_float_colon(a, ex, b_y);
                         }
-                        r.set_size(idxToRemove.size(1));
-                        last = idxToRemove.size(1);
+                        k = b_y.size(1);
+                        last = b_y.size(1);
                         for (i1 = 0; i1 < last; i1++) {
-                            r[i1] = static_cast<int>(idxToRemove[i1]);
+                            tmp_data[i1] = static_cast<int>(b_y[i1]);
                         }
-                        last = r.size(0);
-                        for (i1 = 0; i1 < last; i1++) {
-                            domain[(r[i1] + domain.size(0) * c) - 1] = rtNaN;
+                        for (i1 = 0; i1 < k; i1++) {
+                            domain[(tmp_data[i1] + domain.size(0) * c) - 1] = rtNaN;
                         }
-                        locs[c] = (lower + static_cast<double>(idx)) - 1.0;
+                        locs[c] = (lower + static_cast<double>(iindx)) - 1.0;
                     }
                 }
 

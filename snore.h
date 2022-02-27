@@ -61,18 +61,22 @@ namespace snore {
         virtual SNORE_UNUSED double getNoiseEnd() = 0;
     };
 
-//    class SNORE_PatientModel {
-//    public:
-//        virtual ~SNORE_PatientModel();
-//
-//        virtual void digest(SNORE_F64pcm &src);
-//
-//        virtual double getResult();
-//    };
+    class SNORE_PatientModel {
+    public:
+        virtual ~SNORE_PatientModel() = default;
+
+        virtual void digest(SNORE_F64pcm &src) = 0;
+
+        virtual double getResult() = 0;
+    };
 
     SNORE_UNUSED extern SNORE_ModelResult *newModelResult();
 
     SNORE_UNUSED extern void deleteModelResult(SNORE_ModelResult *ptr);
+
+    SNORE_UNUSED extern SNORE_PatientModel *newPatientModel();
+
+    SNORE_UNUSED extern void deletePatientModel(SNORE_PatientModel *ptr);
 
     /**
      * 模型入口函数

@@ -2,7 +2,7 @@
 // File: vad.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef VAD_H
@@ -15,9 +15,9 @@
 #include <cstdlib>
 
 // Function Declarations
-extern void vad(coder::array<double, 2U> &x, double fs,
-                coder::array<double, 2U> &w_starts,
-                coder::array<double, 2U> &w_ends);
+extern void vad(coder::array<double, 1U> &x, double fs,
+                coder::array<long long, 1U> &w_starts,
+                coder::array<long long, 1U> &w_ends);
 
 #endif
 //

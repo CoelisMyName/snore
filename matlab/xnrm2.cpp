@@ -2,24 +2,107 @@
 // File: xnrm2.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "xnrm2.h"
+#include "SnoringRecognition_rtwutil.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 
 // Function Definitions
 //
 // Arguments    : int n
-//                const double x[36]
+//                const double x_data[]
 //                int ix0
 // Return Type  : double
 //
 namespace coder {
     namespace internal {
         namespace blas {
+            double b_xnrm2(int n, const double x_data[], int ix0) {
+                double y;
+                y = 0.0;
+                if (n >= 1) {
+                    if (n == 1) {
+                        y = fabs(x_data[ix0 - 1]);
+                    } else {
+                        double scale;
+                        int kend;
+                        scale = 3.3121686421112381E-170;
+                        kend = (ix0 + n) - 1;
+                        for (int k = ix0; k <= kend; k++) {
+                            double absxk;
+                            absxk = fabs(x_data[k - 1]);
+                            if (absxk > scale) {
+                                double t;
+                                t = scale / absxk;
+                                y = y * t * t + 1.0;
+                                scale = absxk;
+                            } else {
+                                double t;
+                                t = absxk / scale;
+                                y += t * t;
+                            }
+                        }
+                        y = scale * sqrt(y);
+                    }
+                }
+                return y;
+            }
+
+//
+// Arguments    : int n
+//                const creal_T x_data[]
+//                int ix0
+// Return Type  : double
+//
+            double xnrm2(int n, const creal_T x_data[], int ix0) {
+                double y;
+                y = 0.0;
+                if (n >= 1) {
+                    if (n == 1) {
+                        y = rt_hypotd_snf(x_data[ix0 - 1].re, x_data[ix0 - 1].im);
+                    } else {
+                        double scale;
+                        int kend;
+                        scale = 3.3121686421112381E-170;
+                        kend = (ix0 + n) - 1;
+                        for (int k = ix0; k <= kend; k++) {
+                            double absxk;
+                            double t;
+                            absxk = fabs(x_data[k - 1].re);
+                            if (absxk > scale) {
+                                t = scale / absxk;
+                                y = y * t * t + 1.0;
+                                scale = absxk;
+                            } else {
+                                t = absxk / scale;
+                                y += t * t;
+                            }
+                            absxk = fabs(x_data[k - 1].im);
+                            if (absxk > scale) {
+                                t = scale / absxk;
+                                y = y * t * t + 1.0;
+                                scale = absxk;
+                            } else {
+                                t = absxk / scale;
+                                y += t * t;
+                            }
+                        }
+                        y = scale * sqrt(y);
+                    }
+                }
+                return y;
+            }
+
+//
+// Arguments    : int n
+//                const double x[36]
+//                int ix0
+// Return Type  : double
+//
             double xnrm2(int n, const double x[36], int ix0) {
                 double y;
                 y = 0.0;
@@ -63,23 +146,26 @@ namespace coder {
                     if (n == 1) {
                         y = fabs(x[1]);
                     } else {
+                        double absxk;
                         double scale;
-                        int kend;
+                        double t;
                         scale = 3.3121686421112381E-170;
-                        kend = n + 1;
-                        for (int k = 2; k <= kend; k++) {
-                            double absxk;
-                            absxk = fabs(x[k - 1]);
-                            if (absxk > scale) {
-                                double t;
-                                t = scale / absxk;
-                                y = y * t * t + 1.0;
-                                scale = absxk;
-                            } else {
-                                double t;
-                                t = absxk / scale;
-                                y += t * t;
-                            }
+                        absxk = fabs(x[1]);
+                        if (absxk > 3.3121686421112381E-170) {
+                            y = 1.0;
+                            scale = absxk;
+                        } else {
+                            t = absxk / 3.3121686421112381E-170;
+                            y = t * t;
+                        }
+                        absxk = fabs(x[2]);
+                        if (absxk > scale) {
+                            t = scale / absxk;
+                            y = y * t * t + 1.0;
+                            scale = absxk;
+                        } else {
+                            t = absxk / scale;
+                            y += t * t;
                         }
                         y = scale * sqrt(y);
                     }

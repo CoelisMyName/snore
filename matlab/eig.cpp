@@ -2,21 +2,40 @@
 // File: eig.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "eig.h"
-#include "SnoringRecognition_data.h"
 #include "SnoringRecognition_rtwutil.h"
-#include "eigHermitianStandard.h"
+#include "eigStandard.h"
 #include "rt_nonfinite.h"
-#include "xzhgeqz.h"
-#include "xzlartg.h"
+#include "xhseqr.h"
+#include "xnrm2.h"
 #include "rt_nonfinite.h"
 #include <math.h>
+#include <string.h>
+
+// Function Declarations
+static int div_nde_s32_floor(int numerator, int denominator);
 
 // Function Definitions
+//
+// Arguments    : int numerator
+//                int denominator
+// Return Type  : int
+//
+static int div_nde_s32_floor(int numerator, int denominator) {
+    int b_numerator;
+    if (((numerator < 0) != (denominator < 0)) &&
+        (numerator % denominator != 0)) {
+        b_numerator = -1;
+    } else {
+        b_numerator = 0;
+    }
+    return numerator / denominator + b_numerator;
+}
+
 //
 // Arguments    : const double A[36]
 //                creal_T V[6]
@@ -24,45 +43,43 @@
 //
 namespace coder {
     void eig(const double A[36], creal_T V[6]) {
-        creal_T At[36];
-        creal_T beta1[6];
-        creal_T atmp;
-        double b_dv[6];
-        double absxk;
-        int ii;
-        boolean_T notdone;
-        notdone = true;
-        for (ii = 0; ii < 36; ii++) {
-            if ((!notdone) || (rtIsInf(A[ii]) || rtIsNaN(A[ii]))) {
-                notdone = false;
+        double T[36];
+        double work[6];
+        double tau[5];
+        int i;
+        boolean_T p;
+        p = true;
+        for (i = 0; i < 36; i++) {
+            if ((!p) || (rtIsInf(A[i]) || rtIsNaN(A[i]))) {
+                p = false;
             }
         }
-        if (!notdone) {
-            for (int i = 0; i < 6; i++) {
-                V[i].re = rtNaN;
-                V[i].im = 0.0;
+        if (!p) {
+            for (int b_i = 0; b_i < 6; b_i++) {
+                V[b_i].re = rtNaN;
+                V[b_i].im = 0.0;
             }
         } else {
+            int b_i;
+            int coltop;
             int exitg1;
-            int i;
-            int j;
             boolean_T exitg2;
-            notdone = true;
-            j = 0;
+            p = true;
+            coltop = 0;
             exitg2 = false;
-            while ((!exitg2) && (j < 6)) {
-                i = 0;
+            while ((!exitg2) && (coltop < 6)) {
+                b_i = 0;
                 do {
                     exitg1 = 0;
-                    if (i <= j) {
-                        if (!(A[i + 6 * j] == A[j + 6 * i])) {
-                            notdone = false;
+                    if (b_i <= coltop) {
+                        if (!(A[b_i + 6 * coltop] == A[coltop + 6 * b_i])) {
+                            p = false;
                             exitg1 = 1;
                         } else {
-                            i++;
+                            b_i++;
                         }
                     } else {
-                        j++;
+                        coltop++;
                         exitg1 = 2;
                     }
                 } while (exitg1 == 0);
@@ -70,350 +87,244 @@ namespace coder {
                     exitg2 = true;
                 }
             }
-            if (notdone) {
-                eigHermitianStandard(A, b_dv);
+            if (p) {
+                double temp;
+                p = true;
+                for (i = 0; i < 36; i++) {
+                    temp = A[i];
+                    T[i] = temp;
+                    if ((!p) || (rtIsInf(temp) || rtIsNaN(temp))) {
+                        p = false;
+                    }
+                }
+                if (!p) {
+                    for (int c_i = 0; c_i < 36; c_i++) {
+                        T[c_i] = rtNaN;
+                    }
+                    i = 2;
+                    for (coltop = 0; coltop < 5; coltop++) {
+                        if (i <= 6) {
+                            memset(&T[(coltop * 6 + i) + -1], 0,
+                                   (7 - i) * sizeof(double));
+                        }
+                        i++;
+                    }
+                } else {
+                    for (b_i = 0; b_i < 6; b_i++) {
+                        work[b_i] = 0.0;
+                    }
+                    for (b_i = 0; b_i < 5; b_i++) {
+                        double alpha1;
+                        int alpha1_tmp;
+                        int c_i;
+                        int ia;
+                        int in;
+                        int iv0_tmp;
+                        int jA;
+                        int knt;
+                        int lastc;
+                        int lastv;
+                        int rowleft;
+                        coltop = b_i * 6 + 2;
+                        in = (b_i + 1) * 6;
+                        alpha1_tmp = (b_i + 6 * b_i) + 1;
+                        alpha1 = T[alpha1_tmp];
+                        if (b_i + 3 < 6) {
+                            i = b_i + 1;
+                        } else {
+                            i = 4;
+                        }
+                        rowleft = i + coltop;
+                        tau[b_i] = 0.0;
+                        temp = internal::blas::xnrm2(4 - b_i, T, rowleft);
+                        if (temp != 0.0) {
+                            double beta1;
+                            beta1 = rt_hypotd_snf(alpha1, temp);
+                            if (alpha1 >= 0.0) {
+                                beta1 = -beta1;
+                            }
+                            if (fabs(beta1) < 1.0020841800044864E-292) {
+                                knt = -1;
+                                c_i = (rowleft - b_i) + 3;
+                                do {
+                                    knt++;
+                                    for (i = rowleft; i <= c_i; i++) {
+                                        T[i - 1] *= 9.9792015476736E+291;
+                                    }
+                                    beta1 *= 9.9792015476736E+291;
+                                    alpha1 *= 9.9792015476736E+291;
+                                } while (!(fabs(beta1) >= 1.0020841800044864E-292));
+                                beta1 = rt_hypotd_snf(
+                                        alpha1,
+                                        internal::blas::xnrm2(4 - b_i, T, rowleft));
+                                if (alpha1 >= 0.0) {
+                                    beta1 = -beta1;
+                                }
+                                tau[b_i] = (beta1 - alpha1) / beta1;
+                                temp = 1.0 / (alpha1 - beta1);
+                                c_i = (rowleft - b_i) + 3;
+                                for (i = rowleft; i <= c_i; i++) {
+                                    T[i - 1] *= temp;
+                                }
+                                for (i = 0; i <= knt; i++) {
+                                    beta1 *= 1.0020841800044864E-292;
+                                }
+                                alpha1 = beta1;
+                            } else {
+                                tau[b_i] = (beta1 - alpha1) / beta1;
+                                temp = 1.0 / (alpha1 - beta1);
+                                c_i = (rowleft - b_i) + 3;
+                                for (i = rowleft; i <= c_i; i++) {
+                                    T[i - 1] *= temp;
+                                }
+                                alpha1 = beta1;
+                            }
+                        }
+                        T[alpha1_tmp] = 1.0;
+                        iv0_tmp = (b_i + coltop) - 1;
+                        jA = in + 1;
+                        if (tau[b_i] != 0.0) {
+                            lastv = 4 - b_i;
+                            i = (iv0_tmp - b_i) + 4;
+                            while ((lastv + 1 > 0) && (T[i] == 0.0)) {
+                                lastv--;
+                                i--;
+                            }
+                            lastc = 6;
+                            exitg2 = false;
+                            while ((!exitg2) && (lastc > 0)) {
+                                rowleft = in + lastc;
+                                ia = rowleft;
+                                do {
+                                    exitg1 = 0;
+                                    if (ia <= rowleft + lastv * 6) {
+                                        if (T[ia - 1] != 0.0) {
+                                            exitg1 = 1;
+                                        } else {
+                                            ia += 6;
+                                        }
+                                    } else {
+                                        lastc--;
+                                        exitg1 = 2;
+                                    }
+                                } while (exitg1 == 0);
+                                if (exitg1 == 1) {
+                                    exitg2 = true;
+                                }
+                            }
+                        } else {
+                            lastv = -1;
+                            lastc = 0;
+                        }
+                        if (lastv + 1 > 0) {
+                            if (lastc != 0) {
+                                if (0 <= lastc - 1) {
+                                    memset(&work[0], 0, lastc * sizeof(double));
+                                }
+                                knt = iv0_tmp;
+                                c_i = (in + 6 * lastv) + 1;
+                                for (i = jA; i <= c_i; i += 6) {
+                                    rowleft = (i + lastc) - 1;
+                                    for (ia = i; ia <= rowleft; ia++) {
+                                        coltop = ia - i;
+                                        work[coltop] += T[ia - 1] * T[knt];
+                                    }
+                                    knt++;
+                                }
+                            }
+                            if (!(-tau[b_i] == 0.0)) {
+                                jA = in;
+                                for (coltop = 0; coltop <= lastv; coltop++) {
+                                    temp = T[iv0_tmp + coltop];
+                                    if (temp != 0.0) {
+                                        temp *= -tau[b_i];
+                                        c_i = jA + 1;
+                                        rowleft = lastc + jA;
+                                        for (knt = c_i; knt <= rowleft; knt++) {
+                                            T[knt - 1] +=
+                                                    work[(knt - jA) - 1] * temp;
+                                        }
+                                    }
+                                    jA += 6;
+                                }
+                            }
+                        }
+                        jA = (b_i + in) + 2;
+                        if (tau[b_i] != 0.0) {
+                            lastv = 5 - b_i;
+                            i = (iv0_tmp - b_i) + 4;
+                            while ((lastv > 0) && (T[i] == 0.0)) {
+                                lastv--;
+                                i--;
+                            }
+                            lastc = 4 - b_i;
+                            exitg2 = false;
+                            while ((!exitg2) && (lastc + 1 > 0)) {
+                                coltop = jA + lastc * 6;
+                                ia = coltop;
+                                do {
+                                    exitg1 = 0;
+                                    if (ia <= (coltop + lastv) - 1) {
+                                        if (T[ia - 1] != 0.0) {
+                                            exitg1 = 1;
+                                        } else {
+                                            ia++;
+                                        }
+                                    } else {
+                                        lastc--;
+                                        exitg1 = 2;
+                                    }
+                                } while (exitg1 == 0);
+                                if (exitg1 == 1) {
+                                    exitg2 = true;
+                                }
+                            }
+                        } else {
+                            lastv = 0;
+                            lastc = -1;
+                        }
+                        if (lastv > 0) {
+                            if (lastc + 1 != 0) {
+                                if (0 <= lastc) {
+                                    memset(&work[0], 0,
+                                           (lastc + 1) * sizeof(double));
+                                }
+                                c_i = jA + 6 * lastc;
+                                for (i = jA; i <= c_i; i += 6) {
+                                    temp = 0.0;
+                                    rowleft = (i + lastv) - 1;
+                                    for (ia = i; ia <= rowleft; ia++) {
+                                        temp += T[ia - 1] * T[(iv0_tmp + ia) - i];
+                                    }
+                                    coltop = div_nde_s32_floor(i - jA, 6);
+                                    work[coltop] += temp;
+                                }
+                            }
+                            if (!(-tau[b_i] == 0.0)) {
+                                for (coltop = 0; coltop <= lastc; coltop++) {
+                                    temp = work[coltop];
+                                    if (temp != 0.0) {
+                                        temp *= -tau[b_i];
+                                        c_i = lastv + jA;
+                                        for (knt = jA; knt < c_i; knt++) {
+                                            T[knt - 1] +=
+                                                    T[(iv0_tmp + knt) - jA] * temp;
+                                        }
+                                    }
+                                    jA += 6;
+                                }
+                            }
+                        }
+                        T[alpha1_tmp] = alpha1;
+                    }
+                    internal::lapack::xhseqr(T);
+                }
                 for (i = 0; i < 6; i++) {
-                    V[i].re = b_dv[i];
+                    V[i].re = T[i + 6 * i];
                     V[i].im = 0.0;
                 }
             } else {
-                double a;
-                double anrm;
-                double anrmto;
-                double cto1;
-                double ctoc;
-                double stemp_im;
-                for (ii = 0; ii < 36; ii++) {
-                    At[ii].re = A[ii];
-                    At[ii].im = 0.0;
-                }
-                anrm = 0.0;
-                ii = 0;
-                exitg2 = false;
-                while ((!exitg2) && (ii < 36)) {
-                    absxk = rt_hypotd_snf(At[ii].re, At[ii].im);
-                    if (rtIsNaN(absxk)) {
-                        anrm = rtNaN;
-                        exitg2 = true;
-                    } else {
-                        if (absxk > anrm) {
-                            anrm = absxk;
-                        }
-                        ii++;
-                    }
-                }
-                if (rtIsInf(anrm) || rtIsNaN(anrm)) {
-                    for (i = 0; i < 6; i++) {
-                        V[i].re = rtNaN;
-                        V[i].im = 0.0;
-                        beta1[i].re = rtNaN;
-                        beta1[i].im = 0.0;
-                    }
-                } else {
-                    int At_tmp;
-                    int exitg3;
-                    int ihi;
-                    int ilo;
-                    int jcol;
-                    int nzcount;
-                    boolean_T exitg4;
-                    boolean_T guard1 = false;
-                    boolean_T ilascl;
-                    ilascl = false;
-                    anrmto = anrm;
-                    guard1 = false;
-                    if ((anrm > 0.0) && (anrm < 6.7178761075670888E-139)) {
-                        anrmto = 6.7178761075670888E-139;
-                        ilascl = true;
-                        guard1 = true;
-                    } else if (anrm > 1.4885657073574029E+138) {
-                        anrmto = 1.4885657073574029E+138;
-                        ilascl = true;
-                        guard1 = true;
-                    }
-                    if (guard1) {
-                        absxk = anrm;
-                        ctoc = anrmto;
-                        notdone = true;
-                        while (notdone) {
-                            stemp_im = absxk * 2.0041683600089728E-292;
-                            cto1 = ctoc / 4.9896007738368E+291;
-                            if ((stemp_im > ctoc) && (ctoc != 0.0)) {
-                                a = 2.0041683600089728E-292;
-                                absxk = stemp_im;
-                            } else if (cto1 > absxk) {
-                                a = 4.9896007738368E+291;
-                                ctoc = cto1;
-                            } else {
-                                a = ctoc / absxk;
-                                notdone = false;
-                            }
-                            for (ii = 0; ii < 36; ii++) {
-                                At[ii].re *= a;
-                                At[ii].im *= a;
-                            }
-                        }
-                    }
-                    ilo = 1;
-                    ihi = 6;
-                    do {
-                        exitg3 = 0;
-                        i = 0;
-                        j = 0;
-                        notdone = false;
-                        ii = ihi;
-                        exitg2 = false;
-                        while ((!exitg2) && (ii > 0)) {
-                            nzcount = 0;
-                            i = ii;
-                            j = ihi;
-                            jcol = 0;
-                            exitg4 = false;
-                            while ((!exitg4) && (jcol <= ihi - 1)) {
-                                At_tmp = (ii + 6 * jcol) - 1;
-                                if ((At[At_tmp].re != 0.0) || (At[At_tmp].im != 0.0) ||
-                                    (ii == jcol + 1)) {
-                                    if (nzcount == 0) {
-                                        j = jcol + 1;
-                                        nzcount = 1;
-                                        jcol++;
-                                    } else {
-                                        nzcount = 2;
-                                        exitg4 = true;
-                                    }
-                                } else {
-                                    jcol++;
-                                }
-                            }
-                            if (nzcount < 2) {
-                                notdone = true;
-                                exitg2 = true;
-                            } else {
-                                ii--;
-                            }
-                        }
-                        if (!notdone) {
-                            exitg3 = 2;
-                        } else {
-                            if (i != ihi) {
-                                for (ii = 0; ii < 6; ii++) {
-                                    nzcount = (i + 6 * ii) - 1;
-                                    atmp = At[nzcount];
-                                    At_tmp = (ihi + 6 * ii) - 1;
-                                    At[nzcount] = At[At_tmp];
-                                    At[At_tmp] = atmp;
-                                }
-                            }
-                            if (j != ihi) {
-                                for (ii = 0; ii < ihi; ii++) {
-                                    nzcount = ii + 6 * (j - 1);
-                                    atmp = At[nzcount];
-                                    At_tmp = ii + 6 * (ihi - 1);
-                                    At[nzcount] = At[At_tmp];
-                                    At[At_tmp] = atmp;
-                                }
-                            }
-                            ihi--;
-                            if (ihi == 1) {
-                                exitg3 = 1;
-                            }
-                        }
-                    } while (exitg3 == 0);
-                    if (exitg3 != 1) {
-                        do {
-                            exitg1 = 0;
-                            i = 0;
-                            j = 0;
-                            notdone = false;
-                            jcol = ilo;
-                            exitg2 = false;
-                            while ((!exitg2) && (jcol <= ihi)) {
-                                nzcount = 0;
-                                i = ihi;
-                                j = jcol;
-                                ii = ilo;
-                                exitg4 = false;
-                                while ((!exitg4) && (ii <= ihi)) {
-                                    At_tmp = (ii + 6 * (jcol - 1)) - 1;
-                                    if ((At[At_tmp].re != 0.0) || (At[At_tmp].im != 0.0) ||
-                                        (ii == jcol)) {
-                                        if (nzcount == 0) {
-                                            i = ii;
-                                            nzcount = 1;
-                                            ii++;
-                                        } else {
-                                            nzcount = 2;
-                                            exitg4 = true;
-                                        }
-                                    } else {
-                                        ii++;
-                                    }
-                                }
-                                if (nzcount < 2) {
-                                    notdone = true;
-                                    exitg2 = true;
-                                } else {
-                                    jcol++;
-                                }
-                            }
-                            if (!notdone) {
-                                exitg1 = 1;
-                            } else {
-                                if (i != ilo) {
-                                    for (ii = ilo; ii < 7; ii++) {
-                                        nzcount = 6 * (ii - 1);
-                                        jcol = (i + nzcount) - 1;
-                                        atmp = At[jcol];
-                                        At_tmp = (ilo + nzcount) - 1;
-                                        At[jcol] = At[At_tmp];
-                                        At[At_tmp] = atmp;
-                                    }
-                                }
-                                if (j != ilo) {
-                                    for (ii = 0; ii < ihi; ii++) {
-                                        nzcount = ii + 6 * (j - 1);
-                                        atmp = At[nzcount];
-                                        At_tmp = ii + 6 * (ilo - 1);
-                                        At[nzcount] = At[At_tmp];
-                                        At[At_tmp] = atmp;
-                                    }
-                                }
-                                ilo++;
-                                if (ilo == ihi) {
-                                    exitg1 = 1;
-                                }
-                            }
-                        } while (exitg1 == 0);
-                    }
-                    if (ihi >= ilo + 2) {
-                        for (jcol = ilo - 1; jcol + 1 < ihi - 1; jcol++) {
-                            int jcolp1;
-                            jcolp1 = jcol + 2;
-                            for (int jrow = ihi - 1; jrow + 1 > jcol + 2; jrow--) {
-                                At_tmp = jrow + 6 * jcol;
-                                internal::reflapack::xzlartg(At[At_tmp - 1], At[At_tmp], &absxk,
-                                                             &atmp, &At[(jrow + 6 * jcol) - 1]);
-                                At[At_tmp].re = 0.0;
-                                At[At_tmp].im = 0.0;
-                                for (j = jcolp1; j < 7; j++) {
-                                    nzcount = jrow + 6 * (j - 1);
-                                    ctoc = absxk * At[nzcount - 1].re +
-                                           (atmp.re * At[nzcount].re - atmp.im * At[nzcount].im);
-                                    stemp_im =
-                                            absxk * At[nzcount - 1].im +
-                                            (atmp.re * At[nzcount].im + atmp.im * At[nzcount].re);
-                                    cto1 = At[nzcount - 1].re;
-                                    At[nzcount].re =
-                                            absxk * At[nzcount].re - (atmp.re * At[nzcount - 1].re +
-                                                                      atmp.im * At[nzcount - 1].im);
-                                    At[nzcount].im =
-                                            absxk * At[nzcount].im -
-                                            (atmp.re * At[nzcount - 1].im - atmp.im * cto1);
-                                    At[nzcount - 1].re = ctoc;
-                                    At[nzcount - 1].im = stemp_im;
-                                }
-                                atmp.re = -atmp.re;
-                                atmp.im = -atmp.im;
-                                for (i = 1; i <= ihi; i++) {
-                                    nzcount = (i + 6 * (jrow - 1)) - 1;
-                                    ii = (i + 6 * jrow) - 1;
-                                    ctoc = absxk * At[ii].re +
-                                           (atmp.re * At[nzcount].re - atmp.im * At[nzcount].im);
-                                    stemp_im = absxk * At[ii].im + (atmp.re * At[nzcount].im +
-                                                                    atmp.im * At[nzcount].re);
-                                    cto1 = At[ii].re;
-                                    At[nzcount].re = absxk * At[nzcount].re -
-                                                     (atmp.re * At[ii].re + atmp.im * At[ii].im);
-                                    At[nzcount].im = absxk * At[nzcount].im -
-                                                     (atmp.re * At[ii].im - atmp.im * cto1);
-                                    At[ii].re = ctoc;
-                                    At[ii].im = stemp_im;
-                                }
-                            }
-                        }
-                    }
-                    internal::reflapack::xzhgeqz(At, ilo, ihi, &ii, V, beta1);
-                    if ((ii == 0) && ilascl) {
-                        notdone = true;
-                        while (notdone) {
-                            stemp_im = anrmto * 2.0041683600089728E-292;
-                            cto1 = anrm / 4.9896007738368E+291;
-                            if ((stemp_im > anrm) && (anrm != 0.0)) {
-                                a = 2.0041683600089728E-292;
-                                anrmto = stemp_im;
-                            } else if (cto1 > anrmto) {
-                                a = 4.9896007738368E+291;
-                                anrm = cto1;
-                            } else {
-                                a = anrm / anrmto;
-                                notdone = false;
-                            }
-                            for (ii = 0; ii < 6; ii++) {
-                                V[ii].re *= a;
-                                V[ii].im *= a;
-                            }
-                        }
-                    }
-                }
-                for (ii = 0; ii < 6; ii++) {
-                    double ai;
-                    anrm = V[ii].re;
-                    ai = V[ii].im;
-                    ctoc = beta1[ii].re;
-                    cto1 = beta1[ii].im;
-                    if (cto1 == 0.0) {
-                        if (ai == 0.0) {
-                            anrmto = anrm / ctoc;
-                            absxk = 0.0;
-                        } else if (anrm == 0.0) {
-                            anrmto = 0.0;
-                            absxk = ai / ctoc;
-                        } else {
-                            anrmto = anrm / ctoc;
-                            absxk = ai / ctoc;
-                        }
-                    } else if (ctoc == 0.0) {
-                        if (anrm == 0.0) {
-                            anrmto = ai / cto1;
-                            absxk = 0.0;
-                        } else if (ai == 0.0) {
-                            anrmto = 0.0;
-                            absxk = -(anrm / cto1);
-                        } else {
-                            anrmto = ai / cto1;
-                            absxk = -(anrm / cto1);
-                        }
-                    } else {
-                        a = fabs(ctoc);
-                        absxk = fabs(cto1);
-                        if (a > absxk) {
-                            stemp_im = cto1 / ctoc;
-                            absxk = ctoc + stemp_im * cto1;
-                            anrmto = (anrm + stemp_im * ai) / absxk;
-                            absxk = (ai - stemp_im * anrm) / absxk;
-                        } else if (absxk == a) {
-                            if (ctoc > 0.0) {
-                                stemp_im = 0.5;
-                            } else {
-                                stemp_im = -0.5;
-                            }
-                            if (cto1 > 0.0) {
-                                absxk = 0.5;
-                            } else {
-                                absxk = -0.5;
-                            }
-                            anrmto = (anrm * stemp_im + ai * absxk) / a;
-                            absxk = (ai * stemp_im - anrm * absxk) / a;
-                        } else {
-                            stemp_im = ctoc / cto1;
-                            absxk = cto1 + stemp_im * ctoc;
-                            anrmto = (stemp_im * anrm + ai) / absxk;
-                            absxk = (stemp_im * ai - anrm) / absxk;
-                        }
-                    }
-                    V[ii].re = anrmto;
-                    V[ii].im = absxk;
-                }
+                eigStandard(A, V);
             }
         }
     }

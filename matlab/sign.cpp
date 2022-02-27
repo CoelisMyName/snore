@@ -2,7 +2,7 @@
 // File: sign.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -19,27 +19,6 @@ namespace coder {
     void b_sign(::coder::array<double, 1U> &x) {
         int nx;
         nx = x.size(0);
-        for (int k = 0; k < nx; k++) {
-            double b_x;
-            b_x = x[k];
-            if (x[k] < 0.0) {
-                b_x = -1.0;
-            } else if (x[k] > 0.0) {
-                b_x = 1.0;
-            } else if (x[k] == 0.0) {
-                b_x = 0.0;
-            }
-            x[k] = b_x;
-        }
-    }
-
-//
-// Arguments    : ::coder::array<double, 2U> &x
-// Return Type  : void
-//
-    void b_sign(::coder::array<double, 2U> &x) {
-        int nx;
-        nx = x.size(1);
         for (int k = 0; k < nx; k++) {
             double b_x;
             b_x = x[k];
@@ -78,6 +57,27 @@ namespace coder {
             b_x = 0.0;
         }
         x[1] = b_x;
+    }
+
+//
+// Arguments    : ::coder::array<double, 2U> &x
+// Return Type  : void
+//
+    void b_sign(::coder::array<double, 2U> &x) {
+        int nx;
+        nx = x.size(1);
+        for (int k = 0; k < nx; k++) {
+            double b_x;
+            b_x = x[k];
+            if (x[k] < 0.0) {
+                b_x = -1.0;
+            } else if (x[k] > 0.0) {
+                b_x = 1.0;
+            } else if (x[k] == 0.0) {
+                b_x = 0.0;
+            }
+            x[k] = b_x;
+        }
     }
 
 //

@@ -18,11 +18,29 @@ extern "C" {
 #include "matlab/zweight.h"
 #include "matlab/SnoringRecognition_initialize.h"
 
+#include "matlab/bark_feat.h"
+#include "matlab/cep_feat.h"
+#include "matlab/fmt_feat.h"
+#include "matlab/gtcc_feat.h"
+#include "matlab/mfcc_feat.h"
+#include "matlab/pitch_feat.h"
+#include "matlab/pr800_feat.h"
+#include "matlab/se_feat.h"
+#include "matlab/patient_classifier.h"
+
 #include <cstdio>
 #include <cstdlib>
 #include <cassert>
 
 #define DEFAULT_PRECISION 16
+
+#define FEAT_MFCC_COLUMN 39
+
+#define FEAT_BARK_COLUMN 17
+
+#define FEAT_CEP_COLUMN 39
+
+#define FEAT_GTCC_COLUMN 20
 
 #ifdef ANDROID
 #include <android/log.h>
@@ -33,8 +51,6 @@ static const char *const TAG = "snore";
 using namespace snore;
 
 using coder::array;
-
-typedef array<double, 2U> array1D;
 
 class SNORE_ModelResultImpl : public SNORE_ModelResult {
 public:
@@ -120,11 +136,313 @@ public:
     double mNoiseLength = -1;
 };
 
+class SNORE_PatientModelImpl : public SNORE_PatientModel {
+public:
+    SNORE_PatientModelImpl() {
+        mMFCC.set_size(0, FEAT_MFCC_COLUMN);
+        mBARK.set_size(0, FEAT_BARK_COLUMN);
+        mCEP.set_size(0, FEAT_CEP_COLUMN);
+        mGTCC.set_size(0, FEAT_GTCC_COLUMN);
+    }
+
+    void digest(SNORE_F64pcm &src) override {
+        double fs = src.fs;
+        SnoringRecognition_initialize();
+        coder::array<double, 1U> sig;
+        sig.set(src.raw, src.length);
+        featMFCC(sig, fs);
+        featBARK(sig, fs);
+        featPitch(sig, fs);
+        featCEP(sig, fs);
+        featFMT(sig, fs);
+        featGTCC(sig, fs);
+        featPR800(sig, fs);
+        featSE(sig, fs);
+        mVersion += 1;
+    }
+
+    double getResult() override {
+        if (mVersion == mResultVersion) {
+            return mResult;
+        }
+        featAssert();
+        mResult = patient_classifier(&mStackData, mMFCC, mBARK, mPitchMean, mPitchMax, mPitchMin, mPitchVar, mCEP,
+                                     mFMT1, mFMT2,
+                                     mFMT3, mGTCC, mPR800Mean, mPR800Max, mPR800Min, mPR800Var, mSEMean, mSEMax, mSEMin,
+                                     mSEVar);
+        mResultVersion = mVersion;
+        return mResult;
+    }
+
+private:
+
+    SNORE_UNUSED static void printArray(coder::array<double, 2U> &input) {
+        for (int i = 0; i < input.size(0); ++i) {
+            for (int j = 0; j < input.size(1); ++j) {
+                printf("%.4f ", input.at(i, j));
+            }
+            printf("\n");
+        }
+        printf("\n");
+        printf("\n");
+    }
+
+    SNORE_UNUSED static void printArray(coder::array<double, 1U> &input) {
+        for (int i = 0; i < input.size(0); ++i) {
+            printf("%.4f ", input.at(i));
+        }
+        printf("\n");
+        printf("\n");
+    }
+
+    static void setZeros(coder::array<double, 2U> &input) {
+        int size = input.size(0) * input.size(1);
+        for (int i = 0; i < size; ++i) {
+            input[i] = 0;
+        }
+    }
+
+    void featAssert() {
+        assert(mMFCC.size(1) == FEAT_MFCC_COLUMN);
+        assert(mBARK.size(1) == FEAT_BARK_COLUMN);
+        assert(mCEP.size(1) == FEAT_CEP_COLUMN);
+        assert(mGTCC.size(1) == FEAT_GTCC_COLUMN);
+        auto row = mMFCC.size(0);
+        assert(mMFCC.size(0) == row);
+        assert(mBARK.size(0) == row);
+        assert(mPitchMean.size(0) == row);
+        assert(mPitchMax.size(0) == row);
+        assert(mPitchMin.size(0) == row);
+        assert(mPitchVar.size(0) == row);
+        assert(mCEP.size(0) == row);
+        assert(mFMT1.size(0) == row);
+        assert(mFMT2.size(0) == row);
+        assert(mFMT3.size(0) == row);
+        assert(mGTCC.size(0) == row);
+        assert(mPR800Mean.size(0) == row);
+        assert(mPR800Max.size(0) == row);
+        assert(mPR800Min.size(0) == row);
+        assert(mPR800Var.size(0) == row);
+        assert(mSEMean.size(0) == row);
+        assert(mSEMax.size(0) == row);
+        assert(mSEMin.size(0) == row);
+        assert(mSEVar.size(0) == row);
+    }
+
+    void featMFCC(coder::array<double, 1U> &sig, double fs) {
+        coder::array<double, 2U> result;
+        mfcc_feat(sig, fs, result);
+        int length = result.size(0) * result.size(1);
+        int oldRow = mMFCC.size(0), oldCol = mMFCC.size(1);
+        int newRow = oldRow + 1, newCol = FEAT_MFCC_COLUMN;
+        coder::array<double, 2U> temp = mMFCC;
+        mMFCC.clear();
+        mMFCC.set_size(newRow, newCol);
+        setZeros(mMFCC);
+        for (int i = 0; i < oldRow; ++i) {
+            for (int j = 0; j < oldCol; ++j) {
+                mMFCC.at(i, j) = temp.at(i, j);
+            }
+        }
+        for (int i = 0; i < newCol && i < length; ++i) {
+            mMFCC.at(newRow - 1, i) = result[i];
+        }
+    }
+
+    void featBARK(coder::array<double, 1U> &sig, double fs) {
+        double result[FEAT_BARK_COLUMN];
+        bark_feat(sig, fs, result);
+        int length = FEAT_BARK_COLUMN;
+        int oldRow = mBARK.size(0), oldCol = mBARK.size(1);
+        int newRow = oldRow + 1, newCol = FEAT_BARK_COLUMN;
+        coder::array<double, 2U> temp = mBARK;
+        mBARK.clear();
+        mBARK.set_size(newRow, newCol);
+        setZeros(mBARK);
+        for (int i = 0; i < oldRow; ++i) {
+            for (int j = 0; j < oldCol; ++j) {
+                mBARK.at(i, j) = temp.at(i, j);
+            }
+        }
+        for (int i = 0; i < newCol && i < length; ++i) {
+            mBARK.at(newRow - 1, i) = result[i];
+        }
+    }
+
+    void featPitch(coder::array<double, 1U> &sig, double fs) {
+        double mean, max, min, var;
+        int oldRow, newRow;
+        pitch_feat(sig, fs, &mean, &min, &max, &var);
+        oldRow = mPitchMean.size(0);
+        newRow = oldRow + 1;
+        mPitchMean.set_size(newRow);
+        mPitchMean[newRow - 1] = mean;
+
+        oldRow = mPitchMax.size(0);
+        newRow = oldRow + 1;
+        mPitchMax.set_size(newRow);
+        mPitchMax[newRow - 1] = max;
+
+        oldRow = mPitchMin.size(0);
+        newRow = oldRow + 1;
+        mPitchMin.set_size(newRow);
+        mPitchMin[newRow - 1] = min;
+
+        oldRow = mPitchVar.size(0);
+        newRow = oldRow + 1;
+        mPitchVar.set_size(newRow);
+        mPitchVar[newRow - 1] = var;
+    }
+
+    void featCEP(coder::array<double, 1U> &sig, double fs) {
+        double result[FEAT_CEP_COLUMN];
+        int size[2];
+        cep_feat(sig, fs, result, size);
+        int length = size[0] * size[1];
+        int oldRow = mCEP.size(0), oldCol = mCEP.size(1);
+        int newRow = oldRow + 1, newCol = FEAT_CEP_COLUMN;
+        coder::array<double, 2U> temp = mCEP;
+        mCEP.clear();
+        mCEP.set_size(newRow, newCol);
+        setZeros(mCEP);
+        for (int i = 0; i < oldRow; ++i) {
+            for (int j = 0; j < oldCol; ++j) {
+                mCEP.at(i, j) = temp.at(i, j);
+            }
+        }
+        for (int i = 0; i < newCol && i < length; ++i) {
+            mCEP.at(newRow - 1, i) = result[i];
+        }
+    }
+
+    void featFMT(coder::array<double, 1U> &sig, double fs) {
+        double fmt1, fmt2, fmt3;
+        int oldRow, newRow;
+        fmt_feat(sig, fs, &fmt1, &fmt3, &fmt2);
+        oldRow = mFMT1.size(0);
+        newRow = oldRow + 1;
+        mFMT1.set_size(newRow);
+        mFMT1[newRow - 1] = fmt1;
+
+        oldRow = mFMT2.size(0);
+        newRow = oldRow + 1;
+        mFMT2.set_size(newRow);
+        mFMT2[newRow - 1] = fmt2;
+
+        oldRow = mFMT3.size(0);
+        newRow = oldRow + 1;
+        mFMT3.set_size(newRow);
+        mFMT3[newRow - 1] = fmt3;
+    }
+
+    void featGTCC(coder::array<double, 1U> &sig, double fs) {
+        coder::array<double, 2U> result;
+        gtcc_feat(&mStackData, sig, fs, result);
+        int length = result.size(0) * result.size(1);
+        int oldRow = mGTCC.size(0), oldCol = mGTCC.size(1);
+        int newRow = oldRow + 1, newCol = FEAT_GTCC_COLUMN;
+        coder::array<double, 2U> temp = mGTCC;
+        mGTCC.clear();
+        mGTCC.set_size(newRow, newCol);
+        setZeros(mGTCC);
+        for (int i = 0; i < oldRow; ++i) {
+            for (int j = 0; j < oldCol; ++j) {
+                mGTCC.at(i, j) = temp.at(i, j);
+            }
+        }
+        for (int i = 0; i < newCol && i < length; ++i) {
+            mGTCC.at(newRow - 1, i) = result[i];
+        }
+    }
+
+    void featPR800(coder::array<double, 1U> &sig, double fs) {
+        double mean, max, min, var;
+        int oldRow, newRow;
+        pr800_feat(sig, fs, &mean, &max, &min, &var);
+        oldRow = mPR800Mean.size(0);
+        newRow = oldRow + 1;
+        mPR800Mean.set_size(newRow);
+        mPR800Mean[newRow - 1] = mean;
+
+        oldRow = mPR800Max.size(0);
+        newRow = oldRow + 1;
+        mPR800Max.set_size(newRow);
+        mPR800Max[newRow - 1] = max;
+
+        oldRow = mPR800Min.size(0);
+        newRow = oldRow + 1;
+        mPR800Min.set_size(newRow);
+        mPR800Min[newRow - 1] = min;
+
+        oldRow = mPR800Var.size(0);
+        newRow = oldRow + 1;
+        mPR800Var.set_size(newRow);
+        mPR800Var[newRow - 1] = var;
+    }
+
+    void featSE(coder::array<double, 1U> &sig, double fs) {
+        double mean, max, min, var;
+        int oldRow, newRow;
+        se_feat(sig, fs, &mean, &max, &min, &var);
+        oldRow = mSEMean.size(0);
+        newRow = oldRow + 1;
+        mSEMean.set_size(newRow);
+        mSEMean[newRow - 1] = mean;
+
+        oldRow = mSEMax.size(0);
+        newRow = oldRow + 1;
+        mSEMax.set_size(newRow);
+        mSEMax[newRow - 1] = max;
+
+        oldRow = mSEMin.size(0);
+        newRow = oldRow + 1;
+        mSEMin.set_size(newRow);
+        mSEMin[newRow - 1] = min;
+
+        oldRow = mSEVar.size(0);
+        newRow = oldRow + 1;
+        mSEVar.set_size(newRow);
+        mSEVar[newRow - 1] = var;
+    }
+
+    int64_t mVersion = 0;
+    int64_t mResultVersion = 0;
+    double mResult = 0;
+    SnoringRecognitionStackData mStackData{};
+    coder::array<double, 2U> mMFCC;
+    coder::array<double, 2U> mBARK;
+    coder::array<double, 1U> mPitchMean;
+    coder::array<double, 1U> mPitchMax;
+    coder::array<double, 1U> mPitchMin;
+    coder::array<double, 1U> mPitchVar;
+    coder::array<double, 2U> mCEP;
+    coder::array<double, 1U> mFMT1;
+    coder::array<double, 1U> mFMT2;
+    coder::array<double, 1U> mFMT3;
+    coder::array<double, 2U> mGTCC;
+    coder::array<double, 1U> mPR800Mean;
+    coder::array<double, 1U> mPR800Max;
+    coder::array<double, 1U> mPR800Min;
+    coder::array<double, 1U> mPR800Var;
+    coder::array<double, 1U> mSEMean;
+    coder::array<double, 1U> mSEMax;
+    coder::array<double, 1U> mSEMin;
+    coder::array<double, 1U> mSEVar;
+};
+
 SNORE_UNUSED SNORE_ModelResult *newModelResult() {
     return new SNORE_ModelResultImpl();
 }
 
 SNORE_UNUSED void deleteModelResult(SNORE_ModelResult *ptr) {
+    delete ptr;
+}
+
+SNORE_UNUSED extern SNORE_PatientModel *newPatientModel() {
+    return new SNORE_PatientModelImpl;
+}
+
+SNORE_UNUSED extern void deletePatientModel(SNORE_PatientModel *ptr) {
     delete ptr;
 }
 
@@ -265,22 +583,24 @@ SNORE_UNUSED void snore::reduceNoise(SNORE_I16pcm &src, SNORE_I16pcm &dst, const
 }
 
 SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResult &modelResult) {
-    SnoringRecognitionStackData stackData{};
-    SnoringRecognitionPersistentData persistentData{};
-    SNORE_ModelResultImpl &modelResultImpl = dynamic_cast<SNORE_ModelResultImpl &>(modelResult);
-    stackData.pd = &persistentData;
-    SnoringRecognition_initialize(&stackData);
-    array1D x, w_starts, w_ends, label;
-    //TODO 默认是单声道
-    x.set(pcm.raw, 1, pcm.length);
+    auto &modelResultImpl = dynamic_cast<SNORE_ModelResultImpl &>(modelResult);
+    modelResultImpl.clear();
+    SnoringRecognition_initialize();
+    double fs = pcm.fs;
+    coder::array<double, 1U> x;
+    coder::array<long long, 1U> starts, ends;
+    coder::array<double, 1U> label;
+    //默认是单声道
+    x.set(pcm.raw, pcm.length);
+
     /**
      * 端点检测
      */
-    vad(x, pcm.fs, w_starts, w_ends);
+    vad(x, fs, starts, ends);
     /**
      * 有声段检测
      */
-    noise_segment(w_starts, w_ends, pcm.fs, 0.5 * pcm.fs, 3 * pcm.fs, &modelResultImpl.mNoiseStart,
+    noise_segment(starts, ends, fs, 0.5 * fs, 3 * fs, &modelResultImpl.mNoiseStart,
                   &modelResultImpl.mNoiseLength);
     /**
      * 分类器分类
@@ -291,9 +611,9 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
 //        LOG_D(TAG, "start %.1f, end %.1f", w_starts[i], w_ends[i]);
 //    }
 //#endif
-    classifier(&stackData, x, w_starts, w_ends, pcm.fs, label);
+    classifier(x, fs, starts, ends, label);
     modelResultImpl.clear();
-    int64_t labelSize = label.size(1), startsSize = w_starts.size(1), endsSize = w_ends.size(1);
+    int64_t labelSize = label.size(0), startsSize = starts.size(0), endsSize = starts.size(0);
     modelResultImpl.mSignalIndexSize = std::min(labelSize, std::min(startsSize, endsSize));
     modelResultImpl.mSignalLabel = new double[modelResultImpl.mSignalIndexSize];
     for (int i = 0; i < modelResultImpl.mSignalIndexSize; ++i) {
@@ -301,17 +621,18 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
     }
     modelResultImpl.mSignalStarts = new int64_t[modelResultImpl.mSignalIndexSize];
     for (int i = 0; i < modelResultImpl.mSignalIndexSize; ++i) {
-        modelResultImpl.mSignalStarts[i] = (uint32_t) w_starts[i] - 1;
+        modelResultImpl.mSignalStarts[i] = starts[i] - 1;
     }
     modelResultImpl.mSignalEnds = new int64_t[modelResultImpl.mSignalIndexSize];
     for (int i = 0; i < modelResultImpl.mSignalIndexSize; ++i) {
-        modelResultImpl.mSignalEnds[i] = (uint32_t) w_ends[i];
+        modelResultImpl.mSignalEnds[i] = ends[i];
     }
 }
 
 SNORE_UNUSED  void snore::calculateSPL(SNORE_F64pcm &src, SNORE_SPL &spl) {
-    array1D x;
-    x.set(src.raw, 1, src.length);
+    coder::array<double, 1U> x;
+    x.set(src.raw, src.length);
+    SnoringRecognition_initialize();
     aweight(x, spl.a_pow, spl.freq, &spl.a_sum);
     cweight(x, spl.c_pow, spl.freq, &spl.c_sum);
     zweight(x, spl.z_pow, spl.freq, &spl.z_sum);

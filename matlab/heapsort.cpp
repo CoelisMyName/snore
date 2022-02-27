@@ -2,7 +2,7 @@
 // File: heapsort.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
@@ -56,9 +56,9 @@ namespace coder {
                 i = x[leftIdx + 1] - 1;
                 i1 = cmp->workspace.a[x[leftIdx] - 1];
                 i2 = cmp->workspace.a[i];
-                varargout_1 = ((i1 < i2) ||
-                               ((i1 == i2) &&
-                                (cmp->workspace.b[x[leftIdx] - 1] < cmp->workspace.b[i])));
+                varargout_1 =
+                        ((i1 < i2) || ((i1 == i2) && (cmp->workspace.b[x[leftIdx] - 1] <
+                                                      cmp->workspace.b[i])));
                 if (varargout_1) {
                     cmpIdx = leftIdx + 1;
                     xcmp = x[leftIdx + 1];

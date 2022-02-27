@@ -2,7 +2,7 @@
 // File: mel2frq.h
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 #ifndef MEL2FRQ_H
@@ -13,14 +13,8 @@
 #include <cstddef>
 #include <cstdlib>
 
-// Type Declarations
-struct SnoringRecognitionStackData;
-
 // Function Declarations
-void mel2frq(SnoringRecognitionStackData *SD, const double mel[4],
-             double frq[4]);
-
-void mel2frq_init(SnoringRecognitionStackData *SD);
+void mel2frq(const double mel[4], double frq[4]);
 
 #endif
 //

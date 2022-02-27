@@ -2,15 +2,15 @@
 // File: NCF.cpp
 //
 // MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 22-Feb-2022 23:42:31
+// C/C++ source code generated on  : 27-Feb-2022 11:31:05
 //
 
 // Include Files
 #include "NCF.h"
 #include "FFTImplementationCallback.h"
 #include "SnoringRecognition_rtwutil.h"
+#include "fft.h"
 #include "getCandidates.h"
-#include "pitchValidator.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
 #include <math.h>
@@ -18,7 +18,6 @@
 // Function Definitions
 //
 // Arguments    : const ::coder::array<double, 2U> &y
-//                const pitchValidator params
 //                ::coder::array<double, 1U> &f0
 // Return Type  : void
 //
@@ -26,221 +25,1445 @@ namespace coder {
     namespace audio {
         namespace internal {
             namespace pitch {
-                void NCF(const ::coder::array<double, 2U> &y, const pitchValidator params,
-                         ::coder::array<double, 1U> &f0) {
-                    array<creal_T, 2U> b_y;
+                void NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
                     array<double, 2U> Rt;
                     array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
                     array<double, 2U> c1;
                     array<double, 2U> c_y;
-                    array<double, 2U> d_y;
-                    array<double, 2U> yRMS;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
                     array<double, 1U> peak;
                     double edge[2];
-                    double mxl;
                     int i;
                     int i1;
+                    int i2;
                     int ibmat;
-                    int loop_ub;
-                    int nChan;
-                    int result;
-                    int sz_idx_0;
-                    int varargin_1_tmp;
-                    short input_sizes_idx_0;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short sizes_idx_0;
+                    unsigned char input_sizes_idx_0;
                     boolean_T empty_non_axis_sizes;
-                    edge[0] = rt_roundd_snf(8000.0 / params.Range[1]);
-                    edge[1] = rt_roundd_snf(8000.0 / params.Range[0]);
-                    mxl = edge[1];
-                    if (!(mxl < 399.0)) {
-                        mxl = 399.0;
+                    edge[0] = 20.0;
+                    edge[1] = 160.0;
+                    b_fft(y, x);
+                    nx = x.size(1) << 10;
+                    c1.set_size(1024, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
                     }
-                    if (y.size(1) == 0) {
-                        b_y.set_size(1024, 0);
+                    b_y.set_size(1024, c1.size(1));
+                    nx = c1.size(1) << 10;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(1024, 0);
                     } else {
-                        nChan = y.size(1);
-                        b_y.set_size(1024, y.size(1));
-                        loop_ub = 1024 * y.size(1);
-                        for (i = 0; i < loop_ub; i++) {
-                            b_y[i].re = 0.0;
-                            b_y[i].im = 0.0;
-                        }
-                        for (ibmat = 0; ibmat < nChan; ibmat++) {
-                            for (i = 0; i < 1024; i++) {
-                                b_y[i + 1024 * ibmat].re = 0.0;
-                                b_y[i + 1024 * ibmat].im = 0.0;
-                            }
-                            ::coder::internal::FFTImplementationCallback::doHalfLengthRadix2(
-                                    y, ibmat * 400, *(creal_T(*)[1024]) &b_y[1024 * ibmat]);
-                        }
-                    }
-                    nChan = b_y.size(1) << 10;
-                    c1.set_size(1024, b_y.size(1));
-                    for (ibmat = 0; ibmat < nChan; ibmat++) {
-                        c1[ibmat] = rt_hypotd_snf(b_y[ibmat].re, b_y[ibmat].im);
-                    }
-                    c_y.set_size(1024, c1.size(1));
-                    nChan = c1.size(1) << 10;
-                    for (ibmat = 0; ibmat < nChan; ibmat++) {
-                        c_y[ibmat] = c1[ibmat] * c1[ibmat];
-                    }
-                    if (c_y.size(1) == 0) {
-                        b_y.set_size(1024, 0);
-                    } else {
-                        nChan = c_y.size(1);
-                        b_y.set_size(1024, c_y.size(1));
-                        for (ibmat = 0; ibmat < nChan; ibmat++) {
+                        nx = b_y.size(1);
+                        x.set_size(1024, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
                             ::coder::internal::FFTImplementationCallback::b_doHalfLengthRadix2(
-                                    c_y, ibmat << 10, *(creal_T(*)[1024]) &b_y[1024 * ibmat]);
+                                    b_y, ibmat << 10, *(creal_T(*)[1024]) &x[1024 * ibmat]);
                         }
-                        loop_ub = 1024 * b_y.size(1);
-                        b_y.set_size(1024, b_y.size(1));
-                        for (i = 0; i < loop_ub; i++) {
-                            b_y[i].re = 0.0009765625 * b_y[i].re;
-                            b_y[i].im = 0.0009765625 * b_y[i].im;
+                        nx = 1024 * x.size(1);
+                        x.set_size(1024, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.0009765625 * x[i].re;
+                            x[i].im = 0.0009765625 * x[i].im;
                         }
                     }
-                    c1.set_size(1024, b_y.size(1));
-                    loop_ub = 1024 * b_y.size(1);
-                    for (i = 0; i < loop_ub; i++) {
-                        c1[i] = b_y[i].re / 32.0;
+                    c1.set_size(1024, x.size(1));
+                    nx = 1024 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 32.0;
                     }
-                    if (1.0 > mxl + 1.0) {
-                        loop_ub = 0;
+                    c_y.set_size(1, 160);
+                    for (i = 0; i < 160; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(160, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 160; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1]) + 1024 * i) + 863];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
                     } else {
-                        loop_ub = static_cast<int>(mxl + 1.0);
+                        itilerow = 0;
                     }
-                    if (mxl < 1.0) {
-                        d_y.set_size(1, 0);
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 160U;
                     } else {
-                        i = static_cast<int>(mxl);
-                        d_y.set_size(1, i);
-                        ibmat = i - 1;
-                        for (i = 0; i <= ibmat; i++) {
-                            d_y[i] = static_cast<double>(i) + 1.0;
-                        }
+                        input_sizes_idx_0 = 0U;
                     }
-                    ibmat = c1.size(1);
-                    yRMS.set_size(d_y.size(1), c1.size(1));
-                    for (i = 0; i < ibmat; i++) {
-                        nChan = d_y.size(1);
-                        for (i1 = 0; i1 < nChan; i1++) {
-                            yRMS[i1 + yRMS.size(0) * i] =
-                                    c1[(static_cast<int>((1024.0 - mxl) + d_y[i1]) + 1024 * i) - 1];
-                        }
-                    }
-                    if ((d_y.size(1) != 0) && (c1.size(1) != 0)) {
-                        result = c1.size(1);
-                    } else if ((loop_ub != 0) && (c1.size(1) != 0)) {
-                        result = c1.size(1);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 161;
                     } else {
-                        if (c1.size(1) > 0) {
-                            result = c1.size(1);
-                        } else {
-                            result = 0;
-                        }
-                        if (c1.size(1) > result) {
-                            result = c1.size(1);
-                        }
+                        sizes_idx_0 = 0;
                     }
-                    empty_non_axis_sizes = (result == 0);
-                    if (empty_non_axis_sizes || ((d_y.size(1) != 0) && (c1.size(1) != 0))) {
-                        input_sizes_idx_0 = static_cast<short>(d_y.size(1));
-                    } else {
-                        input_sizes_idx_0 = 0;
-                    }
-                    if (empty_non_axis_sizes || ((loop_ub != 0) && (c1.size(1) != 0))) {
-                        sz_idx_0 = loop_ub;
-                    } else {
-                        sz_idx_0 = 0;
-                    }
-                    nChan = input_sizes_idx_0;
-                    ibmat = c1.size(1);
-                    b_c1.set_size(loop_ub, c1.size(1));
-                    for (i = 0; i < ibmat; i++) {
-                        for (i1 = 0; i1 < loop_ub; i1++) {
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(161, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 161; i1++) {
                             b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 1024 * i];
                         }
                     }
-                    Rt.set_size(input_sizes_idx_0 + sz_idx_0, result);
-                    for (i = 0; i < result; i++) {
-                        for (i1 = 0; i1 < nChan; i1++) {
-                            Rt[i1 + Rt.size(0) * i] = yRMS[i1 + input_sizes_idx_0 * i];
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
                         }
                     }
-                    for (i = 0; i < result; i++) {
-                        for (i1 = 0; i1 < sz_idx_0; i1++) {
-                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] = b_c1[i1 + sz_idx_0 * i];
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
                         }
                     }
-                    mxl = (edge[1] + 1.0) + edge[0];
-                    if (mxl > Rt.size(0)) {
+                    nx = c1.size(1);
+                    b_c1.set_size(161, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 161; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 1024 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (181 > result.size(0)) {
                         i = -1;
                         i1 = -1;
                     } else {
-                        i = static_cast<int>(mxl) - 2;
+                        i = 179;
                         i1 = Rt.size(0) - 1;
                     }
-                    loop_ub = Rt.size(1);
-                    d_y.set_size(1, Rt.size(1));
-                    for (nChan = 0; nChan < loop_ub; nChan++) {
-                        d_y[nChan] = Rt[(static_cast<int>(edge[1] + 1.0) + Rt.size(0) * nChan) - 1];
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 160];
                     }
-                    nChan = Rt.size(1) - 1;
-                    for (ibmat = 0; ibmat <= nChan; ibmat++) {
-                        d_y[ibmat] = sqrt(d_y[ibmat]);
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
                     }
-                    varargin_1_tmp = i1 - i;
-                    yRMS.set_size(varargin_1_tmp, d_y.size(1));
-                    nChan = d_y.size(1);
-                    for (result = 0; result < nChan; result++) {
-                        ibmat = result * varargin_1_tmp;
-                        for (sz_idx_0 = 0; sz_idx_0 < varargin_1_tmp; sz_idx_0++) {
-                            yRMS[ibmat + sz_idx_0] = d_y[result];
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
                         }
                     }
-                    loop_ub = Rt.size(1);
-                    yRMS.set_size(varargin_1_tmp, Rt.size(1));
-                    for (i1 = 0; i1 < loop_ub; i1++) {
-                        for (nChan = 0; nChan < varargin_1_tmp; nChan++) {
-                            yRMS[nChan + yRMS.size(0) * i1] =
-                                    Rt[((i + nChan) + Rt.size(0) * i1) + 1] /
-                                    yRMS[nChan + yRMS.size(0) * i1];
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
                         }
                     }
-                    if ((static_cast<int>(edge[0] - 1.0) != 0) && (yRMS.size(1) != 0)) {
-                        result = yRMS.size(1);
-                    } else if ((yRMS.size(0) != 0) && (yRMS.size(1) != 0)) {
-                        result = yRMS.size(1);
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
                     } else {
-                        result = yRMS.size(1);
+                        itilerow = nx + 1;
                     }
-                    empty_non_axis_sizes = (result == 0);
-                    if (empty_non_axis_sizes ||
-                        ((static_cast<int>(edge[0] - 1.0) != 0) && (yRMS.size(1) != 0))) {
-                        nChan = static_cast<int>(edge[0] - 1.0);
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 19U;
                     } else {
-                        nChan = 0;
+                        input_sizes_idx_0 = 0U;
                     }
-                    if (empty_non_axis_sizes || ((yRMS.size(0) != 0) && (yRMS.size(1) != 0))) {
-                        sz_idx_0 = yRMS.size(0);
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
                     } else {
-                        sz_idx_0 = 0;
+                        sizes_idx_0 = 0;
                     }
-                    b_c1.set_size(nChan + sz_idx_0, result);
-                    for (i = 0; i < result; i++) {
-                        for (i1 = 0; i1 < nChan; i1++) {
-                            b_c1[i1 + b_c1.size(0) * i] = 0.0;
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
                         }
                     }
-                    for (i = 0; i < result; i++) {
-                        for (i1 = 0; i1 < sz_idx_0; i1++) {
-                            b_c1[(i1 + nChan) + b_c1.size(0) * i] = yRMS[i1 + sz_idx_0 * i];
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
                         }
                     }
-                    getCandidates(b_c1, edge, 1.0, peak, f0);
-                    loop_ub = f0.size(0);
-                    for (i = 0; i < loop_ub; i++) {
+                    getCandidates(r, edge, peak, f0);
+                    nx = f0.size(0);
+                    for (i = 0; i < nx; i++) {
                         f0[i] = 8000.0 / f0[i];
+                    }
+                }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &y
+//                ::coder::array<double, 1U> &f0
+// Return Type  : void
+//
+                void b_NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
+                    array<double, 2U> Rt;
+                    array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
+                    array<double, 2U> c1;
+                    array<double, 2U> c_y;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
+                    array<double, 1U> locs;
+                    array<double, 1U> peak;
+                    double edge[2];
+                    int i;
+                    int i1;
+                    int i2;
+                    int ibmat;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short sizes_idx_0;
+                    unsigned char input_sizes_idx_0;
+                    boolean_T empty_non_axis_sizes;
+                    edge[0] = 28.0;
+                    edge[1] = 221.0;
+                    c_fft(y, x);
+                    nx = x.size(1) << 11;
+                    c1.set_size(2048, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
+                    }
+                    b_y.set_size(2048, c1.size(1));
+                    nx = c1.size(1) << 11;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(2048, 0);
+                    } else {
+                        nx = b_y.size(1);
+                        x.set_size(2048, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
+                            ::coder::internal::FFTImplementationCallback::d_doHalfLengthRadix2(
+                                    b_y, ibmat << 11, *(creal_T(*)[2048]) &x[2048 * ibmat]);
+                        }
+                        nx = 2048 * x.size(1);
+                        x.set_size(2048, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.00048828125 * x[i].re;
+                            x[i].im = 0.00048828125 * x[i].im;
+                        }
+                    }
+                    c1.set_size(2048, x.size(1));
+                    nx = 2048 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 45.254833995939045;
+                    }
+                    c_y.set_size(1, 221);
+                    for (i = 0; i < 221; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(221, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 221; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1] + 1827.0) + 2048 * i) - 1];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
+                    } else {
+                        itilerow = 0;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 221U;
+                    } else {
+                        input_sizes_idx_0 = 0U;
+                    }
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 222;
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(222, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 222; i1++) {
+                            b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 2048 * i];
+                        }
+                    }
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
+                        }
+                    }
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
+                        }
+                    }
+                    nx = c1.size(1);
+                    b_c1.set_size(222, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 222; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 2048 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (250 > result.size(0)) {
+                        i = -1;
+                        i1 = -1;
+                    } else {
+                        i = 248;
+                        i1 = Rt.size(0) - 1;
+                    }
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 221];
+                    }
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
+                    }
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
+                        }
+                    }
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
+                        }
+                    }
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
+                    } else {
+                        itilerow = nx + 1;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 27U;
+                    } else {
+                        input_sizes_idx_0 = 0U;
+                    }
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    getCandidates(r, edge, peak, locs);
+                    f0.set_size(locs.size(0));
+                    nx = locs.size(0);
+                    for (i = 0; i < nx; i++) {
+                        f0[i] = 11025.0 / locs[i];
+                    }
+                }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &y
+//                ::coder::array<double, 1U> &f0
+// Return Type  : void
+//
+                void c_NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
+                    array<double, 2U> Rt;
+                    array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
+                    array<double, 2U> c1;
+                    array<double, 2U> c_y;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
+                    array<double, 1U> locs;
+                    array<double, 1U> peak;
+                    double edge[2];
+                    int i;
+                    int i1;
+                    int i2;
+                    int ibmat;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short sizes_idx_0;
+                    unsigned char input_sizes_idx_0;
+                    boolean_T empty_non_axis_sizes;
+                    edge[0] = 30.0;
+                    edge[1] = 240.0;
+                    d_fft(y, x);
+                    nx = x.size(1) << 11;
+                    c1.set_size(2048, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
+                    }
+                    b_y.set_size(2048, c1.size(1));
+                    nx = c1.size(1) << 11;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(2048, 0);
+                    } else {
+                        nx = b_y.size(1);
+                        x.set_size(2048, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
+                            ::coder::internal::FFTImplementationCallback::d_doHalfLengthRadix2(
+                                    b_y, ibmat << 11, *(creal_T(*)[2048]) &x[2048 * ibmat]);
+                        }
+                        nx = 2048 * x.size(1);
+                        x.set_size(2048, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.00048828125 * x[i].re;
+                            x[i].im = 0.00048828125 * x[i].im;
+                        }
+                    }
+                    c1.set_size(2048, x.size(1));
+                    nx = 2048 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 45.254833995939045;
+                    }
+                    c_y.set_size(1, 240);
+                    for (i = 0; i < 240; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(240, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 240; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1]) + 2048 * i) + 1807];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
+                    } else {
+                        itilerow = 0;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 240U;
+                    } else {
+                        input_sizes_idx_0 = 0U;
+                    }
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 241;
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(241, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 241; i1++) {
+                            b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 2048 * i];
+                        }
+                    }
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
+                        }
+                    }
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
+                        }
+                    }
+                    nx = c1.size(1);
+                    b_c1.set_size(241, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 241; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 2048 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (271 > result.size(0)) {
+                        i = -1;
+                        i1 = -1;
+                    } else {
+                        i = 269;
+                        i1 = Rt.size(0) - 1;
+                    }
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 240];
+                    }
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
+                    }
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
+                        }
+                    }
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
+                        }
+                    }
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
+                    } else {
+                        itilerow = nx + 1;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 29U;
+                    } else {
+                        input_sizes_idx_0 = 0U;
+                    }
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    getCandidates(r, edge, peak, locs);
+                    f0.set_size(locs.size(0));
+                    nx = locs.size(0);
+                    for (i = 0; i < nx; i++) {
+                        f0[i] = 12000.0 / locs[i];
+                    }
+                }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &y
+//                ::coder::array<double, 1U> &f0
+// Return Type  : void
+//
+                void d_NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
+                    array<double, 2U> Rt;
+                    array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
+                    array<double, 2U> c1;
+                    array<double, 2U> c_y;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
+                    array<double, 1U> locs;
+                    array<double, 1U> peak;
+                    double edge[2];
+                    int i;
+                    int i1;
+                    int i2;
+                    int ibmat;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short input_sizes_idx_0;
+                    short sizes_idx_0;
+                    boolean_T empty_non_axis_sizes;
+                    edge[0] = 55.0;
+                    edge[1] = 441.0;
+                    e_fft(y, x);
+                    nx = x.size(1) << 12;
+                    c1.set_size(4096, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
+                    }
+                    b_y.set_size(4096, c1.size(1));
+                    nx = c1.size(1) << 12;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(4096, 0);
+                    } else {
+                        nx = b_y.size(1);
+                        x.set_size(4096, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
+                            ::coder::internal::FFTImplementationCallback::g_doHalfLengthRadix2(
+                                    b_y, ibmat << 12, *(creal_T(*)[4096]) &x[4096 * ibmat]);
+                        }
+                        nx = 4096 * x.size(1);
+                        x.set_size(4096, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.000244140625 * x[i].re;
+                            x[i].im = 0.000244140625 * x[i].im;
+                        }
+                    }
+                    c1.set_size(4096, x.size(1));
+                    nx = 4096 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 64.0;
+                    }
+                    c_y.set_size(1, 441);
+                    for (i = 0; i < 441; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(441, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 441; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1]) + 4096 * i) + 3654];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
+                    } else {
+                        itilerow = 0;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 441;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 442;
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(442, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 442; i1++) {
+                            b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 4096 * i];
+                        }
+                    }
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
+                        }
+                    }
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
+                        }
+                    }
+                    nx = c1.size(1);
+                    b_c1.set_size(442, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 442; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 4096 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (497 > result.size(0)) {
+                        i = -1;
+                        i1 = -1;
+                    } else {
+                        i = 495;
+                        i1 = Rt.size(0) - 1;
+                    }
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 441];
+                    }
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
+                    }
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
+                        }
+                    }
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
+                        }
+                    }
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
+                    } else {
+                        itilerow = nx + 1;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 54;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    getCandidates(r, edge, peak, locs);
+                    f0.set_size(locs.size(0));
+                    nx = locs.size(0);
+                    for (i = 0; i < nx; i++) {
+                        f0[i] = 22050.0 / locs[i];
+                    }
+                }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &y
+//                ::coder::array<double, 1U> &f0
+// Return Type  : void
+//
+                void e_NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
+                    array<double, 2U> Rt;
+                    array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
+                    array<double, 2U> c1;
+                    array<double, 2U> c_y;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
+                    array<double, 1U> locs;
+                    array<double, 1U> peak;
+                    double edge[2];
+                    int i;
+                    int i1;
+                    int i2;
+                    int ibmat;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short input_sizes_idx_0;
+                    short sizes_idx_0;
+                    boolean_T empty_non_axis_sizes;
+                    edge[0] = 60.0;
+                    edge[1] = 480.0;
+                    f_fft(y, x);
+                    nx = x.size(1) << 12;
+                    c1.set_size(4096, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
+                    }
+                    b_y.set_size(4096, c1.size(1));
+                    nx = c1.size(1) << 12;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(4096, 0);
+                    } else {
+                        nx = b_y.size(1);
+                        x.set_size(4096, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
+                            ::coder::internal::FFTImplementationCallback::g_doHalfLengthRadix2(
+                                    b_y, ibmat << 12, *(creal_T(*)[4096]) &x[4096 * ibmat]);
+                        }
+                        nx = 4096 * x.size(1);
+                        x.set_size(4096, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.000244140625 * x[i].re;
+                            x[i].im = 0.000244140625 * x[i].im;
+                        }
+                    }
+                    c1.set_size(4096, x.size(1));
+                    nx = 4096 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 64.0;
+                    }
+                    c_y.set_size(1, 480);
+                    for (i = 0; i < 480; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(480, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 480; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1]) + 4096 * i) + 3615];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
+                    } else {
+                        itilerow = 0;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 480;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 481;
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(481, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 481; i1++) {
+                            b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 4096 * i];
+                        }
+                    }
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
+                        }
+                    }
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
+                        }
+                    }
+                    nx = c1.size(1);
+                    b_c1.set_size(481, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 481; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 4096 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (541 > result.size(0)) {
+                        i = -1;
+                        i1 = -1;
+                    } else {
+                        i = 539;
+                        i1 = Rt.size(0) - 1;
+                    }
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 480];
+                    }
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
+                    }
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
+                        }
+                    }
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
+                        }
+                    }
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
+                    } else {
+                        itilerow = nx + 1;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 59;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    getCandidates(r, edge, peak, locs);
+                    f0.set_size(locs.size(0));
+                    nx = locs.size(0);
+                    for (i = 0; i < nx; i++) {
+                        f0[i] = 24000.0 / locs[i];
+                    }
+                }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &y
+//                ::coder::array<double, 1U> &f0
+// Return Type  : void
+//
+                void f_NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
+                    array<double, 2U> Rt;
+                    array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
+                    array<double, 2U> c1;
+                    array<double, 2U> c_y;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
+                    array<double, 1U> locs;
+                    array<double, 1U> peak;
+                    double edge[2];
+                    int i;
+                    int i1;
+                    int i2;
+                    int ibmat;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short input_sizes_idx_0;
+                    short sizes_idx_0;
+                    boolean_T empty_non_axis_sizes;
+                    edge[0] = 110.0;
+                    edge[1] = 882.0;
+                    g_fft(y, x);
+                    nx = x.size(1) << 13;
+                    c1.set_size(8192, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
+                    }
+                    b_y.set_size(8192, c1.size(1));
+                    nx = c1.size(1) << 13;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(8192, 0);
+                    } else {
+                        nx = b_y.size(1);
+                        x.set_size(8192, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
+                            ::coder::internal::FFTImplementationCallback::j_doHalfLengthRadix2(
+                                    b_y, ibmat << 13, *(creal_T(*)[8192]) &x[8192 * ibmat]);
+                        }
+                        nx = 8192 * x.size(1);
+                        x.set_size(8192, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.0001220703125 * x[i].re;
+                            x[i].im = 0.0001220703125 * x[i].im;
+                        }
+                    }
+                    c1.set_size(8192, x.size(1));
+                    nx = 8192 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 90.509667991878089;
+                    }
+                    c_y.set_size(1, 882);
+                    for (i = 0; i < 882; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(882, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 882; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1]) + 8192 * i) + 7309];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
+                    } else {
+                        itilerow = 0;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 882;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 883;
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(883, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 883; i1++) {
+                            b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 8192 * i];
+                        }
+                    }
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
+                        }
+                    }
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
+                        }
+                    }
+                    nx = c1.size(1);
+                    b_c1.set_size(883, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 883; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 8192 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (993 > result.size(0)) {
+                        i = -1;
+                        i1 = -1;
+                    } else {
+                        i = 991;
+                        i1 = Rt.size(0) - 1;
+                    }
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 882];
+                    }
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
+                    }
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
+                        }
+                    }
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
+                        }
+                    }
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
+                    } else {
+                        itilerow = nx + 1;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 109;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    getCandidates(r, edge, peak, locs);
+                    f0.set_size(locs.size(0));
+                    nx = locs.size(0);
+                    for (i = 0; i < nx; i++) {
+                        f0[i] = 44100.0 / locs[i];
+                    }
+                }
+
+//
+// Arguments    : const ::coder::array<double, 2U> &y
+//                ::coder::array<double, 1U> &f0
+// Return Type  : void
+//
+                void g_NCF(const ::coder::array<double, 2U> &y, ::coder::array<double, 1U> &f0) {
+                    array<creal_T, 2U> x;
+                    array<double, 2U> Rt;
+                    array<double, 2U> b_c1;
+                    array<double, 2U> b_x;
+                    array<double, 2U> b_y;
+                    array<double, 2U> c1;
+                    array<double, 2U> c_y;
+                    array<double, 2U> r;
+                    array<double, 2U> result;
+                    array<double, 2U> varargin_1;
+                    array<double, 1U> locs;
+                    array<double, 1U> peak;
+                    double edge[2];
+                    int i;
+                    int i1;
+                    int i2;
+                    int ibmat;
+                    int itilerow;
+                    int jcol;
+                    int nx;
+                    int result_tmp;
+                    short input_sizes_idx_0;
+                    short sizes_idx_0;
+                    boolean_T empty_non_axis_sizes;
+                    edge[0] = 120.0;
+                    edge[1] = 960.0;
+                    h_fft(y, x);
+                    nx = x.size(1) << 13;
+                    c1.set_size(8192, x.size(1));
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        c1[ibmat] = rt_hypotd_snf(x[ibmat].re, x[ibmat].im);
+                    }
+                    b_y.set_size(8192, c1.size(1));
+                    nx = c1.size(1) << 13;
+                    for (ibmat = 0; ibmat < nx; ibmat++) {
+                        b_y[ibmat] = c1[ibmat] * c1[ibmat];
+                    }
+                    if (b_y.size(1) == 0) {
+                        x.set_size(8192, 0);
+                    } else {
+                        nx = b_y.size(1);
+                        x.set_size(8192, b_y.size(1));
+                        for (ibmat = 0; ibmat < nx; ibmat++) {
+                            ::coder::internal::FFTImplementationCallback::j_doHalfLengthRadix2(
+                                    b_y, ibmat << 13, *(creal_T(*)[8192]) &x[8192 * ibmat]);
+                        }
+                        nx = 8192 * x.size(1);
+                        x.set_size(8192, x.size(1));
+                        for (i = 0; i < nx; i++) {
+                            x[i].re = 0.0001220703125 * x[i].re;
+                            x[i].im = 0.0001220703125 * x[i].im;
+                        }
+                    }
+                    c1.set_size(8192, x.size(1));
+                    nx = 8192 * x.size(1);
+                    for (i = 0; i < nx; i++) {
+                        c1[i] = x[i].re / 90.509667991878089;
+                    }
+                    c_y.set_size(1, 960);
+                    for (i = 0; i < 960; i++) {
+                        c_y[i] = static_cast<double>(i) + 1.0;
+                    }
+                    nx = c1.size(1);
+                    varargin_1.set_size(960, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 960; i1++) {
+                            varargin_1[i1 + varargin_1.size(0) * i] =
+                                    c1[(static_cast<int>(c_y[i1]) + 8192 * i) + 7231];
+                        }
+                    }
+                    if (c1.size(1) != 0) {
+                        itilerow = c1.size(1);
+                    } else {
+                        itilerow = 0;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        input_sizes_idx_0 = 960;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || (c1.size(1) != 0)) {
+                        sizes_idx_0 = 961;
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    ibmat = input_sizes_idx_0;
+                    nx = c1.size(1);
+                    b_c1.set_size(961, c1.size(1));
+                    for (i = 0; i < nx; i++) {
+                        for (i1 = 0; i1 < 961; i1++) {
+                            b_c1[i1 + b_c1.size(0) * i] = c1[i1 + 8192 * i];
+                        }
+                    }
+                    jcol = sizes_idx_0;
+                    i = input_sizes_idx_0 + sizes_idx_0;
+                    result.set_size(i, itilerow);
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < ibmat; i2++) {
+                            result[i2 + result.size(0) * i1] =
+                                    varargin_1[i2 + input_sizes_idx_0 * i1];
+                        }
+                    }
+                    for (i1 = 0; i1 < itilerow; i1++) {
+                        for (i2 = 0; i2 < jcol; i2++) {
+                            result[(i2 + input_sizes_idx_0) + result.size(0) * i1] =
+                                    b_c1[i2 + sizes_idx_0 * i1];
+                        }
+                    }
+                    nx = c1.size(1);
+                    b_c1.set_size(961, c1.size(1));
+                    for (i1 = 0; i1 < nx; i1++) {
+                        for (i2 = 0; i2 < 961; i2++) {
+                            b_c1[i2 + b_c1.size(0) * i1] = c1[i2 + 8192 * i1];
+                        }
+                    }
+                    Rt.set_size(i, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < ibmat; i1++) {
+                            Rt[i1 + Rt.size(0) * i] = varargin_1[i1 + input_sizes_idx_0 * i];
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            Rt[(i1 + input_sizes_idx_0) + Rt.size(0) * i] =
+                                    b_c1[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    if (1081 > result.size(0)) {
+                        i = -1;
+                        i1 = -1;
+                    } else {
+                        i = 1079;
+                        i1 = Rt.size(0) - 1;
+                    }
+                    nx = result.size(1);
+                    b_x.set_size(1, result.size(1));
+                    for (i2 = 0; i2 < nx; i2++) {
+                        b_x[i2] = result[result.size(0) * i2 + 960];
+                    }
+                    nx = result.size(1) - 1;
+                    for (ibmat = 0; ibmat <= nx; ibmat++) {
+                        b_x[ibmat] = sqrt(b_x[ibmat]);
+                    }
+                    result_tmp = i1 - i;
+                    result.set_size(result_tmp, b_x.size(1));
+                    nx = b_x.size(1);
+                    for (jcol = 0; jcol < nx; jcol++) {
+                        ibmat = jcol * result_tmp;
+                        for (itilerow = 0; itilerow < result_tmp; itilerow++) {
+                            result[ibmat + itilerow] = b_x[jcol];
+                        }
+                    }
+                    nx = Rt.size(1) - 1;
+                    for (i1 = 0; i1 <= nx; i1++) {
+                        for (i2 = 0; i2 < result_tmp; i2++) {
+                            Rt[i2 + result_tmp * i1] = Rt[((i + i2) + Rt.size(0) * i1) + 1] /
+                                                       result[i2 + result.size(0) * i1];
+                        }
+                    }
+                    Rt.set_size(result_tmp, nx + 1);
+                    if (nx + 1 != 0) {
+                        itilerow = nx + 1;
+                    } else if ((result_tmp != 0) && (nx + 1 != 0)) {
+                        itilerow = nx + 1;
+                    } else {
+                        itilerow = nx + 1;
+                    }
+                    empty_non_axis_sizes = (itilerow == 0);
+                    if (empty_non_axis_sizes || (nx + 1 != 0)) {
+                        input_sizes_idx_0 = 119;
+                    } else {
+                        input_sizes_idx_0 = 0;
+                    }
+                    if (empty_non_axis_sizes || ((result_tmp != 0) && (nx + 1 != 0))) {
+                        sizes_idx_0 = static_cast<short>(result_tmp);
+                    } else {
+                        sizes_idx_0 = 0;
+                    }
+                    jcol = sizes_idx_0;
+                    r.set_size(input_sizes_idx_0 + sizes_idx_0, itilerow);
+                    for (i = 0; i < itilerow; i++) {
+                        nx = input_sizes_idx_0;
+                        for (i1 = 0; i1 < nx; i1++) {
+                            r[i1 + r.size(0) * i] = 0.0;
+                        }
+                    }
+                    for (i = 0; i < itilerow; i++) {
+                        for (i1 = 0; i1 < jcol; i1++) {
+                            r[(i1 + input_sizes_idx_0) + r.size(0) * i] =
+                                    Rt[i1 + sizes_idx_0 * i];
+                        }
+                    }
+                    getCandidates(r, edge, peak, locs);
+                    f0.set_size(locs.size(0));
+                    nx = locs.size(0);
+                    for (i = 0; i < nx; i++) {
+                        f0[i] = 48000.0 / locs[i];
                     }
                 }
 
