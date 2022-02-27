@@ -36,6 +36,98 @@ using coder::array;
 
 typedef array<double, 2U> array1D;
 
+class SNORE_ModelResultImpl : public SNORE_ModelResult {
+public:
+    SNORE_ModelResultImpl() {
+        mSignalStarts = nullptr;
+        mSignalEnds = nullptr;
+        mSignalLabel = nullptr;
+    }
+
+    ~SNORE_ModelResultImpl() override {
+        SNORE_ModelResultImpl::clear();
+    }
+
+    void print() const override {
+        printf("SNORE_ModelResult {\n");
+        printf("\tnoiseStart:%fs\n", mNoiseStart);
+        printf("\tnoiseLength:%fs\n", mNoiseLength);
+        printf("\tsignalStarts:\n");
+        printf("\t[");
+        for (int64_t i = 0; i < mSignalIndexSize; ++i) {
+            printf("%ld, ", mSignalStarts[i]);
+        }
+        printf("]\n");
+
+        printf("\tsignalEnds:\n");
+        printf("\t[");
+        for (int64_t i = 0; i < mSignalIndexSize; ++i) {
+            printf("%ld, ", mSignalEnds[i]);
+        }
+        printf("]\n");
+
+        printf("\tsignalLabel:\n");
+        printf("\t[");
+        for (int64_t i = 0; i < mSignalIndexSize; ++i) {
+            printf("%.1f, ", mSignalLabel[i]);
+        }
+        printf("]\n");
+
+        printf("}\n");
+    }
+
+    void clear() override {
+        delete[] mSignalStarts;
+        delete[] mSignalEnds;
+        delete[] mSignalLabel;
+        mSignalIndexSize = 0;
+        mNoiseStart = mNoiseLength = -1;
+    }
+
+    int64_t getSignalIndexSize() override {
+        return mSignalIndexSize;
+    }
+
+    int64_t getSignalStart(int64_t index) override {
+        if (index < 0 || index >= mSignalIndexSize) return -1;
+        return mSignalStarts[index];
+    }
+
+    int64_t getSignalEnd(int64_t index) override {
+        if (index < 0 || index >= mSignalIndexSize) return -1;
+        return mSignalEnds[index];
+    }
+
+    double getSignalLabel(int64_t index) override {
+        if (index < 0 || index >= mSignalIndexSize) return -1;
+        return mSignalLabel[index];
+    }
+
+    double getNoiseStart() override {
+        return mNoiseStart;
+    }
+
+    double getNoiseEnd() override {
+        return mNoiseLength;
+    }
+
+    int64_t *mSignalStarts = nullptr /* 声音起始下标 */;
+    int64_t *mSignalEnds = nullptr /* 声音结束下标 */;
+    double *mSignalLabel = nullptr /* 分类器检测结果 */;
+    int64_t mSignalIndexSize = 0 /* 数据大小 */;
+    /* 有声段起始位置和长度（单位：秒） */
+    double mNoiseStart = -1;
+    double mNoiseLength = -1;
+};
+
+SNORE_UNUSED SNORE_ModelResult *newModelResult() {
+    return new SNORE_ModelResultImpl();
+}
+
+SNORE_UNUSED void deleteModelResult(SNORE_ModelResult *ptr) {
+    delete ptr;
+}
+
 void initialSox() {
     int res = sox_init();
     assert(res == SOX_SUCCESS);
@@ -175,6 +267,7 @@ SNORE_UNUSED void snore::reduceNoise(SNORE_I16pcm &src, SNORE_I16pcm &dst, const
 SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResult &modelResult) {
     SnoringRecognitionStackData stackData{};
     SnoringRecognitionPersistentData persistentData{};
+    SNORE_ModelResultImpl &modelResultImpl = dynamic_cast<SNORE_ModelResultImpl &>(modelResult);
     stackData.pd = &persistentData;
     SnoringRecognition_initialize(&stackData);
     array1D x, w_starts, w_ends, label;
@@ -187,8 +280,8 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
     /**
      * 有声段检测
      */
-    noise_segment(w_starts, w_ends, pcm.fs, 0.5 * pcm.fs, 3 * pcm.fs, &modelResult.noiseStart,
-                  &modelResult.noiseLength);
+    noise_segment(w_starts, w_ends, pcm.fs, 0.5 * pcm.fs, 3 * pcm.fs, &modelResultImpl.mNoiseStart,
+                  &modelResultImpl.mNoiseLength);
     /**
      * 分类器分类
      */
@@ -199,20 +292,20 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
 //    }
 //#endif
     classifier(&stackData, x, w_starts, w_ends, pcm.fs, label);
-    modelResult.clear();
+    modelResultImpl.clear();
     int64_t labelSize = label.size(1), startsSize = w_starts.size(1), endsSize = w_ends.size(1);
-    modelResult.signalIndexSize = std::min(labelSize, std::min(startsSize, endsSize));
-    modelResult.signalLabel = new double[modelResult.signalIndexSize];
-    for (int i = 0; i < modelResult.signalIndexSize; ++i) {
-        modelResult.signalLabel[i] = label[i];
+    modelResultImpl.mSignalIndexSize = std::min(labelSize, std::min(startsSize, endsSize));
+    modelResultImpl.mSignalLabel = new double[modelResultImpl.mSignalIndexSize];
+    for (int i = 0; i < modelResultImpl.mSignalIndexSize; ++i) {
+        modelResultImpl.mSignalLabel[i] = label[i];
     }
-    modelResult.signalStarts = new int64_t[modelResult.signalIndexSize];
-    for (int i = 0; i < modelResult.signalIndexSize; ++i) {
-        modelResult.signalStarts[i] = (uint32_t) w_starts[i] - 1;
+    modelResultImpl.mSignalStarts = new int64_t[modelResultImpl.mSignalIndexSize];
+    for (int i = 0; i < modelResultImpl.mSignalIndexSize; ++i) {
+        modelResultImpl.mSignalStarts[i] = (uint32_t) w_starts[i] - 1;
     }
-    modelResult.signalEnds = new int64_t[modelResult.signalIndexSize];
-    for (int i = 0; i < modelResult.signalIndexSize; ++i) {
-        modelResult.signalEnds[i] = (uint32_t) w_ends[i];
+    modelResultImpl.mSignalEnds = new int64_t[modelResultImpl.mSignalIndexSize];
+    for (int i = 0; i < modelResultImpl.mSignalIndexSize; ++i) {
+        modelResultImpl.mSignalEnds[i] = (uint32_t) w_ends[i];
     }
 }
 
@@ -222,50 +315,4 @@ SNORE_UNUSED  void snore::calculateSPL(SNORE_F64pcm &src, SNORE_SPL &spl) {
     aweight(x, spl.a_pow, spl.freq, &spl.a_sum);
     cweight(x, spl.c_pow, spl.freq, &spl.c_sum);
     zweight(x, spl.z_pow, spl.freq, &spl.z_sum);
-}
-
-SNORE_UNUSED  void SNORE_ModelResult::print() const {
-    printf("SNORE_ModelResult {\n");
-    printf("\tnoiseStart:%fs\n", noiseStart);
-    printf("\tnoiseLength:%fs\n", noiseLength);
-    printf("\tsignalStarts:\n");
-    printf("\t[");
-    for (int64_t i = 0; i < signalIndexSize; ++i) {
-        printf("%ld, ", signalStarts[i]);
-    }
-    printf("]\n");
-
-    printf("\tsignalEnds:\n");
-    printf("\t[");
-    for (int64_t i = 0; i < signalIndexSize; ++i) {
-        printf("%ld, ", signalEnds[i]);
-    }
-    printf("]\n");
-
-    printf("\tsignalLabel:\n");
-    printf("\t[");
-    for (int64_t i = 0; i < signalIndexSize; ++i) {
-        printf("%.1f, ", signalLabel[i]);
-    }
-    printf("]\n");
-
-    printf("}\n");
-}
-
-void SNORE_ModelResult::clear() {
-    delete[] signalStarts;
-    delete[] signalEnds;
-    delete[] signalLabel;
-    signalIndexSize = 0;
-    noiseStart = noiseLength = -1;
-}
-
-SNORE_ModelResult::~SNORE_ModelResult() {
-    clear();
-}
-
-SNORE_ModelResult::SNORE_ModelResult() {
-    signalStarts = nullptr;
-    signalEnds = nullptr;
-    signalLabel = nullptr;
 }

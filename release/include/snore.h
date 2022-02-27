@@ -42,19 +42,37 @@ namespace snore {
      */
     class SNORE_ModelResult {
     public:
-        SNORE_ModelResult();
+        virtual ~SNORE_ModelResult() = default;
 
-        ~SNORE_ModelResult();
+        virtual SNORE_UNUSED void print() const = 0;
 
-        SNORE_UNUSED void print() const;
+        virtual void clear() = 0;
 
-        void clear();
+        virtual SNORE_UNUSED int64_t getSignalIndexSize() = 0;
 
-        int64_t *signalStarts = nullptr /* 声音起始下标 */, *signalEnds = nullptr /* 声音结束下标 */;
-        double *signalLabel = nullptr /* 分类器检测结果 */;
-        int64_t signalIndexSize = 0; /* 数据大小 */
-        double noiseStart = -1, noiseLength = -1; /* 有声段起始位置和长度（单位：秒） */
+        virtual SNORE_UNUSED int64_t getSignalStart(int64_t index) = 0;
+
+        virtual SNORE_UNUSED int64_t getSignalEnd(int64_t index) = 0;
+
+        virtual SNORE_UNUSED double getSignalLabel(int64_t index) = 0;
+
+        virtual SNORE_UNUSED double getNoiseStart() = 0;
+
+        virtual SNORE_UNUSED double getNoiseEnd() = 0;
     };
+
+//    class SNORE_PatientModel {
+//    public:
+//        virtual ~SNORE_PatientModel();
+//
+//        virtual void digest(SNORE_F64pcm &src);
+//
+//        virtual double getResult();
+//    };
+
+    SNORE_UNUSED extern SNORE_ModelResult *newModelResult();
+
+    SNORE_UNUSED extern void deleteModelResult(SNORE_ModelResult *ptr);
 
     /**
      * 模型入口函数
