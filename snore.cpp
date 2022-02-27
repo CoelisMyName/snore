@@ -622,18 +622,18 @@ SNORE_UNUSED void snore::calculateSPL(SNORE_F64pcm &src, SNORE_SPL &spl) {
     zweight(x, spl.z_pow, spl.freq, &spl.z_sum);
 }
 
-SNORE_UNUSED SNORE_ModelResult *newModelResult() {
+SNORE_UNUSED SNORE_ModelResult *snore::newModelResult() {
     return new SNORE_ModelResultImpl();
 }
 
-SNORE_UNUSED void deleteModelResult(SNORE_ModelResult *ptr) {
+SNORE_UNUSED void snore::deleteModelResult(SNORE_ModelResult *ptr) {
     delete ptr;
 }
 
-SNORE_UNUSED SNORE_PatientModel *newPatientModel() {
+SNORE_UNUSED SNORE_PatientModel *snore::newPatientModel() {
     return new SNORE_PatientModelImpl;
 }
 
-SNORE_UNUSED void deletePatientModel(SNORE_PatientModel *ptr) {
+SNORE_UNUSED void snore::deletePatientModel(SNORE_PatientModel *ptr) {
     delete ptr;
 }
