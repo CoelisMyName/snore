@@ -145,6 +145,10 @@ public:
         mGTCC.set_size(0, FEAT_GTCC_COLUMN);
     }
 
+    ~SNORE_PatientModelImpl() override {
+        SNORE_PatientModelImpl::clear();
+    }
+
     void digest(SNORE_F64pcm &src) override {
         double fs = src.fs;
         SnoringRecognition_initialize();
@@ -172,6 +176,49 @@ public:
                                      mSEVar);
         mResultVersion = mVersion;
         return mResult;
+    }
+
+    void clear() override {
+        mMFCC.clear();
+        mMFCC.set_size(0, FEAT_MFCC_COLUMN);
+        mBARK.clear();
+        mBARK.set_size(0, FEAT_BARK_COLUMN);
+        mPitchMean.clear();
+        mPitchMean.set_size(0);
+        mPitchMax.clear();
+        mPitchMax.set_size(0);
+        mPR800Min.clear();
+        mPR800Min.set_size(0);
+        mPR800Var.clear();
+        mPR800Var.set_size(0);
+        mCEP.clear();
+        mCEP.set_size(0, FEAT_CEP_COLUMN);
+        mFMT1.clear();
+        mFMT1.set_size(0);
+        mFMT2.clear();
+        mFMT2.set_size(0);
+        mFMT3.clear();
+        mFMT3.set_size(0);
+        mGTCC.clear();
+        mGTCC.set_size(0, FEAT_GTCC_COLUMN);
+        mPR800Mean.clear();
+        mPR800Mean.set_size(0);
+        mPR800Max.clear();
+        mPR800Max.set_size(0);
+        mPR800Min.clear();
+        mPR800Min.set_size(0);
+        mPR800Var.clear();
+        mPR800Var.set_size(0);
+        mSEMean.clear();
+        mSEMean.set_size(0);
+        mSEMax.clear();
+        mSEMax.set_size(0);
+        mSEMin.clear();
+        mSEMin.set_size(0);
+        mSEVar.clear();
+        mSEVar.set_size(0);
+        mVersion = mResultVersion = 0;
+        mResult = 0.0;
     }
 
 private:
@@ -407,7 +454,7 @@ private:
 
     int64_t mVersion = 0;
     int64_t mResultVersion = 0;
-    double mResult = 0;
+    double mResult = 0.0;
     SnoringRecognitionStackData mStackData{};
     coder::array<double, 2U> mMFCC;
     coder::array<double, 2U> mBARK;

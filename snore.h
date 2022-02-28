@@ -44,10 +44,6 @@ namespace snore {
     public:
         virtual ~SNORE_ModelResult() = default;
 
-        virtual SNORE_UNUSED void print() const = 0;
-
-        virtual SNORE_UNUSED void clear() = 0;
-
         virtual SNORE_UNUSED int64_t getSignalIndexSize() = 0;
 
         virtual SNORE_UNUSED int64_t getSignalStart(int64_t index) = 0;
@@ -59,6 +55,10 @@ namespace snore {
         virtual SNORE_UNUSED double getNoiseStart() = 0;
 
         virtual SNORE_UNUSED double getNoiseEnd() = 0;
+
+        virtual SNORE_UNUSED void print() const = 0;
+
+        virtual SNORE_UNUSED void clear() = 0;
     };
 
     class SNORE_PatientModel {
@@ -68,6 +68,8 @@ namespace snore {
         virtual SNORE_UNUSED void digest(SNORE_F64pcm &src) = 0;
 
         virtual SNORE_UNUSED double getResult() = 0;
+
+        virtual SNORE_UNUSED void clear() = 0;
     };
 
     /**
