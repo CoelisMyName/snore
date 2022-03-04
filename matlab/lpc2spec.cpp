@@ -1,326 +1,585 @@
-//
-// File: lpc2spec.cpp
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
-// Include Files
 #include "lpc2spec.h"
 #include "SnoringRecognition_data.h"
-#include "abs.h"
-#include "angle.h"
-#include "exp.h"
-#include "isinf.h"
-#include "isnan.h"
-#include "power.h"
-#include "repmat.h"
-#include "roots.h"
+#include "SnoringRecognition_rtwutil.h"
+#include "eigHermitianStandard.h"
 #include "rt_nonfinite.h"
 #include "sort.h"
-#include "sqrt.h"
+#include "xzggev.h"
 #include "coder_array.h"
+#include "rt_nonfinite.h"
 #include <math.h>
 #include <string.h>
 
-// Function Definitions
-//
-// function [features, F, M] = lpc2spec(lpcas, nout)
-//
-// [features,F,M] = lpc2spec(lpcas,nout)
-//     Convert LPC coeffs back into spectra
-//     nout is number of freq channels, default 17 (i.e. for 8 kHz)
-//  2003-04-11 dpwe@ee.columbia.edu  part of rastamat
-//
-// Arguments    : const coder::array<double, 2U> &lpcas
-//                double nout
-//                coder::array<double, 2U> &features
-//                coder::array<double, 2U> &F
-//                coder::array<double, 2U> &M
-// Return Type  : void
-//
 void lpc2spec(const coder::array<double, 2U> &lpcas, double nout,
               coder::array<double, 2U> &features, coder::array<double, 2U> &F,
-              coder::array<double, 2U> &M) {
-    coder::array<creal_T, 2U> c_aa;
-    coder::array<creal_T, 2U> r2;
-    coder::array<creal_T, 2U> r3;
-    coder::array<creal_T, 1U> c_tmp_data;
-    coder::array<creal_T, 1U> r1;
+              coder::array<double, 2U> &M)
+{
+    coder::array<creal_T, 2U> b_aa;
+    coder::array<creal_T, 2U> b_x;
+    coder::array<creal_T, 2U> y;
+    coder::array<creal_T, 1U> r;
     coder::array<double, 2U> aa;
-    coder::array<double, 2U> b_lpcas;
-    coder::array<double, 2U> r;
-    coder::array<double, 2U> r4;
-    coder::array<double, 2U> r5;
-    coder::array<double, 1U> d_tmp_data;
-    coder::array<double, 1U> r6;
+    coder::array<double, 2U> b;
+    coder::array<double, 2U> b_y;
+    coder::array<double, 2U> c_y;
+    coder::array<double, 2U> x;
+    coder::array<double, 1U> d_y;
+    coder::array<double, 1U> e_y;
     coder::array<int, 2U> iidx;
-    creal_T b_aa[13];
-    creal_T b_tmp_data[12];
-    creal_T tmp_data[12];
-    double e_tmp_data[12];
+    creal_T a_data[144];
+    creal_T c[13];
+    creal_T ctmp[13];
+    creal_T beta1_data[12];
+    creal_T eiga_data[12];
+    creal_T r_data[12];
     double ff_data[12];
-    double mags_data[12];
+    double x_data[12];
     double ai;
     double ar;
-    double im;
+    double b_r;
+    double br;
+    double re;
     int ix_data[12];
-    int ff_size[2];
-    int tmp_size[2];
-    int b_i;
-    int b_loop_ub;
+    int a_size[2];
     int i;
-    int loop_ub;
-    int trueCount;
-    // 'lpc2spec:7' if nargin < 2
-    // 'lpc2spec:11' [rows, cols] = size(lpcas);
-    // 'lpc2spec:12' order = rows - 1;
-    // 'lpc2spec:14' gg = lpcas(1, :);
-    // 'lpc2spec:15' aa = lpcas ./ repmat(gg, rows, 1);
-    loop_ub = lpcas.size(1);
-    b_lpcas.set_size(1, lpcas.size(1));
-    for (i = 0; i < loop_ub; i++) {
-        b_lpcas[i] = lpcas[13 * i];
+    int i1;
+    int ibmat;
+    int j;
+    int nTrailingZeros;
+    int ncols;
+    b.set_size(13, lpcas.size(1));
+    ncols = lpcas.size(1) - 1;
+    for (nTrailingZeros = 0; nTrailingZeros <= ncols; nTrailingZeros++) {
+        ibmat = nTrailingZeros * 13;
+        for (j = 0; j < 13; j++) {
+            b[ibmat + j] = lpcas[13 * nTrailingZeros];
+        }
     }
-    coder::repmat(b_lpcas, r);
     aa.set_size(13, lpcas.size(1));
-    loop_ub = 13 * lpcas.size(1);
-    for (i = 0; i < loop_ub; i++) {
-        aa[i] = lpcas[i] / r[i];
+    j = 13 * lpcas.size(1);
+    for (i = 0; i < j; i++) {
+        aa[i] = lpcas[i] / b[i];
     }
-    //  Calculate the actual z-plane polyvals: nout points around unit circle
-    // 'lpc2spec:18' zz = exp((-1i * [0:(nout - 1)]' * pi / (nout - 1)) *
-    // [0:order]);
-    if (coder::b_isnan(nout - 1.0)) {
-        b_lpcas.set_size(1, 1);
-        b_lpcas[0] = rtNaN;
+    if (rtIsNaN(nout - 1.0)) {
+        x.set_size(1, 1);
+        x[0] = rtNaN;
     } else if (nout - 1.0 < 0.0) {
-        b_lpcas.set_size(1, 0);
-    } else if (coder::b_isinf(nout - 1.0) && (0.0 == nout - 1.0)) {
-        b_lpcas.set_size(1, 1);
-        b_lpcas[0] = rtNaN;
+        x.set_size(1, 0);
+    } else if (rtIsInf(nout - 1.0) && (0.0 == nout - 1.0)) {
+        x.set_size(1, 1);
+        x[0] = rtNaN;
     } else {
-        loop_ub = static_cast<int>(floor(nout - 1.0));
-        b_lpcas.set_size(1, loop_ub + 1);
-        for (i = 0; i <= loop_ub; i++) {
-            b_lpcas[i] = i;
+        j = static_cast<int>(floor(nout - 1.0));
+        x.set_size(1, j + 1);
+        for (i = 0; i <= j; i++) {
+            x[i] = i;
         }
     }
-    //  Actual polyvals, in power (mag^2)
-    // 'lpc2spec:21' features = ((1 ./ abs(zz * aa)).^2) ./ repmat(gg, nout, 1);
-    r1.set_size(b_lpcas.size(1));
-    loop_ub = b_lpcas.size(1);
-    for (i = 0; i < loop_ub; i++) {
-        ar = b_lpcas[i] * 0.0 * 3.1415926535897931;
-        ai = -b_lpcas[i] * 3.1415926535897931;
+    r.set_size(x.size(1));
+    j = x.size(1);
+    for (i = 0; i < j; i++) {
+        ar = x[i] * 0.0 * 3.1415926535897931;
+        ai = -x[i] * 3.1415926535897931;
         if (ai == 0.0) {
-            r1[i].re = ar / (nout - 1.0);
-            r1[i].im = 0.0;
+            r[i].re = ar / (nout - 1.0);
+            r[i].im = 0.0;
         } else if (ar == 0.0) {
-            r1[i].re = 0.0;
-            r1[i].im = ai / (nout - 1.0);
+            r[i].re = 0.0;
+            r[i].im = ai / (nout - 1.0);
         } else {
-            r1[i].re = rtNaN;
-            r1[i].im = ai / (nout - 1.0);
+            r[i].re = rtNaN;
+            r[i].im = ai / (nout - 1.0);
         }
     }
-    r2.set_size(r1.size(0), 13);
-    loop_ub = r1.size(0);
+    b_x.set_size(r.size(0), 13);
+    j = r.size(0);
     for (i = 0; i < 13; i++) {
-        b_aa[i].re = i;
+        c[i].re = i;
+        c[i].im = 0.0;
+        for (i1 = 0; i1 < j; i1++) {
+            nTrailingZeros = static_cast<int>(c[i].re);
+            br = c[i].im;
+            b_x[i1 + b_x.size(0) * i].re =
+                r[i1].re * static_cast<double>(nTrailingZeros) - r[i1].im * br;
+            b_x[i1 + b_x.size(0) * i].im =
+                r[i1].re * br + r[i1].im * static_cast<double>(nTrailingZeros);
+        }
+    }
+    ncols = b_x.size(0) * 13;
+    for (j = 0; j < ncols; j++) {
+        if (b_x[j].im == 0.0) {
+            b_x[j].re = exp(b_x[j].re);
+            b_x[j].im = 0.0;
+        } else if (rtIsInf(b_x[j].im) && rtIsInf(b_x[j].re) &&
+                   (b_x[j].re < 0.0)) {
+            b_x[j].re = 0.0;
+            b_x[j].im = 0.0;
+        } else {
+            b_r = exp(b_x[j].re / 2.0);
+            br = b_x[j].im;
+            b_x[j].re = b_r * (b_r * cos(b_x[j].im));
+            b_x[j].im = b_r * (b_r * sin(br));
+        }
+    }
+    b_aa.set_size(13, aa.size(1));
+    j = 13 * aa.size(1);
+    for (i = 0; i < j; i++) {
+        b_aa[i].re = aa[i];
         b_aa[i].im = 0.0;
-        for (b_i = 0; b_i < loop_ub; b_i++) {
-            trueCount = static_cast<int>(b_aa[i].re);
-            ar = b_aa[i].im;
-            r2[b_i + r2.size(0) * i].re =
-                    r1[b_i].re * static_cast<double>(trueCount) - r1[b_i].im * ar;
-            r2[b_i + r2.size(0) * i].im =
-                    r1[b_i].re * ar + r1[b_i].im * static_cast<double>(trueCount);
-        }
     }
-    coder::b_exp(r2);
-    c_aa.set_size(13, aa.size(1));
-    loop_ub = 13 * aa.size(1);
-    for (i = 0; i < loop_ub; i++) {
-        c_aa[i].re = aa[i];
-        c_aa[i].im = 0.0;
-    }
-    r3.set_size(r2.size(0), c_aa.size(1));
-    loop_ub = r2.size(0);
-    for (i = 0; i < loop_ub; i++) {
-        b_loop_ub = c_aa.size(1);
-        for (b_i = 0; b_i < b_loop_ub; b_i++) {
-            ai = 0.0;
-            im = 0.0;
-            for (trueCount = 0; trueCount < 13; trueCount++) {
-                ai += r2[i + r2.size(0) * trueCount].re *
-                      c_aa[trueCount + 13 * b_i].re -
-                      r2[i + r2.size(0) * trueCount].im *
-                      c_aa[trueCount + 13 * b_i].im;
-                im += r2[i + r2.size(0) * trueCount].re *
-                      c_aa[trueCount + 13 * b_i].im +
-                      r2[i + r2.size(0) * trueCount].im *
-                      c_aa[trueCount + 13 * b_i].re;
+    y.set_size(b_x.size(0), b_aa.size(1));
+    j = b_x.size(0);
+    for (i = 0; i < j; i++) {
+        ncols = b_aa.size(1);
+        for (i1 = 0; i1 < ncols; i1++) {
+            re = 0.0;
+            b_r = 0.0;
+            for (nTrailingZeros = 0; nTrailingZeros < 13; nTrailingZeros++) {
+                re += b_x[i + b_x.size(0) * nTrailingZeros].re *
+                          b_aa[nTrailingZeros + 13 * i1].re -
+                      b_x[i + b_x.size(0) * nTrailingZeros].im *
+                          b_aa[nTrailingZeros + 13 * i1].im;
+                b_r += b_x[i + b_x.size(0) * nTrailingZeros].re *
+                           b_aa[nTrailingZeros + 13 * i1].im +
+                       b_x[i + b_x.size(0) * nTrailingZeros].im *
+                           b_aa[nTrailingZeros + 13 * i1].re;
             }
-            r3[i + r3.size(0) * b_i].re = ai;
-            r3[i + r3.size(0) * b_i].im = im;
+            y[i + y.size(0) * i1].re = re;
+            y[i + y.size(0) * i1].im = b_r;
         }
     }
-    coder::b_abs(r3, r4);
-    r5.set_size(r4.size(0), r4.size(1));
-    loop_ub = r4.size(0) * r4.size(1);
-    for (i = 0; i < loop_ub; i++) {
-        r5[i] = 1.0 / r4[i];
+    ncols = y.size(0) * y.size(1);
+    b_y.set_size(y.size(0), y.size(1));
+    for (j = 0; j < ncols; j++) {
+        b_y[j] = rt_hypotd_snf(y[j].re, y[j].im);
     }
-    coder::power(r5, r4);
-    loop_ub = lpcas.size(1);
-    b_lpcas.set_size(1, lpcas.size(1));
-    for (i = 0; i < loop_ub; i++) {
-        b_lpcas[i] = lpcas[13 * i];
+    j = b_y.size(0) * b_y.size(1);
+    for (i = 0; i < j; i++) {
+        b_y[i] = 1.0 / b_y[i];
     }
-    coder::repmat(b_lpcas, nout, r5);
-    features.set_size(r4.size(0), r4.size(1));
-    loop_ub = r4.size(0) * r4.size(1);
-    for (i = 0; i < loop_ub; i++) {
-        features[i] = r4[i] / r5[i];
+    c_y.set_size(b_y.size(0), b_y.size(1));
+    ncols = b_y.size(0) * b_y.size(1);
+    for (j = 0; j < ncols; j++) {
+        c_y[j] = b_y[j] * b_y[j];
     }
-    // 'lpc2spec:23' F = zeros(cols, size(aa, 1));
+    i = static_cast<int>(nout);
+    b_y.set_size(i, lpcas.size(1));
+    ncols = lpcas.size(1) - 1;
+    for (nTrailingZeros = 0; nTrailingZeros <= ncols; nTrailingZeros++) {
+        ibmat = nTrailingZeros * static_cast<int>(nout);
+        for (j = 0; j < i; j++) {
+            b_y[ibmat + j] = lpcas[13 * nTrailingZeros];
+        }
+    }
+    features.set_size(c_y.size(0), c_y.size(1));
+    j = c_y.size(0) * c_y.size(1);
+    for (i = 0; i < j; i++) {
+        features[i] = c_y[i] / b_y[i];
+    }
     F.set_size(lpcas.size(1), 13);
-    loop_ub = lpcas.size(1) * 13;
-    for (i = 0; i < loop_ub; i++) {
+    j = lpcas.size(1) * 13;
+    for (i = 0; i < j; i++) {
         F[i] = 0.0;
     }
-    // 'lpc2spec:24' M = zeros(cols, size(aa, 1));
     M.set_size(lpcas.size(1), 13);
-    loop_ub = lpcas.size(1) * 13;
-    for (i = 0; i < loop_ub; i++) {
+    j = lpcas.size(1) * 13;
+    for (i = 0; i < j; i++) {
         M[i] = 0.0;
     }
-    // 'lpc2spec:26' for c = 1:cols
     i = lpcas.size(1);
-    if (0 <= i - 1) {
-        tmp_size[0] = 1;
-    }
-    for (int c = 0; c < i; c++) {
-        // 'lpc2spec:27' aaa = aa(:, c);
-        // 'lpc2spec:28' rr = roots(complex(aaa'));
-        // 'lpc2spec:29' ff = angle(rr');
-        for (b_i = 0; b_i < 13; b_i++) {
-            b_aa[b_i].re = aa[b_i + 13 * c];
-            b_aa[b_i].im = 0.0;
+    for (int b_c = 0; b_c < i; b_c++) {
+        double brm;
+        int b_i;
+        int k2;
+        for (i1 = 0; i1 < 13; i1++) {
+            c[i1].re = aa[i1 + 13 * b_c];
+            c[i1].im = 0.0;
         }
-        coder::roots(b_aa, tmp_data, &b_loop_ub);
-        tmp_size[1] = b_loop_ub;
-        for (b_i = 0; b_i < b_loop_ub; b_i++) {
-            b_tmp_data[b_i].re = tmp_data[b_i].re;
-            b_tmp_data[b_i].im = -tmp_data[b_i].im;
+        memset(&r_data[0], 0, 12U * sizeof(creal_T));
+        ncols = 1;
+        while ((ncols <= 13) &&
+               ((!(c[ncols - 1].re != 0.0)) && (!(c[ncols - 1].im != 0.0)))) {
+            ncols++;
         }
-        coder::angle(b_tmp_data, tmp_size, ff_data, ff_size);
-        //   size(ff)
-        //   size(aaa)
-        // 'lpc2spec:32' zz = exp(1i * ff' * [0:(length(aaa) - 1)]);
-        // 'lpc2spec:33' mags = sqrt(((1 ./ abs(zz * aaa)).^2) / gg(c))';
-        loop_ub = ff_size[1];
-        r2.set_size(ff_size[1], 13);
-        for (b_i = 0; b_i < 13; b_i++) {
-            b_aa[b_i].re = b_i;
-            b_aa[b_i].im = 0.0;
-            for (trueCount = 0; trueCount < loop_ub; trueCount++) {
-                im = ff_data[trueCount];
-                ai = im * 0.0;
-                b_loop_ub = static_cast<int>(b_aa[b_i].re);
-                ar = b_aa[b_i].im;
-                r2[trueCount + r2.size(0) * b_i].re =
-                        ai * static_cast<double>(b_loop_ub) - im * ar;
-                r2[trueCount + r2.size(0) * b_i].im =
-                        ai * ar + im * static_cast<double>(b_loop_ub);
+        k2 = 13;
+        while ((k2 >= ncols) &&
+               ((!(c[k2 - 1].re != 0.0)) && (!(c[k2 - 1].im != 0.0)))) {
+            k2--;
+        }
+        nTrailingZeros = 12 - k2;
+        if (ncols < k2) {
+            double bi;
+            int companDim;
+            boolean_T exitg1;
+            companDim = k2 - ncols;
+            exitg1 = false;
+            while ((!exitg1) && (companDim > 0)) {
+                boolean_T exitg2;
+                j = 0;
+                exitg2 = false;
+                while ((!exitg2) && (j + 1 <= companDim)) {
+                    ibmat = ncols + j;
+                    ar = c[ibmat].re;
+                    ai = c[ibmat].im;
+                    br = c[ncols - 1].re;
+                    bi = c[ncols - 1].im;
+                    if (bi == 0.0) {
+                        if (ai == 0.0) {
+                            ctmp[j].re = ar / br;
+                            ctmp[j].im = 0.0;
+                        } else if (ar == 0.0) {
+                            ctmp[j].re = 0.0;
+                            ctmp[j].im = ai / br;
+                        } else {
+                            ctmp[j].re = ar / br;
+                            ctmp[j].im = ai / br;
+                        }
+                    } else if (br == 0.0) {
+                        if (ar == 0.0) {
+                            ctmp[j].re = ai / bi;
+                            ctmp[j].im = 0.0;
+                        } else if (ai == 0.0) {
+                            ctmp[j].re = 0.0;
+                            ctmp[j].im = -(ar / bi);
+                        } else {
+                            ctmp[j].re = ai / bi;
+                            ctmp[j].im = -(ar / bi);
+                        }
+                    } else {
+                        brm = fabs(br);
+                        b_r = fabs(bi);
+                        if (brm > b_r) {
+                            brm = bi / br;
+                            b_r = br + brm * bi;
+                            ctmp[j].re = (ar + brm * ai) / b_r;
+                            ctmp[j].im = (ai - brm * ar) / b_r;
+                        } else if (b_r == brm) {
+                            if (br > 0.0) {
+                                br = 0.5;
+                            } else {
+                                br = -0.5;
+                            }
+                            if (bi > 0.0) {
+                                b_r = 0.5;
+                            } else {
+                                b_r = -0.5;
+                            }
+                            ctmp[j].re = (ar * br + ai * b_r) / brm;
+                            ctmp[j].im = (ai * br - ar * b_r) / brm;
+                        } else {
+                            brm = br / bi;
+                            b_r = bi + brm * br;
+                            ctmp[j].re = (brm * ar + ai) / b_r;
+                            ctmp[j].im = (brm * ai - ar) / b_r;
+                        }
+                    }
+                    if (rtIsInf(rt_hypotd_snf(ctmp[j].re, ctmp[j].im))) {
+                        exitg2 = true;
+                    } else {
+                        j++;
+                    }
+                }
+                if (j + 1 > companDim) {
+                    exitg1 = true;
+                } else {
+                    ncols++;
+                    companDim--;
+                }
+            }
+            if (companDim < 1) {
+                if (1 > 13 - k2) {
+                    ibmat = 0;
+                } else {
+                    ibmat = 13 - k2;
+                }
+            } else {
+                boolean_T p;
+                a_size[0] = companDim;
+                a_size[1] = companDim;
+                j = companDim * companDim;
+                if (0 <= j - 1) {
+                    memset(&a_data[0], 0, j * sizeof(creal_T));
+                }
+                for (j = 0; j <= companDim - 2; j++) {
+                    i1 = companDim * j;
+                    a_data[i1].re = -ctmp[j].re;
+                    a_data[i1].im = -ctmp[j].im;
+                    i1 = (j + i1) + 1;
+                    a_data[i1].re = 1.0;
+                    a_data[i1].im = 0.0;
+                }
+                i1 = companDim * (companDim - 1);
+                a_data[i1].re = -ctmp[companDim - 1].re;
+                a_data[i1].im = -ctmp[companDim - 1].im;
+                if (0 <= nTrailingZeros) {
+                    memset(&r_data[0], 0,
+                           (nTrailingZeros + 1) * sizeof(creal_T));
+                }
+                ncols = companDim * companDim;
+                p = true;
+                for (j = 0; j < ncols; j++) {
+                    if ((!p) ||
+                        (rtIsInf(a_data[j].re) || rtIsInf(a_data[j].im) ||
+                         (rtIsNaN(a_data[j].re) || rtIsNaN(a_data[j].im)))) {
+                        p = false;
+                    }
+                }
+                if (!p) {
+                    for (i1 = 0; i1 < companDim; i1++) {
+                        eiga_data[i1].re = rtNaN;
+                        eiga_data[i1].im = 0.0;
+                    }
+                } else {
+                    p = true;
+                    j = 0;
+                    exitg1 = false;
+                    while ((!exitg1) && (j <= companDim - 1)) {
+                        int exitg3;
+                        b_i = 0;
+                        do {
+                            exitg3 = 0;
+                            if (b_i <= j) {
+                                i1 = b_i + companDim * j;
+                                nTrailingZeros = j + companDim * b_i;
+                                if ((!(a_data[i1].re ==
+                                       a_data[nTrailingZeros].re)) ||
+                                    (!(a_data[i1].im ==
+                                       -a_data[nTrailingZeros].im))) {
+                                    p = false;
+                                    exitg3 = 1;
+                                } else {
+                                    b_i++;
+                                }
+                            } else {
+                                j++;
+                                exitg3 = 2;
+                            }
+                        } while (exitg3 == 0);
+                        if (exitg3 == 1) {
+                            exitg1 = true;
+                        }
+                    }
+                    if (p) {
+                        coder::eigHermitianStandard(a_data, a_size, eiga_data,
+                                                    &nTrailingZeros);
+                    } else {
+                        coder::internal::reflapack::xzggev(
+                            a_data, a_size, &ncols, eiga_data, &nTrailingZeros,
+                            beta1_data, &ibmat);
+                        for (i1 = 0; i1 < nTrailingZeros; i1++) {
+                            ar = eiga_data[i1].re;
+                            ai = eiga_data[i1].im;
+                            br = beta1_data[i1].re;
+                            bi = beta1_data[i1].im;
+                            if (bi == 0.0) {
+                                if (ai == 0.0) {
+                                    re = ar / br;
+                                    b_r = 0.0;
+                                } else if (ar == 0.0) {
+                                    re = 0.0;
+                                    b_r = ai / br;
+                                } else {
+                                    re = ar / br;
+                                    b_r = ai / br;
+                                }
+                            } else if (br == 0.0) {
+                                if (ar == 0.0) {
+                                    re = ai / bi;
+                                    b_r = 0.0;
+                                } else if (ai == 0.0) {
+                                    re = 0.0;
+                                    b_r = -(ar / bi);
+                                } else {
+                                    re = ai / bi;
+                                    b_r = -(ar / bi);
+                                }
+                            } else {
+                                brm = fabs(br);
+                                b_r = fabs(bi);
+                                if (brm > b_r) {
+                                    brm = bi / br;
+                                    b_r = br + brm * bi;
+                                    re = (ar + brm * ai) / b_r;
+                                    b_r = (ai - brm * ar) / b_r;
+                                } else if (b_r == brm) {
+                                    if (br > 0.0) {
+                                        br = 0.5;
+                                    } else {
+                                        br = -0.5;
+                                    }
+                                    if (bi > 0.0) {
+                                        b_r = 0.5;
+                                    } else {
+                                        b_r = -0.5;
+                                    }
+                                    re = (ar * br + ai * b_r) / brm;
+                                    b_r = (ai * br - ar * b_r) / brm;
+                                } else {
+                                    brm = br / bi;
+                                    b_r = bi + brm * br;
+                                    re = (brm * ar + ai) / b_r;
+                                    b_r = (brm * ai - ar) / b_r;
+                                }
+                            }
+                            eiga_data[i1].re = re;
+                            eiga_data[i1].im = b_r;
+                        }
+                    }
+                }
+                for (j = 0; j < companDim; j++) {
+                    r_data[(j - k2) + 13] = eiga_data[j];
+                }
+                ibmat = (companDim - k2) + 13;
+            }
+        } else if (1 > 13 - k2) {
+            ibmat = 0;
+        } else {
+            ibmat = 13 - k2;
+        }
+        for (i1 = 0; i1 < ibmat; i1++) {
+            eiga_data[i1].re = r_data[i1].re;
+            eiga_data[i1].im = -r_data[i1].im;
+        }
+        b_i = ibmat;
+        for (j = 0; j < ibmat; j++) {
+            ff_data[j] = rt_atan2d_snf(eiga_data[j].im, eiga_data[j].re);
+        }
+        b_x.set_size(ibmat, 13);
+        for (i1 = 0; i1 < 13; i1++) {
+            c[i1].re = i1;
+            c[i1].im = 0.0;
+            for (nTrailingZeros = 0; nTrailingZeros < ibmat; nTrailingZeros++) {
+                b_r = ff_data[nTrailingZeros];
+                re = b_r * 0.0;
+                ncols = static_cast<int>(c[i1].re);
+                br = c[i1].im;
+                b_x[nTrailingZeros + b_x.size(0) * i1].re =
+                    re * static_cast<double>(ncols) - b_r * br;
+                b_x[nTrailingZeros + b_x.size(0) * i1].im =
+                    re * br + b_r * static_cast<double>(ncols);
             }
         }
-        coder::b_exp(r2);
-        for (b_i = 0; b_i < 13; b_i++) {
-            b_aa[b_i].re = aa[b_i + 13 * c];
-            b_aa[b_i].im = 0.0;
-        }
-        b_loop_ub = r2.size(0);
-        loop_ub = r2.size(0);
-        for (b_i = 0; b_i < loop_ub; b_i++) {
-            ai = 0.0;
-            im = 0.0;
-            for (trueCount = 0; trueCount < 13; trueCount++) {
-                double d;
-                ar = b_aa[trueCount].re;
-                d = b_aa[trueCount].im;
-                ai += r2[b_i + r2.size(0) * trueCount].re * ar -
-                      r2[b_i + r2.size(0) * trueCount].im * d;
-                im += r2[b_i + r2.size(0) * trueCount].re * d +
-                      r2[b_i + r2.size(0) * trueCount].im * ar;
-            }
-            tmp_data[b_i].re = ai;
-            tmp_data[b_i].im = im;
-        }
-        c_tmp_data.set(&tmp_data[0], b_loop_ub);
-        coder::b_abs(c_tmp_data, r6);
-        b_loop_ub = r6.size(0);
-        loop_ub = r6.size(0);
-        for (b_i = 0; b_i < loop_ub; b_i++) {
-            e_tmp_data[b_i] = 1.0 / r6[b_i];
-        }
-        d_tmp_data.set(&e_tmp_data[0], b_loop_ub);
-        coder::power(d_tmp_data, r6);
-        ar = lpcas[13 * c];
-        b_loop_ub = r6.size(0);
-        loop_ub = r6.size(0);
-        for (b_i = 0; b_i < loop_ub; b_i++) {
-            e_tmp_data[b_i] = r6[b_i] / ar;
-        }
-        coder::b_sqrt(e_tmp_data, &b_loop_ub);
-        if (0 <= b_loop_ub - 1) {
-            memcpy(&mags_data[0], &e_tmp_data[0], b_loop_ub * sizeof(double));
-        }
-        // 'lpc2spec:35' [~, ix] = sort(ff);
-        loop_ub = ff_size[1];
-        b_lpcas.set_size(1, ff_size[1]);
-        for (b_i = 0; b_i < loop_ub; b_i++) {
-            b_lpcas[b_i] = ff_data[b_i];
-        }
-        coder::internal::sort(b_lpcas, iidx);
-        b_lpcas.set_size(1, iidx.size(1));
-        loop_ub = iidx.size(1);
-        for (b_i = 0; b_i < loop_ub; b_i++) {
-            trueCount = iidx[b_i];
-            b_lpcas[b_i] = trueCount;
-            ix_data[b_i] = trueCount;
-        }
-        // 'lpc2spec:36' keep = ff(ix) > 0;
-        // 'lpc2spec:37' ix = ix(keep);
-        b_loop_ub = b_lpcas.size(1) - 1;
-        trueCount = 0;
-        for (b_i = 0; b_i <= b_loop_ub; b_i++) {
-            if (ff_data[static_cast<int>(b_lpcas[b_i]) - 1] > 0.0) {
-                trueCount++;
+        ncols = b_x.size(0) * 13;
+        for (j = 0; j < ncols; j++) {
+            if (b_x[j].im == 0.0) {
+                b_x[j].re = exp(b_x[j].re);
+                b_x[j].im = 0.0;
+            } else if (rtIsInf(b_x[j].im) && rtIsInf(b_x[j].re) &&
+                       (b_x[j].re < 0.0)) {
+                b_x[j].re = 0.0;
+                b_x[j].im = 0.0;
+            } else {
+                b_r = exp(b_x[j].re / 2.0);
+                br = b_x[j].im;
+                b_x[j].re = b_r * (b_r * cos(b_x[j].im));
+                b_x[j].im = b_r * (b_r * sin(br));
             }
         }
-        loop_ub = 0;
-        for (b_i = 0; b_i <= b_loop_ub; b_i++) {
+        for (i1 = 0; i1 < 13; i1++) {
+            c[i1].re = aa[i1 + 13 * b_c];
+            c[i1].im = 0.0;
+        }
+        ibmat = b_x.size(0);
+        j = b_x.size(0);
+        for (i1 = 0; i1 < j; i1++) {
+            re = 0.0;
+            b_r = 0.0;
+            for (nTrailingZeros = 0; nTrailingZeros < 13; nTrailingZeros++) {
+                br = c[nTrailingZeros].re;
+                brm = c[nTrailingZeros].im;
+                re += b_x[i1 + b_x.size(0) * nTrailingZeros].re * br -
+                      b_x[i1 + b_x.size(0) * nTrailingZeros].im * brm;
+                b_r += b_x[i1 + b_x.size(0) * nTrailingZeros].re * brm +
+                       b_x[i1 + b_x.size(0) * nTrailingZeros].im * br;
+            }
+            r_data[i1].re = re;
+            r_data[i1].im = b_r;
+        }
+        b_x.set_size(b_i, 13);
+        for (i1 = 0; i1 < 13; i1++) {
+            c[i1].re = i1;
+            c[i1].im = 0.0;
+            for (nTrailingZeros = 0; nTrailingZeros < b_i; nTrailingZeros++) {
+                b_r = ff_data[nTrailingZeros];
+                re = b_r * 0.0;
+                ncols = static_cast<int>(c[i1].re);
+                br = c[i1].im;
+                b_x[nTrailingZeros + b_x.size(0) * i1].re =
+                    re * static_cast<double>(ncols) - b_r * br;
+                b_x[nTrailingZeros + b_x.size(0) * i1].im =
+                    re * br + b_r * static_cast<double>(ncols);
+            }
+        }
+        ncols = b_x.size(0) * 13;
+        for (j = 0; j < ncols; j++) {
+            if (b_x[j].im == 0.0) {
+                b_x[j].re = exp(b_x[j].re);
+                b_x[j].im = 0.0;
+            } else if (rtIsInf(b_x[j].im) && rtIsInf(b_x[j].re) &&
+                       (b_x[j].re < 0.0)) {
+                b_x[j].re = 0.0;
+                b_x[j].im = 0.0;
+            } else {
+                b_r = exp(b_x[j].re / 2.0);
+                br = b_x[j].im;
+                b_x[j].re = b_r * (b_r * cos(b_x[j].im));
+                b_x[j].im = b_r * (b_r * sin(br));
+            }
+        }
+        nTrailingZeros = b_x.size(0);
+        d_y.set_size(nTrailingZeros);
+        for (j = 0; j < ibmat; j++) {
+            d_y[j] = rt_hypotd_snf(r_data[j].re, r_data[j].im);
+        }
+        j = d_y.size(0);
+        for (i1 = 0; i1 < j; i1++) {
+            d_y[i1] = 1.0 / d_y[i1];
+        }
+        e_y.set_size(d_y.size(0));
+        ncols = d_y.size(0);
+        for (j = 0; j < ncols; j++) {
+            e_y[j] = d_y[j] * d_y[j];
+        }
+        b_r = lpcas[13 * b_c];
+        ncols = e_y.size(0);
+        j = e_y.size(0);
+        for (i1 = 0; i1 < j; i1++) {
+            x_data[i1] = e_y[i1] / b_r;
+        }
+        for (j = 0; j < ncols; j++) {
+            x_data[j] = sqrt(x_data[j]);
+        }
+        x.set_size(1, b_i);
+        for (i1 = 0; i1 < b_i; i1++) {
+            x[i1] = ff_data[i1];
+        }
+        coder::internal::sort(x, iidx);
+        x.set_size(1, iidx.size(1));
+        j = iidx.size(1);
+        for (i1 = 0; i1 < j; i1++) {
+            nTrailingZeros = iidx[i1];
+            x[i1] = nTrailingZeros;
+            ix_data[i1] = nTrailingZeros;
+        }
+        ncols = x.size(1) - 1;
+        nTrailingZeros = 0;
+        for (b_i = 0; b_i <= ncols; b_i++) {
+            if (ff_data[static_cast<int>(x[b_i]) - 1] > 0.0) {
+                nTrailingZeros++;
+            }
+        }
+        ibmat = 0;
+        for (b_i = 0; b_i <= ncols; b_i++) {
             if (ff_data[ix_data[b_i] - 1] > 0.0) {
-                ix_data[loop_ub] = ix_data[b_i];
-                loop_ub++;
+                ix_data[ibmat] = ix_data[b_i];
+                ibmat++;
             }
         }
-        // 'lpc2spec:38' F(c, 1:length(ix)) = ff(ix);
-        for (b_i = 0; b_i < trueCount; b_i++) {
-            F[c + F.size(0) * b_i] = ff_data[ix_data[b_i] - 1];
+        for (i1 = 0; i1 < nTrailingZeros; i1++) {
+            F[b_c + F.size(0) * i1] = ff_data[ix_data[i1] - 1];
         }
-        // size(ix)
-        // 'lpc2spec:40' M(c, 1:length(ix)) = mags(ix);
-        for (b_i = 0; b_i < trueCount; b_i++) {
-            M[c + M.size(0) * b_i] = mags_data[ix_data[b_i] - 1];
+        for (i1 = 0; i1 < nTrailingZeros; i1++) {
+            M[b_c + M.size(0) * i1] = x_data[ix_data[i1] - 1];
         }
     }
 }
-
-//
-// File trailer for lpc2spec.cpp
-//
-// [EOF]
-//

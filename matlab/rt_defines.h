@@ -1,14 +1,6 @@
-//
-// File: rt_defines.h
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
 #ifndef RT_DEFINES_H
 #define RT_DEFINES_H
 
-// Include Files
 #include "rtwtypes.h"
 
 #ifdef __cplusplus
@@ -28,8 +20,3 @@ static const real32_T RT_EF = 2.7182817F;
 }
 #endif
 #endif
-//
-// File trailer for rt_defines.h
-//
-// [EOF]
-//

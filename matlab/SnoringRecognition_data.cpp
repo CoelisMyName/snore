@@ -1,15 +1,6 @@
-//
-// File: SnoringRecognition_data.cpp
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
-// Include Files
 #include "SnoringRecognition_data.h"
 #include "rt_nonfinite.h"
 
-// Variable Definitions
 const short iv[8] = {63, 125, 250, 500, 1000, 2000, 4000, 8000};
 
 const double dv1[257] = {1.0,
@@ -3607,9 +3598,3 @@ const double dv8[1025] = {0.0,
                           0.0061358846491544753,
                           0.0030679567629659761,
                           0.0};
-
-//
-// File trailer for SnoringRecognition_data.cpp
-//
-// [EOF]
-//

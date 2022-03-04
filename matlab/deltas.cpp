@@ -1,206 +1,117 @@
-//
-// File: deltas.cpp
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
-// Include Files
 #include "deltas.h"
-#include "filter.h"
-#include "isinf.h"
-#include "isnan.h"
-#include "repmat.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
 
-// Function Definitions
-//
-// function d = deltas(x, w)
-//
-// D = deltas(X,W)  Calculate the deltas (derivatives) of a sequence
-//     Use a W-point window (W odd, default 9) to calculate deltas using a
-//     simple linear slope.  This mirrors the delta calculation performed
-//     in feacalc etc.  Each row of X is filtered separately.
-//  2003-06-30 dpwe@ee.columbia.edu
-//
-// Arguments    : const coder::array<double, 2U> &x
-//                coder::array<double, 2U> &d
-// Return Type  : void
-//
-void b_deltas(const coder::array<double, 2U> &x, coder::array<double, 2U> &d) {
+void deltas(const coder::array<double, 2U> &x, coder::array<double, 2U> &d)
+{
+    coder::array<double, 2U> b;
     coder::array<double, 2U> b_d;
+    coder::array<double, 2U> b_y1;
     coder::array<double, 2U> y;
-    double b_dv[26];
-    double b_dv1[26];
-    // 'deltas:8' if nargin < 2
-    // 'deltas:12' [nr, nc] = size(x);
-    // 'deltas:14' if nc == 0
+    double b_b[26];
+    double c_b[26];
     if (x.size(1) == 0) {
-        //  empty vector passed in; return empty vector
-        // 'deltas:16' d = x;
         d.set_size(13, 0);
     } else {
-        int b_x;
         int i;
-        int i1;
-        // 'deltas:18' else
-        //  actually calculate deltas
-        //  Define window shape
-        // 'deltas:22' hlen = floor(w / 2);
-        // 'deltas:23' w = 2 * hlen + 1;
-        // 'deltas:24' win = hlen:-1:-hlen;
-        //  pad data by repeating first and last columns
-        // 'deltas:27' xx = [repmat(x(:, 1), 1, hlen), x, repmat(x(:, end), 1,
-        // hlen)];
-        //  Apply the delta filter
-        // 'deltas:30' d = filter(win, 1, xx, [], 2);
-        coder::b_repmat(*(double (*)[13]) &x[0], b_dv);
-        b_x = x.size(1);
-        coder::b_repmat(*(double (*)[13]) &x[13 * (b_x - 1)], b_dv1);
-        b_d.set_size(13, x.size(1) + 4);
-        for (i = 0; i < 2; i++) {
-            for (i1 = 0; i1 < 13; i1++) {
-                b_d[i1 + 13 * i] = b_dv[i1 + 13 * i];
+        int jp;
+        int k;
+        int naxpy;
+        int nx;
+        int nx_m_nb;
+        for (nx_m_nb = 0; nx_m_nb < 2; nx_m_nb++) {
+            jp = nx_m_nb * 13;
+            for (k = 0; k < 13; k++) {
+                naxpy = jp + k;
+                b_b[naxpy] = x[k];
+                c_b[naxpy] = x[k + 13 * (x.size(1) - 1)];
             }
         }
-        b_x = x.size(1);
-        for (i = 0; i < b_x; i++) {
-            for (i1 = 0; i1 < 13; i1++) {
-                b_d[i1 + 13 * (i + 2)] = x[i1 + 13 * i];
+        b.set_size(x.size(1) + 4, 13);
+        jp = x.size(1);
+        for (i = 0; i < 13; i++) {
+            b[b.size(0) * i] = b_b[i];
+            b[b.size(0) * i + 1] = b_b[i + 13];
+            for (nx_m_nb = 0; nx_m_nb < jp; nx_m_nb++) {
+                b[(nx_m_nb + b.size(0) * i) + 2] = x[i + 13 * nx_m_nb];
+            }
+            b[(x.size(1) + b.size(0) * i) + 2] = c_b[i];
+            b[(x.size(1) + b.size(0) * i) + 3] = c_b[i + 13];
+        }
+        nx = b.size(0);
+        b_y1.set_size(b.size(0), 13);
+        jp = b.size(0) * 13;
+        for (i = 0; i < jp; i++) {
+            b_y1[i] = 0.0;
+        }
+        for (int c = 0; c < 13; c++) {
+            int offset;
+            offset = c * nx;
+            if (nx >= 10) {
+                jp = offset + nx;
+                for (k = 0; k < 5; k++) {
+                    naxpy = (offset + k) + 1;
+                    for (int j = naxpy; j <= jp; j++) {
+                        b_y1[j - 1] =
+                            b_y1[j - 1] +
+                            (-((static_cast<double>(k) + 1.0) - 1.0) + 2.0) *
+                                b[(j - k) - 1];
+                    }
+                }
+            } else {
+                int j;
+                if (nx > 5) {
+                    nx_m_nb = nx - 6;
+                } else {
+                    nx_m_nb = -1;
+                }
+                for (k = 0; k <= nx_m_nb; k++) {
+                    jp = offset + k;
+                    for (j = 0; j < 5; j++) {
+                        i = jp + j;
+                        b_y1[i] =
+                            b_y1[i] +
+                            b[jp] *
+                                (-((static_cast<double>(j) + 1.0) - 1.0) + 2.0);
+                    }
+                }
+                naxpy = nx - nx_m_nb;
+                i = nx_m_nb + 2;
+                for (k = i; k <= nx; k++) {
+                    jp = (offset + k) - 1;
+                    for (j = 0; j <= naxpy - 2; j++) {
+                        nx_m_nb = jp + j;
+                        b_y1[nx_m_nb] = b_y1[nx_m_nb] +
+                                        b[jp] * (-static_cast<double>(j) + 2.0);
+                    }
+                    naxpy--;
+                }
             }
         }
-        for (i = 0; i < 2; i++) {
-            for (i1 = 0; i1 < 13; i1++) {
-                b_d[i1 + 13 * ((i + x.size(1)) + 2)] = b_dv1[i1 + 13 * i];
+        d.set_size(13, b_y1.size(0));
+        jp = b_y1.size(0);
+        for (i = 0; i < jp; i++) {
+            for (nx_m_nb = 0; nx_m_nb < 13; nx_m_nb++) {
+                d[nx_m_nb + 13 * i] = b_y1[i + b_y1.size(0) * nx_m_nb];
             }
         }
-        coder::b_filter(b_d, d);
-        //  filter along dim 2 (rows)
-        //  Trim edges
-        // 'deltas:33' d = d(:, 2 * hlen + [1:nc]);
-        if (coder::b_isnan(static_cast<double>(x.size(1)))) {
-            y.set_size(1, 1);
-            y[0] = rtNaN;
-        } else if (coder::b_isinf(static_cast<double>(x.size(1))) &&
-                   (1 == x.size(1))) {
-            y.set_size(1, 1);
-            y[0] = rtNaN;
-        } else {
-            y.set_size(1, x.size(1));
-            b_x = x.size(1) - 1;
-            for (i = 0; i <= b_x; i++) {
-                y[i] = static_cast<double>(i) + 1.0;
-            }
+        y.set_size(1, x.size(1));
+        jp = x.size(1) - 1;
+        for (i = 0; i <= jp; i++) {
+            y[i] = static_cast<double>(i) + 1.0;
         }
         b_d.set_size(13, y.size(1));
-        b_x = y.size(1);
-        for (i = 0; i < b_x; i++) {
-            for (i1 = 0; i1 < 13; i1++) {
-                b_d[i1 + 13 * i] =
-                        d[i1 + 13 * (static_cast<int>(y[i] + 4.0) - 1)];
+        jp = y.size(1);
+        for (i = 0; i < jp; i++) {
+            for (nx_m_nb = 0; nx_m_nb < 13; nx_m_nb++) {
+                b_d[nx_m_nb + 13 * i] =
+                    d[nx_m_nb + 13 * (static_cast<int>(y[i]) + 3)];
             }
         }
         d.set_size(13, b_d.size(1));
-        b_x = 13 * b_d.size(1);
-        for (i = 0; i < b_x; i++) {
+        jp = 13 * b_d.size(1);
+        for (i = 0; i < jp; i++) {
             d[i] = b_d[i];
         }
     }
 }
-
-//
-// function d = deltas(x, w)
-//
-// D = deltas(X,W)  Calculate the deltas (derivatives) of a sequence
-//     Use a W-point window (W odd, default 9) to calculate deltas using a
-//     simple linear slope.  This mirrors the delta calculation performed
-//     in feacalc etc.  Each row of X is filtered separately.
-//  2003-06-30 dpwe@ee.columbia.edu
-//
-// Arguments    : const coder::array<double, 2U> &x
-//                coder::array<double, 2U> &d
-// Return Type  : void
-//
-void deltas(const coder::array<double, 2U> &x, coder::array<double, 2U> &d) {
-    coder::array<double, 2U> b_d;
-    coder::array<double, 2U> y;
-    double b_dv[52];
-    double b_dv1[52];
-    int b_x;
-    int i;
-    int i1;
-    // 'deltas:8' if nargin < 2
-    // 'deltas:9' w = 9;
-    // 'deltas:12' [nr, nc] = size(x);
-    // 'deltas:14' if nc == 0
-    // 'deltas:18' else
-    //  actually calculate deltas
-    //  Define window shape
-    // 'deltas:22' hlen = floor(w / 2);
-    // 'deltas:23' w = 2 * hlen + 1;
-    // 'deltas:24' win = hlen:-1:-hlen;
-    //  pad data by repeating first and last columns
-    // 'deltas:27' xx = [repmat(x(:, 1), 1, hlen), x, repmat(x(:, end), 1,
-    // hlen)];
-    //  Apply the delta filter
-    // 'deltas:30' d = filter(win, 1, xx, [], 2);
-    coder::repmat(*(double (*)[13]) &x[0], b_dv);
-    b_x = x.size(1);
-    coder::repmat(*(double (*)[13]) &x[13 * (b_x - 1)], b_dv1);
-    b_d.set_size(13, x.size(1) + 8);
-    for (i = 0; i < 4; i++) {
-        for (i1 = 0; i1 < 13; i1++) {
-            b_d[i1 + 13 * i] = b_dv[i1 + 13 * i];
-        }
-    }
-    b_x = x.size(1);
-    for (i = 0; i < b_x; i++) {
-        for (i1 = 0; i1 < 13; i1++) {
-            b_d[i1 + 13 * (i + 4)] = x[i1 + 13 * i];
-        }
-    }
-    for (i = 0; i < 4; i++) {
-        for (i1 = 0; i1 < 13; i1++) {
-            b_d[i1 + 13 * ((i + x.size(1)) + 4)] = b_dv1[i1 + 13 * i];
-        }
-    }
-    coder::filter(b_d, d);
-    //  filter along dim 2 (rows)
-    //  Trim edges
-    // 'deltas:33' d = d(:, 2 * hlen + [1:nc]);
-    if (coder::b_isnan(static_cast<double>(x.size(1)))) {
-        y.set_size(1, 1);
-        y[0] = rtNaN;
-    } else if (x.size(1) < 1) {
-        y.set_size(1, 0);
-    } else if (coder::b_isinf(static_cast<double>(x.size(1))) &&
-               (1 == x.size(1))) {
-        y.set_size(1, 1);
-        y[0] = rtNaN;
-    } else {
-        y.set_size(1, x.size(1));
-        b_x = x.size(1) - 1;
-        for (i = 0; i <= b_x; i++) {
-            y[i] = static_cast<double>(i) + 1.0;
-        }
-    }
-    b_d.set_size(13, y.size(1));
-    b_x = y.size(1);
-    for (i = 0; i < b_x; i++) {
-        for (i1 = 0; i1 < 13; i1++) {
-            b_d[i1 + 13 * i] = d[i1 + 13 * (static_cast<int>(y[i] + 8.0) - 1)];
-        }
-    }
-    d.set_size(13, b_d.size(1));
-    b_x = 13 * b_d.size(1);
-    for (i = 0; i < b_x; i++) {
-        d[i] = b_d[i];
-    }
-}
-
-//
-// File trailer for deltas.cpp
-//
-// [EOF]
-//

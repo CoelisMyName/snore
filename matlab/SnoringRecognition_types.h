@@ -1,17 +1,8 @@
-//
-// File: SnoringRecognition_types.h
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
 #ifndef SNORINGRECOGNITION_TYPES_H
 #define SNORINGRECOGNITION_TYPES_H
 
-// Include Files
 #include "rtwtypes.h"
 
-// Type Definitions
 struct b_struct_T {
     double mu[4160];
     double sigm[4160];
@@ -40,8 +31,3 @@ struct SnoringRecognitionStackData {
 };
 
 #endif
-//
-// File trailer for SnoringRecognition_types.h
-//
-// [EOF]
-//

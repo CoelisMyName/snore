@@ -1,14 +1,6 @@
-//
-// File: rt_nonfinite.h
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
 #ifndef RT_NONFINITE_H
 #define RT_NONFINITE_H
 
-// Include Files
 #include "rtwtypes.h"
 
 typedef struct {
@@ -54,8 +46,3 @@ extern boolean_T rtIsNaNF(real32_T value);
 }
 #endif
 #endif
-//
-// File trailer for rt_nonfinite.h
-//
-// [EOF]
-//

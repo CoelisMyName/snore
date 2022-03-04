@@ -319,7 +319,7 @@ private:
     void featPitch(coder::array<double, 1U> &sig, double fs) {
         double mean, max, min, var;
         int oldRow, newRow;
-        pitch_feat(sig, fs, &mean, &min, &max, &var);
+        pitch_feat(sig, fs, &mean, &max, &min, &var);
         oldRow = mPitchMean.size(0);
         newRow = oldRow + 1;
         mPitchMean.set_size(newRow);

@@ -1,41 +1,26 @@
-//
-// File: vad.cpp
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
-// Include Files
 #include "vad.h"
-#include "amax_group.h"
-#include "fix.h"
+#include "SnoringRecognition_rtwutil.h"
+#include "blockedSummation.h"
+#include "eml_i64relops.h"
 #include "hist.h"
-#include "mean.h"
 #include "median_filter.h"
 #include "minOrMax.h"
 #include "rt_nonfinite.h"
 #include "sort.h"
-#include "sum_group.h"
-#include "vad_below_threshold.h"
-#include "vad_length_filter.h"
-#include "vad_threshold.h"
 #include "vad_wave.h"
+#include "yuzhiSpeci.h"
 #include "coder_array.h"
+#include "rt_nonfinite.h"
+#include <math.h>
 
-// Function Declarations
 static long long mul_s64_sat(long long a, long long b);
 
 static void mul_wide_s64(long long in0, long long in1,
                          unsigned long long *ptrOutBitsHi,
                          unsigned long long *ptrOutBitsLo);
 
-// Function Definitions
-//
-// Arguments    : long long a
-//                long long b
-// Return Type  : long long
-//
-static long long mul_s64_sat(long long a, long long b) {
+static long long mul_s64_sat(long long a, long long b)
+{
     long long result;
     unsigned long long u64_chi;
     unsigned long long u64_clo;
@@ -53,16 +38,10 @@ static long long mul_s64_sat(long long a, long long b) {
     return result;
 }
 
-//
-// Arguments    : long long in0
-//                long long in1
-//                unsigned long long *ptrOutBitsHi
-//                unsigned long long *ptrOutBitsLo
-// Return Type  : void
-//
 static void mul_wide_s64(long long in0, long long in1,
                          unsigned long long *ptrOutBitsHi,
-                         unsigned long long *ptrOutBitsLo) {
+                         unsigned long long *ptrOutBitsLo)
+{
     unsigned long long absIn0;
     unsigned long long absIn1;
     unsigned long long in0Hi;
@@ -112,165 +91,357 @@ static void mul_wide_s64(long long in0, long long in1,
     *ptrOutBitsLo = in0Lo;
 }
 
-//
-// function [w_starts, w_ends] = vad(x, fs)
-//
-// %% -------------------音频最小长度60秒---------------------------
-//
-// Arguments    : coder::array<double, 1U> &x
-//                double fs
-//                coder::array<long long, 1U> &w_starts
-//                coder::array<long long, 1U> &w_ends
-// Return Type  : void
-//
-void vad(coder::array<double, 1U> &x, double fs,
+void vad(const coder::array<double, 1U> &x, double fs,
          coder::array<long long, 1U> &w_starts,
-         coder::array<long long, 1U> &w_ends) {
+         coder::array<long long, 1U> &w_ends)
+{
+    coder::array<double, 1U> b_maxs;
     coder::array<double, 1U> b_sums;
-    coder::array<double, 1U> b_x;
-    coder::array<double, 1U> c_x;
+    coder::array<double, 1U> b_y;
     coder::array<double, 1U> maxs;
     coder::array<double, 1U> sums;
+    coder::array<double, 1U> y;
+    coder::array<long long, 1U> b_nx1;
     coder::array<long long, 1U> b_w_ends;
-    coder::array<long long, 1U> b_w_starts;
     coder::array<long long, 1U> nx1;
     coder::array<long long, 1U> nx2;
     coder::array<long long, 1U> nx3;
     coder::array<long long, 1U> nx4;
     double a__1[200];
     double bins[200];
-    double MIN_LEN;
     double dth;
     double ex;
+    double u;
+    long long b_k;
+    long long q1;
+    long long qY;
+    int b_i;
+    int b_x;
+    int bufferHeight;
     int i;
-    int iindx;
-    int loop_ub;
-    //  只接受1分钟长度的音频，多的截去，少的补0
-    //  x(inf,1) fs(1,1) w_starts(inf,1) w_ends(inf,1)
-    // 'vad:6' MIN_LEN = 60 * fs;
-    MIN_LEN = 60.0 * fs;
-    // 'vad:8' if (length(x) > MIN_LEN)
-    if (x.size(0) > MIN_LEN) {
-        // 'vad:9' x = x(1:MIN_LEN);
-        if (1.0 > MIN_LEN) {
-            i = 0;
+    int k;
+    int nx;
+    b_x = static_cast<int>(floor(static_cast<double>(x.size(0)) / 50.0)) - 1;
+    maxs.set_size(b_x + 1);
+    for (i = 0; i <= b_x; i++) {
+        maxs[i] = 0.0;
+    }
+    for (b_i = 0; b_i <= b_x; b_i++) {
+        i = b_i * 50;
+        nx = (b_i + 1) * 50;
+        if (i + 1 > nx) {
+            i = -1;
+            nx = -1;
         } else {
-            i = static_cast<int>(MIN_LEN);
+            i--;
+            nx--;
         }
-        x.set_size(i);
-    }
-    // 'vad:12' if (length(x) < MIN_LEN)
-    if (x.size(0) < MIN_LEN) {
-        // 'vad:13' x = [x; zeros(MIN_LEN - length(x), 1)];
-        loop_ub = static_cast<int>(MIN_LEN - static_cast<double>(x.size(0)));
-        i = x.size(0);
-        x.set_size(x.size(0) +
-                   static_cast<int>(MIN_LEN - static_cast<double>(x.size(0))));
-        for (iindx = 0; iindx < loop_ub; iindx++) {
-            x[iindx + i] = 0.0;
+        k = nx - i;
+        nx = k - 1;
+        y.set_size(k);
+        for (k = 0; k <= nx; k++) {
+            y[k] = fabs(x[(i + k) + 1]);
         }
+        maxs[b_i] = coder::internal::maximum(y);
     }
-    // 'vad:16' maxs = amax_group(x, 50);
-    amax_group(x, maxs);
-    // 'vad:17' sums = sum_group(maxs, 50);
-    sum_group(maxs, sums);
-    // 'vad:18' sums = median_filter(sums, 10);
+    b_x = static_cast<int>(floor(static_cast<double>(maxs.size(0)) / 50.0)) - 1;
+    sums.set_size(b_x + 1);
+    for (i = 0; i <= b_x; i++) {
+        sums[i] = 0.0;
+    }
+    for (b_i = 0; b_i <= b_x; b_i++) {
+        i = b_i * 50;
+        nx = (b_i + 1) * 50;
+        if (i + 1 > nx) {
+            i = 0;
+            nx = 0;
+        }
+        k = nx - i;
+        b_maxs.set_size(k);
+        for (nx = 0; nx < k; nx++) {
+            b_maxs[nx] = maxs[i + nx];
+        }
+        sums[b_i] = coder::blockedSummation(b_maxs, k);
+    }
     b_sums.set_size(sums.size(0));
-    loop_ub = sums.size(0) - 1;
-    for (i = 0; i <= loop_ub; i++) {
+    k = sums.size(0) - 1;
+    for (i = 0; i <= k; i++) {
         b_sums[i] = sums[i];
     }
     median_filter(b_sums, sums);
-    // 'vad:20' [bins, ~] = hist(sums, 200);
     coder::hist(sums, bins, a__1);
-    // 'vad:21' [~, position] = max(bins);
-    coder::internal::maximum(bins, &ex, &iindx);
-    // 'vad:22' bins = sort(bins);
-    coder::internal::sort(bins);
-    // 'vad:23' tis = bins(end) / bins(end - 1);
-    // 'vad:24' sorted_sums = sort(sums);
-    b_x.set_size(sums.size(0));
-    loop_ub = sums.size(0);
-    for (i = 0; i < loop_ub; i++) {
-        b_x[i] = sums[i];
-    }
-    coder::internal::sort(b_x);
-    // 前60%的平均值
-    // 'vad:26' ddth = mean(sorted_sums(1:fix(length(sorted_sums) * 0.6)));
-    ex = static_cast<double>(b_x.size(0)) * 0.6;
-    coder::b_fix(&ex);
-    if (1.0 > ex) {
-        loop_ub = 0;
+    if (!rtIsNaN(bins[0])) {
+        nx = 1;
     } else {
-        loop_ub = static_cast<int>(ex);
-    }
-    // 取阈值？
-    // 'vad:29' dth = vad_threshold(tis, sorted_sums, position);
-    dth = vad_threshold(bins[199] / bins[198], b_x, static_cast<double>(iindx));
-    // 'vad:31' coder.varsize('w_starts');
-    // 'vad:32' coder.varsize('w_ends');
-    // 'vad:34' if max(sorted_sums) >= ddth * 5
-    c_x.set_size(loop_ub);
-    for (i = 0; i < loop_ub; i++) {
-        c_x[i] = b_x[i];
-    }
-    if (coder::internal::maximum(b_x) >= coder::mean(c_x) * 5.0) {
-        // 'vad:35' [nx1, nx2] = vad_below_threshold(sums, dth, 6);
-        vad_below_threshold(sums, dth, nx1, nx2);
-        // 'vad:36' [nx3, nx4] = vad_wave(sums, nx1, nx2);
-        vad_wave(sums, nx1, nx2, nx3, nx4);
-        //  映射至实际区间
-        // 'vad:38' w_starts = (nx3 - 1) * 2500 + 1;
-        w_starts.set_size(nx3.size(0));
-        loop_ub = nx3.size(0);
-        for (i = 0; i < loop_ub; i++) {
-            long long q0;
-            q0 = nx3[i];
-            if (q0 < -9223372036854775807LL) {
-                q0 = MIN_int64_T;
+        boolean_T exitg1;
+        nx = 0;
+        k = 2;
+        exitg1 = false;
+        while ((!exitg1) && (k < 201)) {
+            if (!rtIsNaN(bins[k - 1])) {
+                nx = k;
+                exitg1 = true;
             } else {
-                q0--;
+                k++;
             }
-            q0 = mul_s64_sat(q0, 2500LL);
-            if (q0 > 9223372036854775806LL) {
-                q0 = MAX_int64_T;
-            } else {
-                q0++;
-            }
-            w_starts[i] = q0;
         }
-        // 'vad:39' w_ends = nx4 * 2500;
+    }
+    if (nx == 0) {
+        nx = 1;
+    } else {
+        ex = bins[nx - 1];
+        i = nx + 1;
+        for (k = i; k < 201; k++) {
+            u = bins[k - 1];
+            if (ex < u) {
+                ex = u;
+                nx = k;
+            }
+        }
+    }
+    coder::internal::sort(bins);
+    ex = bins[199] / bins[198];
+    y.set_size(sums.size(0));
+    k = sums.size(0);
+    for (i = 0; i < k; i++) {
+        y[i] = sums[i];
+    }
+    coder::internal::sort(y);
+    u = static_cast<double>(y.size(0)) * 0.6;
+    if (u < 0.0) {
+        u = ceil(u);
+    } else {
+        u = floor(u);
+    }
+    if (1.0 > u) {
+        k = 0;
+    } else {
+        k = static_cast<int>(u);
+    }
+    if (ex > 50.0) {
+        dth = yuzhiSpeci(y, static_cast<double>(nx));
+    } else if (ex > 20.0) {
+        ex = coder::internal::minimum(y);
+        dth = (coder::internal::maximum(y) - ex) / 200.0 *
+                  (static_cast<double>(nx) + 1.5) +
+              ex;
+    } else if (ex > 7.0) {
+        dth = (coder::internal::maximum(y) - coder::internal::minimum(y)) /
+                  200.0 *
+                  (((-0.076923076923076927 * ex + 1.5384615384615385) +
+                    static_cast<double>(nx)) +
+                   2.5) +
+              coder::internal::minimum(y);
+    } else if (ex > 2.0) {
+        dth = (coder::internal::maximum(y) - coder::internal::minimum(y)) /
+                  200.0 *
+                  ((static_cast<double>(nx) + (-0.6 * ex + 5.2)) + 2.5) +
+              coder::internal::minimum(y);
+    } else {
+        dth = (coder::internal::maximum(y) - coder::internal::minimum(y)) /
+                  200.0 * (static_cast<double>(nx) + 6.5) +
+              coder::internal::minimum(y);
+    }
+    b_y.set_size(k);
+    for (i = 0; i < k; i++) {
+        b_y[i] = y[i];
+    }
+    if (coder::internal::maximum(y) >=
+        coder::blockedSummation(b_y, k) / static_cast<double>(k) * 5.0) {
+        double count;
+        long long len;
+        b_x = static_cast<int>(ceil(static_cast<double>(sums.size(0)) / 6.0));
+        nx1.set_size(b_x + 1);
+        nx2.set_size(b_x + 1);
+        for (i = 0; i <= b_x; i++) {
+            nx1[i] = 0LL;
+            nx2[i] = 0LL;
+        }
+        len = 0LL;
+        count = 0.0;
+        i = sums.size(0);
+        for (b_i = 0; b_i < i; b_i++) {
+            if (sums[b_i] > dth) {
+                count++;
+            }
+            if ((sums[b_i] <= dth) && (count >= 6.0)) {
+                if (len > 9223372036854775806LL) {
+                    qY = MAX_int64_T;
+                } else {
+                    qY = len + 1LL;
+                }
+                len = qY;
+                u = (static_cast<double>(b_i) + 1.0) - count;
+                if (u >= -9.2233720368547758E+18) {
+                    q1 = static_cast<long long>(u);
+                } else {
+                    q1 = MIN_int64_T;
+                }
+                nx1[static_cast<int>(qY) - 1] = q1;
+                nx2[static_cast<int>(qY) - 1] = b_i;
+            }
+            if (sums[b_i] <= dth) {
+                count = 0.0;
+            }
+        }
+        if (count >= 6.0) {
+            if (len > 9223372036854775806LL) {
+                qY = MAX_int64_T;
+            } else {
+                qY = len + 1LL;
+            }
+            len = qY;
+            u = (static_cast<double>(sums.size(0)) - count) + 1.0;
+            if (u >= -9.2233720368547758E+18) {
+                q1 = static_cast<long long>(u);
+            } else {
+                q1 = MIN_int64_T;
+            }
+            nx1[static_cast<int>(qY) - 1] = q1;
+            nx2[static_cast<int>(qY) - 1] = sums.size(0);
+        }
+        if (1LL > len) {
+            k = 0;
+        } else {
+            k = static_cast<int>(len);
+        }
+        b_nx1.set_size(k);
+        for (i = 0; i < k; i++) {
+            b_nx1[i] = nx1[i];
+        }
+        nx1.set_size(b_nx1.size(0));
+        k = b_nx1.size(0);
+        for (i = 0; i < k; i++) {
+            nx1[i] = b_nx1[i];
+        }
+        if (1LL > len) {
+            k = 0;
+        } else {
+            k = static_cast<int>(len);
+        }
+        b_nx1.set_size(k);
+        for (i = 0; i < k; i++) {
+            b_nx1[i] = nx2[i];
+        }
+        nx2.set_size(b_nx1.size(0));
+        k = b_nx1.size(0);
+        for (i = 0; i < k; i++) {
+            nx2[i] = b_nx1[i];
+        }
+        vad_wave(sums, nx1, nx2, nx3, nx4);
+        w_starts.set_size(nx3.size(0));
+        k = nx3.size(0);
+        for (i = 0; i < k; i++) {
+            qY = nx3[i];
+            if (qY < -9223372036854775807LL) {
+                qY = MIN_int64_T;
+            } else {
+                qY--;
+            }
+            qY = mul_s64_sat(qY, 2500LL);
+            if (qY > 9223372036854775806LL) {
+                qY = MAX_int64_T;
+            } else {
+                qY++;
+            }
+            w_starts[i] = qY;
+        }
         w_ends.set_size(nx4.size(0));
-        loop_ub = nx4.size(0);
-        for (i = 0; i < loop_ub; i++) {
+        k = nx4.size(0);
+        for (i = 0; i < k; i++) {
             w_ends[i] = mul_s64_sat(nx4[i], 2500LL);
         }
     } else {
-        // 'vad:40' else
-        // 'vad:41' w_starts = zeros(0,1,'int64');
         w_starts.set_size(0);
-        // 'vad:42' w_ends = zeros(0,1,'int64');
         w_ends.set_size(0);
     }
-    // 截取段过滤
-    // 'vad:46' [w_starts, w_ends] = vad_length_filter(w_starts, w_ends, 0.03 *
-    // fs, 5 * fs);
-    b_w_starts.set_size(w_starts.size(0));
-    loop_ub = w_starts.size(0) - 1;
-    for (i = 0; i <= loop_ub; i++) {
-        b_w_starts[i] = w_starts[i];
+    ex = 0.03 * fs;
+    u = 5.0 * fs;
+    b_k = 0LL;
+    nx = w_starts.size(0);
+    k = w_ends.size(0);
+    if (nx < k) {
+        bufferHeight = nx;
+    } else {
+        bufferHeight = k;
     }
-    b_w_ends.set_size(w_ends.size(0));
-    loop_ub = w_ends.size(0) - 1;
-    for (i = 0; i <= loop_ub; i++) {
-        b_w_ends[i] = w_ends[i];
+    b_nx1.set_size(bufferHeight);
+    b_w_ends.set_size(bufferHeight);
+    for (i = 0; i < bufferHeight; i++) {
+        b_nx1[i] = 0LL;
+        b_w_ends[i] = 0LL;
     }
-    vad_length_filter(b_w_starts, b_w_ends, 0.03 * fs, 5.0 * fs, w_starts,
-                      w_ends);
+    nx = w_starts.size(0);
+    k = w_ends.size(0);
+    if (nx < k) {
+        k = nx;
+    }
+    for (b_i = 0; b_i < k; b_i++) {
+        qY = w_ends[b_i];
+        q1 = w_starts[b_i];
+        if ((qY >= 0LL) && (q1 < qY - MAX_int64_T)) {
+            qY = MAX_int64_T;
+        } else if ((qY < 0LL) && (q1 > qY - MIN_int64_T)) {
+            qY = MIN_int64_T;
+        } else {
+            qY -= q1;
+        }
+        if (qY > 9223372036854775806LL) {
+            qY = MAX_int64_T;
+        } else {
+            qY++;
+        }
+        if (coder::eml_i64relops(qY, ex)) {
+            boolean_T p;
+            p = false;
+            if ((-9.2233720368547758E+18 <= u) &&
+                (u < 9.2233720368547758E+18)) {
+                boolean_T alarge;
+                boolean_T asmall;
+                boolean_T blarge;
+                boolean_T bsmall;
+                blarge = (u >= 4.503599627370496E+15);
+                alarge = (qY >= 4503599627370496LL);
+                bsmall = (u <= -4.503599627370496E+15);
+                asmall = (qY <= -4503599627370496LL);
+                if (((!alarge) && blarge) || (asmall && (!bsmall))) {
+                    p = true;
+                } else if (blarge || asmall) {
+                    p = (qY < static_cast<long long>(rt_roundd_snf(u)));
+                } else if ((!alarge) && (!bsmall)) {
+                    p = (qY < u);
+                }
+            } else {
+                p = (u >= 0.0);
+            }
+            if (p) {
+                if (b_k > 9223372036854775806LL) {
+                    qY = MAX_int64_T;
+                } else {
+                    qY = b_k + 1LL;
+                }
+                b_k = qY;
+                b_nx1[static_cast<int>(qY) - 1] = w_starts[b_i];
+                b_w_ends[static_cast<int>(qY) - 1] = w_ends[b_i];
+            }
+        }
+    }
+    if (1LL > b_k) {
+        k = 0;
+    } else {
+        k = static_cast<int>(b_k);
+    }
+    w_starts.set_size(k);
+    for (i = 0; i < k; i++) {
+        w_starts[i] = b_nx1[i];
+    }
+    if (1LL > b_k) {
+        k = 0;
+    } else {
+        k = static_cast<int>(b_k);
+    }
+    w_ends.set_size(k);
+    for (i = 0; i < k; i++) {
+        w_ends[i] = b_w_ends[i];
+    }
 }
-
-//
-// File trailer for vad.cpp
-//
-// [EOF]
-//

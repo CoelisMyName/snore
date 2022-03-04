@@ -1,42 +1,29 @@
-//
-// File: aggregatePredict.cpp
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
-// Include Files
 #include "aggregatePredict.h"
 #include "CompactClassificationTree.h"
 #include "predictOneWithCache.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
 
-// Function Definitions
-//
-// Arguments    : const ::coder::array<double, 2U> &X
-//                ::coder::array<double, 2U> &score
-//                const double learnerWeights[400]
-//                const boolean_T isCached[400]
-//                const double classNames[2]
-//                const boolean_T learners[400]
-//                const ::coder::array<boolean_T, 2U> &useObsForLearner
-// Return Type  : void
-//
-namespace coder {
-    namespace classreg {
-        namespace learning {
-            namespace coder {
-                namespace ensembleutils {
+namespace coder
+{
+    namespace classreg
+    {
+        namespace learning
+        {
+            namespace coder
+            {
+                namespace ensembleutils
+                {
                     void aggregatePredict(const ::coder::array<double, 2U> &X, ::
-                    coder::array<double, 2U> &score, const
+                                          coder::array<double, 2U> &score, const
                                           double learnerWeights[400], const
                                           boolean_T isCached[400], const double
                                           classNames[2], const boolean_T
                                           learners[400], const ::coder::array<
-                            boolean_T, 2U> &useObsForLearner) {
+                                          boolean_T, 2U> &useObsForLearner)
+                    {
                         ::coder::classreg::learning::classif::
-                        CompactClassificationTree r;
+                            CompactClassificationTree r;
                         array<double, 2U> cachedScore;
                         array<double, 1U> cachedWeights;
                         array<boolean_T, 1U> b_useObsForLearner;
@@ -87,7 +74,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0)];
+                                    useObsForLearner.size(0)];
                             }
 
                             r.b_init();
@@ -110,7 +97,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 2];
+                                    useObsForLearner.size(0) * 2];
                             }
 
                             r.c_init();
@@ -133,7 +120,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 3];
+                                    useObsForLearner.size(0) * 3];
                             }
 
                             r.d_init();
@@ -156,7 +143,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 4];
+                                    useObsForLearner.size(0) * 4];
                             }
 
                             r.e_init();
@@ -179,7 +166,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 5];
+                                    useObsForLearner.size(0) * 5];
                             }
 
                             r.f_init();
@@ -202,7 +189,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 6];
+                                    useObsForLearner.size(0) * 6];
                             }
 
                             r.g_init();
@@ -225,7 +212,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 7];
+                                    useObsForLearner.size(0) * 7];
                             }
 
                             r.h_init();
@@ -248,7 +235,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 8];
+                                    useObsForLearner.size(0) * 8];
                             }
 
                             r.i_init();
@@ -271,7 +258,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 9];
+                                    useObsForLearner.size(0) * 9];
                             }
 
                             r.j_init();
@@ -294,7 +281,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 10];
+                                    useObsForLearner.size(0) * 10];
                             }
 
                             r.k_init();
@@ -317,7 +304,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 11];
+                                    useObsForLearner.size(0) * 11];
                             }
 
                             r.l_init();
@@ -340,7 +327,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 12];
+                                    useObsForLearner.size(0) * 12];
                             }
 
                             r.m_init();
@@ -363,7 +350,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 13];
+                                    useObsForLearner.size(0) * 13];
                             }
 
                             r.n_init();
@@ -386,7 +373,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 14];
+                                    useObsForLearner.size(0) * 14];
                             }
 
                             r.o_init();
@@ -409,7 +396,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 15];
+                                    useObsForLearner.size(0) * 15];
                             }
 
                             r.p_init();
@@ -432,7 +419,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 16];
+                                    useObsForLearner.size(0) * 16];
                             }
 
                             r.q_init();
@@ -455,7 +442,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 17];
+                                    useObsForLearner.size(0) * 17];
                             }
 
                             r.r_init();
@@ -478,7 +465,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 18];
+                                    useObsForLearner.size(0) * 18];
                             }
 
                             r.s_init();
@@ -501,7 +488,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 19];
+                                    useObsForLearner.size(0) * 19];
                             }
 
                             r.t_init();
@@ -524,7 +511,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 20];
+                                    useObsForLearner.size(0) * 20];
                             }
 
                             r.u_init();
@@ -547,7 +534,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 21];
+                                    useObsForLearner.size(0) * 21];
                             }
 
                             r.v_init();
@@ -570,7 +557,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 22];
+                                    useObsForLearner.size(0) * 22];
                             }
 
                             r.w_init();
@@ -593,7 +580,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 23];
+                                    useObsForLearner.size(0) * 23];
                             }
 
                             r.x_init();
@@ -616,7 +603,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 24];
+                                    useObsForLearner.size(0) * 24];
                             }
 
                             r.y_init();
@@ -639,7 +626,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 25];
+                                    useObsForLearner.size(0) * 25];
                             }
 
                             r.ab_init();
@@ -662,7 +649,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 26];
+                                    useObsForLearner.size(0) * 26];
                             }
 
                             r.bb_init();
@@ -685,7 +672,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 27];
+                                    useObsForLearner.size(0) * 27];
                             }
 
                             r.cb_init();
@@ -708,7 +695,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 28];
+                                    useObsForLearner.size(0) * 28];
                             }
 
                             r.db_init();
@@ -731,7 +718,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 29];
+                                    useObsForLearner.size(0) * 29];
                             }
 
                             r.eb_init();
@@ -754,7 +741,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 30];
+                                    useObsForLearner.size(0) * 30];
                             }
 
                             r.fb_init();
@@ -777,7 +764,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 31];
+                                    useObsForLearner.size(0) * 31];
                             }
 
                             r.gb_init();
@@ -800,7 +787,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 32];
+                                    useObsForLearner.size(0) * 32];
                             }
 
                             r.hb_init();
@@ -823,7 +810,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 33];
+                                    useObsForLearner.size(0) * 33];
                             }
 
                             r.ib_init();
@@ -846,7 +833,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 34];
+                                    useObsForLearner.size(0) * 34];
                             }
 
                             r.jb_init();
@@ -869,7 +856,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 35];
+                                    useObsForLearner.size(0) * 35];
                             }
 
                             r.kb_init();
@@ -892,7 +879,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 36];
+                                    useObsForLearner.size(0) * 36];
                             }
 
                             r.lb_init();
@@ -915,7 +902,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 37];
+                                    useObsForLearner.size(0) * 37];
                             }
 
                             r.mb_init();
@@ -938,7 +925,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 38];
+                                    useObsForLearner.size(0) * 38];
                             }
 
                             r.nb_init();
@@ -961,7 +948,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 39];
+                                    useObsForLearner.size(0) * 39];
                             }
 
                             r.ob_init();
@@ -984,7 +971,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 40];
+                                    useObsForLearner.size(0) * 40];
                             }
 
                             r.pb_init();
@@ -1007,7 +994,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 41];
+                                    useObsForLearner.size(0) * 41];
                             }
 
                             r.qb_init();
@@ -1030,7 +1017,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 42];
+                                    useObsForLearner.size(0) * 42];
                             }
 
                             r.rb_init();
@@ -1053,7 +1040,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 43];
+                                    useObsForLearner.size(0) * 43];
                             }
 
                             r.sb_init();
@@ -1076,7 +1063,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 44];
+                                    useObsForLearner.size(0) * 44];
                             }
 
                             r.tb_init();
@@ -1099,7 +1086,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 45];
+                                    useObsForLearner.size(0) * 45];
                             }
 
                             r.ub_init();
@@ -1122,7 +1109,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 46];
+                                    useObsForLearner.size(0) * 46];
                             }
 
                             r.vb_init();
@@ -1145,7 +1132,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 47];
+                                    useObsForLearner.size(0) * 47];
                             }
 
                             r.wb_init();
@@ -1168,7 +1155,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 48];
+                                    useObsForLearner.size(0) * 48];
                             }
 
                             r.xb_init();
@@ -1191,7 +1178,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 49];
+                                    useObsForLearner.size(0) * 49];
                             }
 
                             r.yb_init();
@@ -1214,7 +1201,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 50];
+                                    useObsForLearner.size(0) * 50];
                             }
 
                             r.ac_init();
@@ -1237,7 +1224,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 51];
+                                    useObsForLearner.size(0) * 51];
                             }
 
                             r.bc_init();
@@ -1260,7 +1247,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 52];
+                                    useObsForLearner.size(0) * 52];
                             }
 
                             r.cc_init();
@@ -1283,7 +1270,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 53];
+                                    useObsForLearner.size(0) * 53];
                             }
 
                             r.dc_init();
@@ -1306,7 +1293,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 54];
+                                    useObsForLearner.size(0) * 54];
                             }
 
                             r.ec_init();
@@ -1329,7 +1316,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 55];
+                                    useObsForLearner.size(0) * 55];
                             }
 
                             r.fc_init();
@@ -1352,7 +1339,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 56];
+                                    useObsForLearner.size(0) * 56];
                             }
 
                             r.gc_init();
@@ -1375,7 +1362,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 57];
+                                    useObsForLearner.size(0) * 57];
                             }
 
                             r.hc_init();
@@ -1398,7 +1385,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 58];
+                                    useObsForLearner.size(0) * 58];
                             }
 
                             r.ic_init();
@@ -1421,7 +1408,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 59];
+                                    useObsForLearner.size(0) * 59];
                             }
 
                             r.jc_init();
@@ -1444,7 +1431,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 60];
+                                    useObsForLearner.size(0) * 60];
                             }
 
                             r.kc_init();
@@ -1467,7 +1454,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 61];
+                                    useObsForLearner.size(0) * 61];
                             }
 
                             r.lc_init();
@@ -1490,7 +1477,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 62];
+                                    useObsForLearner.size(0) * 62];
                             }
 
                             r.mc_init();
@@ -1513,7 +1500,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 63];
+                                    useObsForLearner.size(0) * 63];
                             }
 
                             r.nc_init();
@@ -1536,7 +1523,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 64];
+                                    useObsForLearner.size(0) * 64];
                             }
 
                             r.oc_init();
@@ -1559,7 +1546,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 65];
+                                    useObsForLearner.size(0) * 65];
                             }
 
                             r.pc_init();
@@ -1582,7 +1569,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 66];
+                                    useObsForLearner.size(0) * 66];
                             }
 
                             r.qc_init();
@@ -1605,7 +1592,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 67];
+                                    useObsForLearner.size(0) * 67];
                             }
 
                             r.rc_init();
@@ -1628,7 +1615,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 68];
+                                    useObsForLearner.size(0) * 68];
                             }
 
                             r.sc_init();
@@ -1651,7 +1638,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 69];
+                                    useObsForLearner.size(0) * 69];
                             }
 
                             r.tc_init();
@@ -1674,7 +1661,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 70];
+                                    useObsForLearner.size(0) * 70];
                             }
 
                             r.uc_init();
@@ -1697,7 +1684,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 71];
+                                    useObsForLearner.size(0) * 71];
                             }
 
                             r.vc_init();
@@ -1720,7 +1707,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 72];
+                                    useObsForLearner.size(0) * 72];
                             }
 
                             r.wc_init();
@@ -1743,7 +1730,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 73];
+                                    useObsForLearner.size(0) * 73];
                             }
 
                             r.xc_init();
@@ -1766,7 +1753,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 74];
+                                    useObsForLearner.size(0) * 74];
                             }
 
                             r.yc_init();
@@ -1789,7 +1776,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 75];
+                                    useObsForLearner.size(0) * 75];
                             }
 
                             r.ad_init();
@@ -1812,7 +1799,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 76];
+                                    useObsForLearner.size(0) * 76];
                             }
 
                             r.bd_init();
@@ -1835,7 +1822,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 77];
+                                    useObsForLearner.size(0) * 77];
                             }
 
                             r.cd_init();
@@ -1858,7 +1845,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 78];
+                                    useObsForLearner.size(0) * 78];
                             }
 
                             r.dd_init();
@@ -1881,7 +1868,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 79];
+                                    useObsForLearner.size(0) * 79];
                             }
 
                             r.ed_init();
@@ -1904,7 +1891,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 80];
+                                    useObsForLearner.size(0) * 80];
                             }
 
                             r.fd_init();
@@ -1927,7 +1914,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 81];
+                                    useObsForLearner.size(0) * 81];
                             }
 
                             r.gd_init();
@@ -1950,7 +1937,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 82];
+                                    useObsForLearner.size(0) * 82];
                             }
 
                             r.hd_init();
@@ -1973,7 +1960,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 83];
+                                    useObsForLearner.size(0) * 83];
                             }
 
                             r.id_init();
@@ -1996,7 +1983,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 84];
+                                    useObsForLearner.size(0) * 84];
                             }
 
                             r.jd_init();
@@ -2019,7 +2006,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 85];
+                                    useObsForLearner.size(0) * 85];
                             }
 
                             r.kd_init();
@@ -2042,7 +2029,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 86];
+                                    useObsForLearner.size(0) * 86];
                             }
 
                             r.ld_init();
@@ -2065,7 +2052,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 87];
+                                    useObsForLearner.size(0) * 87];
                             }
 
                             r.md_init();
@@ -2088,7 +2075,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 88];
+                                    useObsForLearner.size(0) * 88];
                             }
 
                             r.nd_init();
@@ -2111,7 +2098,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 89];
+                                    useObsForLearner.size(0) * 89];
                             }
 
                             r.od_init();
@@ -2134,7 +2121,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 90];
+                                    useObsForLearner.size(0) * 90];
                             }
 
                             r.pd_init();
@@ -2157,7 +2144,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 91];
+                                    useObsForLearner.size(0) * 91];
                             }
 
                             r.qd_init();
@@ -2180,7 +2167,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 92];
+                                    useObsForLearner.size(0) * 92];
                             }
 
                             r.rd_init();
@@ -2203,7 +2190,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 93];
+                                    useObsForLearner.size(0) * 93];
                             }
 
                             r.sd_init();
@@ -2226,7 +2213,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 94];
+                                    useObsForLearner.size(0) * 94];
                             }
 
                             r.td_init();
@@ -2249,7 +2236,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 95];
+                                    useObsForLearner.size(0) * 95];
                             }
 
                             r.ud_init();
@@ -2272,7 +2259,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 96];
+                                    useObsForLearner.size(0) * 96];
                             }
 
                             r.vd_init();
@@ -2295,7 +2282,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 97];
+                                    useObsForLearner.size(0) * 97];
                             }
 
                             r.wd_init();
@@ -2318,7 +2305,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 98];
+                                    useObsForLearner.size(0) * 98];
                             }
 
                             r.xd_init();
@@ -2341,7 +2328,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 99];
+                                    useObsForLearner.size(0) * 99];
                             }
 
                             r.yd_init();
@@ -2364,7 +2351,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 100];
+                                    useObsForLearner.size(0) * 100];
                             }
 
                             r.ae_init();
@@ -2387,7 +2374,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 101];
+                                    useObsForLearner.size(0) * 101];
                             }
 
                             r.be_init();
@@ -2410,7 +2397,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 102];
+                                    useObsForLearner.size(0) * 102];
                             }
 
                             r.ce_init();
@@ -2433,7 +2420,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 103];
+                                    useObsForLearner.size(0) * 103];
                             }
 
                             r.de_init();
@@ -2456,7 +2443,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 104];
+                                    useObsForLearner.size(0) * 104];
                             }
 
                             r.ee_init();
@@ -2479,7 +2466,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 105];
+                                    useObsForLearner.size(0) * 105];
                             }
 
                             r.fe_init();
@@ -2502,7 +2489,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 106];
+                                    useObsForLearner.size(0) * 106];
                             }
 
                             r.ge_init();
@@ -2525,7 +2512,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 107];
+                                    useObsForLearner.size(0) * 107];
                             }
 
                             r.he_init();
@@ -2548,7 +2535,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 108];
+                                    useObsForLearner.size(0) * 108];
                             }
 
                             r.ie_init();
@@ -2571,7 +2558,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 109];
+                                    useObsForLearner.size(0) * 109];
                             }
 
                             r.je_init();
@@ -2594,7 +2581,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 110];
+                                    useObsForLearner.size(0) * 110];
                             }
 
                             r.ke_init();
@@ -2617,7 +2604,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 111];
+                                    useObsForLearner.size(0) * 111];
                             }
 
                             r.le_init();
@@ -2640,7 +2627,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 112];
+                                    useObsForLearner.size(0) * 112];
                             }
 
                             r.me_init();
@@ -2663,7 +2650,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 113];
+                                    useObsForLearner.size(0) * 113];
                             }
 
                             r.ne_init();
@@ -2686,7 +2673,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 114];
+                                    useObsForLearner.size(0) * 114];
                             }
 
                             r.oe_init();
@@ -2709,7 +2696,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 115];
+                                    useObsForLearner.size(0) * 115];
                             }
 
                             r.pe_init();
@@ -2732,7 +2719,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 116];
+                                    useObsForLearner.size(0) * 116];
                             }
 
                             r.qe_init();
@@ -2755,7 +2742,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 117];
+                                    useObsForLearner.size(0) * 117];
                             }
 
                             r.re_init();
@@ -2778,7 +2765,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 118];
+                                    useObsForLearner.size(0) * 118];
                             }
 
                             r.se_init();
@@ -2801,7 +2788,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 119];
+                                    useObsForLearner.size(0) * 119];
                             }
 
                             r.te_init();
@@ -2824,7 +2811,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 120];
+                                    useObsForLearner.size(0) * 120];
                             }
 
                             r.ue_init();
@@ -2847,7 +2834,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 121];
+                                    useObsForLearner.size(0) * 121];
                             }
 
                             r.ve_init();
@@ -2870,7 +2857,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 122];
+                                    useObsForLearner.size(0) * 122];
                             }
 
                             r.we_init();
@@ -2893,7 +2880,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 123];
+                                    useObsForLearner.size(0) * 123];
                             }
 
                             r.xe_init();
@@ -2916,7 +2903,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 124];
+                                    useObsForLearner.size(0) * 124];
                             }
 
                             r.ye_init();
@@ -2939,7 +2926,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 125];
+                                    useObsForLearner.size(0) * 125];
                             }
 
                             r.af_init();
@@ -2962,7 +2949,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 126];
+                                    useObsForLearner.size(0) * 126];
                             }
 
                             r.bf_init();
@@ -2985,7 +2972,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 127];
+                                    useObsForLearner.size(0) * 127];
                             }
 
                             r.cf_init();
@@ -3008,7 +2995,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 128];
+                                    useObsForLearner.size(0) * 128];
                             }
 
                             r.df_init();
@@ -3031,7 +3018,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 129];
+                                    useObsForLearner.size(0) * 129];
                             }
 
                             r.ef_init();
@@ -3054,7 +3041,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 130];
+                                    useObsForLearner.size(0) * 130];
                             }
 
                             r.ff_init();
@@ -3077,7 +3064,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 131];
+                                    useObsForLearner.size(0) * 131];
                             }
 
                             r.gf_init();
@@ -3100,7 +3087,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 132];
+                                    useObsForLearner.size(0) * 132];
                             }
 
                             r.hf_init();
@@ -3123,7 +3110,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 133];
+                                    useObsForLearner.size(0) * 133];
                             }
 
                             r.if_init();
@@ -3146,7 +3133,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 134];
+                                    useObsForLearner.size(0) * 134];
                             }
 
                             r.jf_init();
@@ -3169,7 +3156,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 135];
+                                    useObsForLearner.size(0) * 135];
                             }
 
                             r.kf_init();
@@ -3192,7 +3179,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 136];
+                                    useObsForLearner.size(0) * 136];
                             }
 
                             r.lf_init();
@@ -3215,7 +3202,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 137];
+                                    useObsForLearner.size(0) * 137];
                             }
 
                             r.mf_init();
@@ -3238,7 +3225,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 138];
+                                    useObsForLearner.size(0) * 138];
                             }
 
                             r.nf_init();
@@ -3261,7 +3248,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 139];
+                                    useObsForLearner.size(0) * 139];
                             }
 
                             r.of_init();
@@ -3284,7 +3271,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 140];
+                                    useObsForLearner.size(0) * 140];
                             }
 
                             r.pf_init();
@@ -3307,7 +3294,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 141];
+                                    useObsForLearner.size(0) * 141];
                             }
 
                             r.qf_init();
@@ -3330,7 +3317,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 142];
+                                    useObsForLearner.size(0) * 142];
                             }
 
                             r.rf_init();
@@ -3353,7 +3340,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 143];
+                                    useObsForLearner.size(0) * 143];
                             }
 
                             r.sf_init();
@@ -3376,7 +3363,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 144];
+                                    useObsForLearner.size(0) * 144];
                             }
 
                             r.tf_init();
@@ -3399,7 +3386,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 145];
+                                    useObsForLearner.size(0) * 145];
                             }
 
                             r.uf_init();
@@ -3422,7 +3409,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 146];
+                                    useObsForLearner.size(0) * 146];
                             }
 
                             r.vf_init();
@@ -3445,7 +3432,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 147];
+                                    useObsForLearner.size(0) * 147];
                             }
 
                             r.wf_init();
@@ -3468,7 +3455,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 148];
+                                    useObsForLearner.size(0) * 148];
                             }
 
                             r.xf_init();
@@ -3491,7 +3478,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 149];
+                                    useObsForLearner.size(0) * 149];
                             }
 
                             r.yf_init();
@@ -3514,7 +3501,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 150];
+                                    useObsForLearner.size(0) * 150];
                             }
 
                             r.ag_init();
@@ -3537,7 +3524,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 151];
+                                    useObsForLearner.size(0) * 151];
                             }
 
                             r.bg_init();
@@ -3560,7 +3547,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 152];
+                                    useObsForLearner.size(0) * 152];
                             }
 
                             r.cg_init();
@@ -3583,7 +3570,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 153];
+                                    useObsForLearner.size(0) * 153];
                             }
 
                             r.dg_init();
@@ -3606,7 +3593,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 154];
+                                    useObsForLearner.size(0) * 154];
                             }
 
                             r.eg_init();
@@ -3629,7 +3616,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 155];
+                                    useObsForLearner.size(0) * 155];
                             }
 
                             r.fg_init();
@@ -3652,7 +3639,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 156];
+                                    useObsForLearner.size(0) * 156];
                             }
 
                             r.gg_init();
@@ -3675,7 +3662,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 157];
+                                    useObsForLearner.size(0) * 157];
                             }
 
                             r.hg_init();
@@ -3698,7 +3685,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 158];
+                                    useObsForLearner.size(0) * 158];
                             }
 
                             r.ig_init();
@@ -3721,7 +3708,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 159];
+                                    useObsForLearner.size(0) * 159];
                             }
 
                             r.jg_init();
@@ -3744,7 +3731,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 160];
+                                    useObsForLearner.size(0) * 160];
                             }
 
                             r.kg_init();
@@ -3767,7 +3754,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 161];
+                                    useObsForLearner.size(0) * 161];
                             }
 
                             r.lg_init();
@@ -3790,7 +3777,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 162];
+                                    useObsForLearner.size(0) * 162];
                             }
 
                             r.mg_init();
@@ -3813,7 +3800,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 163];
+                                    useObsForLearner.size(0) * 163];
                             }
 
                             r.ng_init();
@@ -3836,7 +3823,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 164];
+                                    useObsForLearner.size(0) * 164];
                             }
 
                             r.og_init();
@@ -3859,7 +3846,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 165];
+                                    useObsForLearner.size(0) * 165];
                             }
 
                             r.pg_init();
@@ -3882,7 +3869,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 166];
+                                    useObsForLearner.size(0) * 166];
                             }
 
                             r.qg_init();
@@ -3905,7 +3892,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 167];
+                                    useObsForLearner.size(0) * 167];
                             }
 
                             r.rg_init();
@@ -3928,7 +3915,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 168];
+                                    useObsForLearner.size(0) * 168];
                             }
 
                             r.sg_init();
@@ -3951,7 +3938,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 169];
+                                    useObsForLearner.size(0) * 169];
                             }
 
                             r.tg_init();
@@ -3974,7 +3961,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 170];
+                                    useObsForLearner.size(0) * 170];
                             }
 
                             r.ug_init();
@@ -3997,7 +3984,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 171];
+                                    useObsForLearner.size(0) * 171];
                             }
 
                             r.vg_init();
@@ -4020,7 +4007,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 172];
+                                    useObsForLearner.size(0) * 172];
                             }
 
                             r.wg_init();
@@ -4043,7 +4030,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 173];
+                                    useObsForLearner.size(0) * 173];
                             }
 
                             r.xg_init();
@@ -4066,7 +4053,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 174];
+                                    useObsForLearner.size(0) * 174];
                             }
 
                             r.yg_init();
@@ -4089,7 +4076,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 175];
+                                    useObsForLearner.size(0) * 175];
                             }
 
                             r.ah_init();
@@ -4112,7 +4099,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 176];
+                                    useObsForLearner.size(0) * 176];
                             }
 
                             r.bh_init();
@@ -4135,7 +4122,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 177];
+                                    useObsForLearner.size(0) * 177];
                             }
 
                             r.ch_init();
@@ -4158,7 +4145,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 178];
+                                    useObsForLearner.size(0) * 178];
                             }
 
                             r.dh_init();
@@ -4181,7 +4168,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 179];
+                                    useObsForLearner.size(0) * 179];
                             }
 
                             r.eh_init();
@@ -4204,7 +4191,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 180];
+                                    useObsForLearner.size(0) * 180];
                             }
 
                             r.fh_init();
@@ -4227,7 +4214,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 181];
+                                    useObsForLearner.size(0) * 181];
                             }
 
                             r.gh_init();
@@ -4250,7 +4237,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 182];
+                                    useObsForLearner.size(0) * 182];
                             }
 
                             r.hh_init();
@@ -4273,7 +4260,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 183];
+                                    useObsForLearner.size(0) * 183];
                             }
 
                             r.ih_init();
@@ -4296,7 +4283,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 184];
+                                    useObsForLearner.size(0) * 184];
                             }
 
                             r.jh_init();
@@ -4319,7 +4306,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 185];
+                                    useObsForLearner.size(0) * 185];
                             }
 
                             r.kh_init();
@@ -4342,7 +4329,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 186];
+                                    useObsForLearner.size(0) * 186];
                             }
 
                             r.lh_init();
@@ -4365,7 +4352,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 187];
+                                    useObsForLearner.size(0) * 187];
                             }
 
                             r.mh_init();
@@ -4388,7 +4375,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 188];
+                                    useObsForLearner.size(0) * 188];
                             }
 
                             r.nh_init();
@@ -4411,7 +4398,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 189];
+                                    useObsForLearner.size(0) * 189];
                             }
 
                             r.oh_init();
@@ -4434,7 +4421,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 190];
+                                    useObsForLearner.size(0) * 190];
                             }
 
                             r.ph_init();
@@ -4457,7 +4444,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 191];
+                                    useObsForLearner.size(0) * 191];
                             }
 
                             r.qh_init();
@@ -4480,7 +4467,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 192];
+                                    useObsForLearner.size(0) * 192];
                             }
 
                             r.rh_init();
@@ -4503,7 +4490,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 193];
+                                    useObsForLearner.size(0) * 193];
                             }
 
                             r.sh_init();
@@ -4526,7 +4513,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 194];
+                                    useObsForLearner.size(0) * 194];
                             }
 
                             r.th_init();
@@ -4549,7 +4536,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 195];
+                                    useObsForLearner.size(0) * 195];
                             }
 
                             r.uh_init();
@@ -4572,7 +4559,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 196];
+                                    useObsForLearner.size(0) * 196];
                             }
 
                             r.vh_init();
@@ -4595,7 +4582,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 197];
+                                    useObsForLearner.size(0) * 197];
                             }
 
                             r.wh_init();
@@ -4618,7 +4605,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 198];
+                                    useObsForLearner.size(0) * 198];
                             }
 
                             r.xh_init();
@@ -4641,7 +4628,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 199];
+                                    useObsForLearner.size(0) * 199];
                             }
 
                             r.yh_init();
@@ -4664,7 +4651,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 200];
+                                    useObsForLearner.size(0) * 200];
                             }
 
                             r.ai_init();
@@ -4687,7 +4674,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 201];
+                                    useObsForLearner.size(0) * 201];
                             }
 
                             r.bi_init();
@@ -4710,7 +4697,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 202];
+                                    useObsForLearner.size(0) * 202];
                             }
 
                             r.ci_init();
@@ -4733,7 +4720,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 203];
+                                    useObsForLearner.size(0) * 203];
                             }
 
                             r.di_init();
@@ -4756,7 +4743,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 204];
+                                    useObsForLearner.size(0) * 204];
                             }
 
                             r.ei_init();
@@ -4779,7 +4766,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 205];
+                                    useObsForLearner.size(0) * 205];
                             }
 
                             r.fi_init();
@@ -4802,7 +4789,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 206];
+                                    useObsForLearner.size(0) * 206];
                             }
 
                             r.gi_init();
@@ -4825,7 +4812,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 207];
+                                    useObsForLearner.size(0) * 207];
                             }
 
                             r.hi_init();
@@ -4848,7 +4835,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 208];
+                                    useObsForLearner.size(0) * 208];
                             }
 
                             r.ii_init();
@@ -4871,7 +4858,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 209];
+                                    useObsForLearner.size(0) * 209];
                             }
 
                             r.ji_init();
@@ -4894,7 +4881,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 210];
+                                    useObsForLearner.size(0) * 210];
                             }
 
                             r.ki_init();
@@ -4917,7 +4904,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 211];
+                                    useObsForLearner.size(0) * 211];
                             }
 
                             r.li_init();
@@ -4940,7 +4927,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 212];
+                                    useObsForLearner.size(0) * 212];
                             }
 
                             r.mi_init();
@@ -4963,7 +4950,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 213];
+                                    useObsForLearner.size(0) * 213];
                             }
 
                             r.ni_init();
@@ -4986,7 +4973,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 214];
+                                    useObsForLearner.size(0) * 214];
                             }
 
                             r.oi_init();
@@ -5009,7 +4996,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 215];
+                                    useObsForLearner.size(0) * 215];
                             }
 
                             r.pi_init();
@@ -5032,7 +5019,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 216];
+                                    useObsForLearner.size(0) * 216];
                             }
 
                             r.qi_init();
@@ -5055,7 +5042,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 217];
+                                    useObsForLearner.size(0) * 217];
                             }
 
                             r.ri_init();
@@ -5078,7 +5065,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 218];
+                                    useObsForLearner.size(0) * 218];
                             }
 
                             r.si_init();
@@ -5101,7 +5088,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 219];
+                                    useObsForLearner.size(0) * 219];
                             }
 
                             r.ti_init();
@@ -5124,7 +5111,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 220];
+                                    useObsForLearner.size(0) * 220];
                             }
 
                             r.ui_init();
@@ -5147,7 +5134,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 221];
+                                    useObsForLearner.size(0) * 221];
                             }
 
                             r.vi_init();
@@ -5170,7 +5157,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 222];
+                                    useObsForLearner.size(0) * 222];
                             }
 
                             r.wi_init();
@@ -5193,7 +5180,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 223];
+                                    useObsForLearner.size(0) * 223];
                             }
 
                             r.xi_init();
@@ -5216,7 +5203,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 224];
+                                    useObsForLearner.size(0) * 224];
                             }
 
                             r.yi_init();
@@ -5239,7 +5226,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 225];
+                                    useObsForLearner.size(0) * 225];
                             }
 
                             r.aj_init();
@@ -5262,7 +5249,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 226];
+                                    useObsForLearner.size(0) * 226];
                             }
 
                             r.bj_init();
@@ -5285,7 +5272,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 227];
+                                    useObsForLearner.size(0) * 227];
                             }
 
                             r.cj_init();
@@ -5308,7 +5295,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 228];
+                                    useObsForLearner.size(0) * 228];
                             }
 
                             r.dj_init();
@@ -5331,7 +5318,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 229];
+                                    useObsForLearner.size(0) * 229];
                             }
 
                             r.ej_init();
@@ -5354,7 +5341,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 230];
+                                    useObsForLearner.size(0) * 230];
                             }
 
                             r.fj_init();
@@ -5377,7 +5364,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 231];
+                                    useObsForLearner.size(0) * 231];
                             }
 
                             r.gj_init();
@@ -5400,7 +5387,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 232];
+                                    useObsForLearner.size(0) * 232];
                             }
 
                             r.hj_init();
@@ -5423,7 +5410,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 233];
+                                    useObsForLearner.size(0) * 233];
                             }
 
                             r.ij_init();
@@ -5446,7 +5433,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 234];
+                                    useObsForLearner.size(0) * 234];
                             }
 
                             r.jj_init();
@@ -5469,7 +5456,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 235];
+                                    useObsForLearner.size(0) * 235];
                             }
 
                             r.kj_init();
@@ -5492,7 +5479,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 236];
+                                    useObsForLearner.size(0) * 236];
                             }
 
                             r.lj_init();
@@ -5515,7 +5502,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 237];
+                                    useObsForLearner.size(0) * 237];
                             }
 
                             r.mj_init();
@@ -5538,7 +5525,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 238];
+                                    useObsForLearner.size(0) * 238];
                             }
 
                             r.nj_init();
@@ -5561,7 +5548,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 239];
+                                    useObsForLearner.size(0) * 239];
                             }
 
                             r.oj_init();
@@ -5584,7 +5571,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 240];
+                                    useObsForLearner.size(0) * 240];
                             }
 
                             r.pj_init();
@@ -5607,7 +5594,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 241];
+                                    useObsForLearner.size(0) * 241];
                             }
 
                             r.qj_init();
@@ -5630,7 +5617,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 242];
+                                    useObsForLearner.size(0) * 242];
                             }
 
                             r.rj_init();
@@ -5653,7 +5640,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 243];
+                                    useObsForLearner.size(0) * 243];
                             }
 
                             r.sj_init();
@@ -5676,7 +5663,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 244];
+                                    useObsForLearner.size(0) * 244];
                             }
 
                             r.tj_init();
@@ -5699,7 +5686,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 245];
+                                    useObsForLearner.size(0) * 245];
                             }
 
                             r.uj_init();
@@ -5722,7 +5709,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 246];
+                                    useObsForLearner.size(0) * 246];
                             }
 
                             r.vj_init();
@@ -5745,7 +5732,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 247];
+                                    useObsForLearner.size(0) * 247];
                             }
 
                             r.wj_init();
@@ -5768,7 +5755,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 248];
+                                    useObsForLearner.size(0) * 248];
                             }
 
                             r.xj_init();
@@ -5791,7 +5778,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 249];
+                                    useObsForLearner.size(0) * 249];
                             }
 
                             r.yj_init();
@@ -5814,7 +5801,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 250];
+                                    useObsForLearner.size(0) * 250];
                             }
 
                             r.ak_init();
@@ -5837,7 +5824,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 251];
+                                    useObsForLearner.size(0) * 251];
                             }
 
                             r.bk_init();
@@ -5860,7 +5847,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 252];
+                                    useObsForLearner.size(0) * 252];
                             }
 
                             r.ck_init();
@@ -5883,7 +5870,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 253];
+                                    useObsForLearner.size(0) * 253];
                             }
 
                             r.dk_init();
@@ -5906,7 +5893,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 254];
+                                    useObsForLearner.size(0) * 254];
                             }
 
                             r.ek_init();
@@ -5929,7 +5916,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 255];
+                                    useObsForLearner.size(0) * 255];
                             }
 
                             r.fk_init();
@@ -5952,7 +5939,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 256];
+                                    useObsForLearner.size(0) * 256];
                             }
 
                             r.gk_init();
@@ -5975,7 +5962,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 257];
+                                    useObsForLearner.size(0) * 257];
                             }
 
                             r.hk_init();
@@ -5998,7 +5985,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 258];
+                                    useObsForLearner.size(0) * 258];
                             }
 
                             r.ik_init();
@@ -6021,7 +6008,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 259];
+                                    useObsForLearner.size(0) * 259];
                             }
 
                             r.jk_init();
@@ -6044,7 +6031,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 260];
+                                    useObsForLearner.size(0) * 260];
                             }
 
                             r.kk_init();
@@ -6067,7 +6054,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 261];
+                                    useObsForLearner.size(0) * 261];
                             }
 
                             r.lk_init();
@@ -6090,7 +6077,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 262];
+                                    useObsForLearner.size(0) * 262];
                             }
 
                             r.mk_init();
@@ -6113,7 +6100,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 263];
+                                    useObsForLearner.size(0) * 263];
                             }
 
                             r.nk_init();
@@ -6136,7 +6123,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 264];
+                                    useObsForLearner.size(0) * 264];
                             }
 
                             r.ok_init();
@@ -6159,7 +6146,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 265];
+                                    useObsForLearner.size(0) * 265];
                             }
 
                             r.pk_init();
@@ -6182,7 +6169,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 266];
+                                    useObsForLearner.size(0) * 266];
                             }
 
                             r.qk_init();
@@ -6205,7 +6192,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 267];
+                                    useObsForLearner.size(0) * 267];
                             }
 
                             r.rk_init();
@@ -6228,7 +6215,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 268];
+                                    useObsForLearner.size(0) * 268];
                             }
 
                             r.sk_init();
@@ -6251,7 +6238,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 269];
+                                    useObsForLearner.size(0) * 269];
                             }
 
                             r.tk_init();
@@ -6274,7 +6261,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 270];
+                                    useObsForLearner.size(0) * 270];
                             }
 
                             r.uk_init();
@@ -6297,7 +6284,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 271];
+                                    useObsForLearner.size(0) * 271];
                             }
 
                             r.vk_init();
@@ -6320,7 +6307,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 272];
+                                    useObsForLearner.size(0) * 272];
                             }
 
                             r.wk_init();
@@ -6343,7 +6330,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 273];
+                                    useObsForLearner.size(0) * 273];
                             }
 
                             r.xk_init();
@@ -6366,7 +6353,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 274];
+                                    useObsForLearner.size(0) * 274];
                             }
 
                             r.yk_init();
@@ -6389,7 +6376,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 275];
+                                    useObsForLearner.size(0) * 275];
                             }
 
                             r.al_init();
@@ -6412,7 +6399,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 276];
+                                    useObsForLearner.size(0) * 276];
                             }
 
                             r.bl_init();
@@ -6435,7 +6422,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 277];
+                                    useObsForLearner.size(0) * 277];
                             }
 
                             r.cl_init();
@@ -6458,7 +6445,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 278];
+                                    useObsForLearner.size(0) * 278];
                             }
 
                             r.dl_init();
@@ -6481,7 +6468,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 279];
+                                    useObsForLearner.size(0) * 279];
                             }
 
                             r.el_init();
@@ -6504,7 +6491,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 280];
+                                    useObsForLearner.size(0) * 280];
                             }
 
                             r.fl_init();
@@ -6527,7 +6514,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 281];
+                                    useObsForLearner.size(0) * 281];
                             }
 
                             r.gl_init();
@@ -6550,7 +6537,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 282];
+                                    useObsForLearner.size(0) * 282];
                             }
 
                             r.hl_init();
@@ -6573,7 +6560,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 283];
+                                    useObsForLearner.size(0) * 283];
                             }
 
                             r.il_init();
@@ -6596,7 +6583,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 284];
+                                    useObsForLearner.size(0) * 284];
                             }
 
                             r.jl_init();
@@ -6619,7 +6606,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 285];
+                                    useObsForLearner.size(0) * 285];
                             }
 
                             r.kl_init();
@@ -6642,7 +6629,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 286];
+                                    useObsForLearner.size(0) * 286];
                             }
 
                             r.ll_init();
@@ -6665,7 +6652,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 287];
+                                    useObsForLearner.size(0) * 287];
                             }
 
                             r.ml_init();
@@ -6688,7 +6675,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 288];
+                                    useObsForLearner.size(0) * 288];
                             }
 
                             r.nl_init();
@@ -6711,7 +6698,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 289];
+                                    useObsForLearner.size(0) * 289];
                             }
 
                             r.ol_init();
@@ -6734,7 +6721,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 290];
+                                    useObsForLearner.size(0) * 290];
                             }
 
                             r.pl_init();
@@ -6757,7 +6744,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 291];
+                                    useObsForLearner.size(0) * 291];
                             }
 
                             r.ql_init();
@@ -6780,7 +6767,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 292];
+                                    useObsForLearner.size(0) * 292];
                             }
 
                             r.rl_init();
@@ -6803,7 +6790,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 293];
+                                    useObsForLearner.size(0) * 293];
                             }
 
                             r.sl_init();
@@ -6826,7 +6813,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 294];
+                                    useObsForLearner.size(0) * 294];
                             }
 
                             r.tl_init();
@@ -6849,7 +6836,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 295];
+                                    useObsForLearner.size(0) * 295];
                             }
 
                             r.ul_init();
@@ -6872,7 +6859,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 296];
+                                    useObsForLearner.size(0) * 296];
                             }
 
                             r.vl_init();
@@ -6895,7 +6882,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 297];
+                                    useObsForLearner.size(0) * 297];
                             }
 
                             r.wl_init();
@@ -6918,7 +6905,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 298];
+                                    useObsForLearner.size(0) * 298];
                             }
 
                             r.xl_init();
@@ -6941,7 +6928,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 299];
+                                    useObsForLearner.size(0) * 299];
                             }
 
                             r.yl_init();
@@ -6964,7 +6951,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 300];
+                                    useObsForLearner.size(0) * 300];
                             }
 
                             r.am_init();
@@ -6987,7 +6974,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 301];
+                                    useObsForLearner.size(0) * 301];
                             }
 
                             r.bm_init();
@@ -7010,7 +6997,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 302];
+                                    useObsForLearner.size(0) * 302];
                             }
 
                             r.cm_init();
@@ -7033,7 +7020,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 303];
+                                    useObsForLearner.size(0) * 303];
                             }
 
                             r.dm_init();
@@ -7056,7 +7043,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 304];
+                                    useObsForLearner.size(0) * 304];
                             }
 
                             r.em_init();
@@ -7079,7 +7066,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 305];
+                                    useObsForLearner.size(0) * 305];
                             }
 
                             r.fm_init();
@@ -7102,7 +7089,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 306];
+                                    useObsForLearner.size(0) * 306];
                             }
 
                             r.gm_init();
@@ -7125,7 +7112,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 307];
+                                    useObsForLearner.size(0) * 307];
                             }
 
                             r.hm_init();
@@ -7148,7 +7135,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 308];
+                                    useObsForLearner.size(0) * 308];
                             }
 
                             r.im_init();
@@ -7171,7 +7158,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 309];
+                                    useObsForLearner.size(0) * 309];
                             }
 
                             r.jm_init();
@@ -7194,7 +7181,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 310];
+                                    useObsForLearner.size(0) * 310];
                             }
 
                             r.km_init();
@@ -7217,7 +7204,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 311];
+                                    useObsForLearner.size(0) * 311];
                             }
 
                             r.lm_init();
@@ -7240,7 +7227,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 312];
+                                    useObsForLearner.size(0) * 312];
                             }
 
                             r.mm_init();
@@ -7263,7 +7250,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 313];
+                                    useObsForLearner.size(0) * 313];
                             }
 
                             r.nm_init();
@@ -7286,7 +7273,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 314];
+                                    useObsForLearner.size(0) * 314];
                             }
 
                             r.om_init();
@@ -7309,7 +7296,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 315];
+                                    useObsForLearner.size(0) * 315];
                             }
 
                             r.pm_init();
@@ -7332,7 +7319,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 316];
+                                    useObsForLearner.size(0) * 316];
                             }
 
                             r.qm_init();
@@ -7355,7 +7342,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 317];
+                                    useObsForLearner.size(0) * 317];
                             }
 
                             r.rm_init();
@@ -7378,7 +7365,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 318];
+                                    useObsForLearner.size(0) * 318];
                             }
 
                             r.sm_init();
@@ -7401,7 +7388,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 319];
+                                    useObsForLearner.size(0) * 319];
                             }
 
                             r.tm_init();
@@ -7424,7 +7411,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 320];
+                                    useObsForLearner.size(0) * 320];
                             }
 
                             r.um_init();
@@ -7447,7 +7434,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 321];
+                                    useObsForLearner.size(0) * 321];
                             }
 
                             r.vm_init();
@@ -7470,7 +7457,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 322];
+                                    useObsForLearner.size(0) * 322];
                             }
 
                             r.wm_init();
@@ -7493,7 +7480,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 323];
+                                    useObsForLearner.size(0) * 323];
                             }
 
                             r.xm_init();
@@ -7516,7 +7503,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 324];
+                                    useObsForLearner.size(0) * 324];
                             }
 
                             r.ym_init();
@@ -7539,7 +7526,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 325];
+                                    useObsForLearner.size(0) * 325];
                             }
 
                             r.an_init();
@@ -7562,7 +7549,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 326];
+                                    useObsForLearner.size(0) * 326];
                             }
 
                             r.bn_init();
@@ -7585,7 +7572,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 327];
+                                    useObsForLearner.size(0) * 327];
                             }
 
                             r.cn_init();
@@ -7608,7 +7595,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 328];
+                                    useObsForLearner.size(0) * 328];
                             }
 
                             r.dn_init();
@@ -7631,7 +7618,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 329];
+                                    useObsForLearner.size(0) * 329];
                             }
 
                             r.en_init();
@@ -7654,7 +7641,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 330];
+                                    useObsForLearner.size(0) * 330];
                             }
 
                             r.fn_init();
@@ -7677,7 +7664,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 331];
+                                    useObsForLearner.size(0) * 331];
                             }
 
                             r.gn_init();
@@ -7700,7 +7687,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 332];
+                                    useObsForLearner.size(0) * 332];
                             }
 
                             r.hn_init();
@@ -7723,7 +7710,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 333];
+                                    useObsForLearner.size(0) * 333];
                             }
 
                             r.in_init();
@@ -7746,7 +7733,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 334];
+                                    useObsForLearner.size(0) * 334];
                             }
 
                             r.jn_init();
@@ -7769,7 +7756,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 335];
+                                    useObsForLearner.size(0) * 335];
                             }
 
                             r.kn_init();
@@ -7792,7 +7779,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 336];
+                                    useObsForLearner.size(0) * 336];
                             }
 
                             r.ln_init();
@@ -7815,7 +7802,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 337];
+                                    useObsForLearner.size(0) * 337];
                             }
 
                             r.mn_init();
@@ -7838,7 +7825,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 338];
+                                    useObsForLearner.size(0) * 338];
                             }
 
                             r.nn_init();
@@ -7861,7 +7848,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 339];
+                                    useObsForLearner.size(0) * 339];
                             }
 
                             r.on_init();
@@ -7884,7 +7871,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 340];
+                                    useObsForLearner.size(0) * 340];
                             }
 
                             r.pn_init();
@@ -7907,7 +7894,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 341];
+                                    useObsForLearner.size(0) * 341];
                             }
 
                             r.qn_init();
@@ -7930,7 +7917,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 342];
+                                    useObsForLearner.size(0) * 342];
                             }
 
                             r.rn_init();
@@ -7953,7 +7940,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 343];
+                                    useObsForLearner.size(0) * 343];
                             }
 
                             r.sn_init();
@@ -7976,7 +7963,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 344];
+                                    useObsForLearner.size(0) * 344];
                             }
 
                             r.tn_init();
@@ -7999,7 +7986,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 345];
+                                    useObsForLearner.size(0) * 345];
                             }
 
                             r.un_init();
@@ -8022,7 +8009,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 346];
+                                    useObsForLearner.size(0) * 346];
                             }
 
                             r.vn_init();
@@ -8045,7 +8032,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 347];
+                                    useObsForLearner.size(0) * 347];
                             }
 
                             r.wn_init();
@@ -8068,7 +8055,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 348];
+                                    useObsForLearner.size(0) * 348];
                             }
 
                             r.xn_init();
@@ -8091,7 +8078,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 349];
+                                    useObsForLearner.size(0) * 349];
                             }
 
                             r.yn_init();
@@ -8114,7 +8101,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 350];
+                                    useObsForLearner.size(0) * 350];
                             }
 
                             r.ao_init();
@@ -8137,7 +8124,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 351];
+                                    useObsForLearner.size(0) * 351];
                             }
 
                             r.bo_init();
@@ -8160,7 +8147,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 352];
+                                    useObsForLearner.size(0) * 352];
                             }
 
                             r.co_init();
@@ -8183,7 +8170,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 353];
+                                    useObsForLearner.size(0) * 353];
                             }
 
                             r.do_init();
@@ -8206,7 +8193,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 354];
+                                    useObsForLearner.size(0) * 354];
                             }
 
                             r.eo_init();
@@ -8229,7 +8216,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 355];
+                                    useObsForLearner.size(0) * 355];
                             }
 
                             r.fo_init();
@@ -8252,7 +8239,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 356];
+                                    useObsForLearner.size(0) * 356];
                             }
 
                             r.go_init();
@@ -8275,7 +8262,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 357];
+                                    useObsForLearner.size(0) * 357];
                             }
 
                             r.ho_init();
@@ -8298,7 +8285,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 358];
+                                    useObsForLearner.size(0) * 358];
                             }
 
                             r.io_init();
@@ -8321,7 +8308,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 359];
+                                    useObsForLearner.size(0) * 359];
                             }
 
                             r.jo_init();
@@ -8344,7 +8331,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 360];
+                                    useObsForLearner.size(0) * 360];
                             }
 
                             r.ko_init();
@@ -8367,7 +8354,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 361];
+                                    useObsForLearner.size(0) * 361];
                             }
 
                             r.lo_init();
@@ -8390,7 +8377,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 362];
+                                    useObsForLearner.size(0) * 362];
                             }
 
                             r.mo_init();
@@ -8413,7 +8400,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 363];
+                                    useObsForLearner.size(0) * 363];
                             }
 
                             r.no_init();
@@ -8436,7 +8423,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 364];
+                                    useObsForLearner.size(0) * 364];
                             }
 
                             r.oo_init();
@@ -8459,7 +8446,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 365];
+                                    useObsForLearner.size(0) * 365];
                             }
 
                             r.po_init();
@@ -8482,7 +8469,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 366];
+                                    useObsForLearner.size(0) * 366];
                             }
 
                             r.qo_init();
@@ -8505,7 +8492,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 367];
+                                    useObsForLearner.size(0) * 367];
                             }
 
                             r.ro_init();
@@ -8528,7 +8515,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 368];
+                                    useObsForLearner.size(0) * 368];
                             }
 
                             r.so_init();
@@ -8551,7 +8538,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 369];
+                                    useObsForLearner.size(0) * 369];
                             }
 
                             r.to_init();
@@ -8574,7 +8561,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 370];
+                                    useObsForLearner.size(0) * 370];
                             }
 
                             r.uo_init();
@@ -8597,7 +8584,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 371];
+                                    useObsForLearner.size(0) * 371];
                             }
 
                             r.vo_init();
@@ -8620,7 +8607,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 372];
+                                    useObsForLearner.size(0) * 372];
                             }
 
                             r.wo_init();
@@ -8643,7 +8630,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 373];
+                                    useObsForLearner.size(0) * 373];
                             }
 
                             r.xo_init();
@@ -8666,7 +8653,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 374];
+                                    useObsForLearner.size(0) * 374];
                             }
 
                             r.yo_init();
@@ -8689,7 +8676,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 375];
+                                    useObsForLearner.size(0) * 375];
                             }
 
                             r.ap_init();
@@ -8712,7 +8699,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 376];
+                                    useObsForLearner.size(0) * 376];
                             }
 
                             r.bp_init();
@@ -8735,7 +8722,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 377];
+                                    useObsForLearner.size(0) * 377];
                             }
 
                             r.cp_init();
@@ -8758,7 +8745,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 378];
+                                    useObsForLearner.size(0) * 378];
                             }
 
                             r.dp_init();
@@ -8781,7 +8768,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 379];
+                                    useObsForLearner.size(0) * 379];
                             }
 
                             r.ep_init();
@@ -8804,7 +8791,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 380];
+                                    useObsForLearner.size(0) * 380];
                             }
 
                             r.fp_init();
@@ -8827,7 +8814,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 381];
+                                    useObsForLearner.size(0) * 381];
                             }
 
                             r.gp_init();
@@ -8850,7 +8837,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 382];
+                                    useObsForLearner.size(0) * 382];
                             }
 
                             r.hp_init();
@@ -8873,7 +8860,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 383];
+                                    useObsForLearner.size(0) * 383];
                             }
 
                             r.ip_init();
@@ -8896,7 +8883,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 384];
+                                    useObsForLearner.size(0) * 384];
                             }
 
                             r.jp_init();
@@ -8919,7 +8906,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 385];
+                                    useObsForLearner.size(0) * 385];
                             }
 
                             r.kp_init();
@@ -8942,7 +8929,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 386];
+                                    useObsForLearner.size(0) * 386];
                             }
 
                             r.lp_init();
@@ -8965,7 +8952,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 387];
+                                    useObsForLearner.size(0) * 387];
                             }
 
                             r.mp_init();
@@ -8988,7 +8975,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 388];
+                                    useObsForLearner.size(0) * 388];
                             }
 
                             r.np_init();
@@ -9011,7 +8998,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 389];
+                                    useObsForLearner.size(0) * 389];
                             }
 
                             r.op_init();
@@ -9034,7 +9021,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 390];
+                                    useObsForLearner.size(0) * 390];
                             }
 
                             r.pp_init();
@@ -9057,7 +9044,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 391];
+                                    useObsForLearner.size(0) * 391];
                             }
 
                             r.qp_init();
@@ -9080,7 +9067,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 392];
+                                    useObsForLearner.size(0) * 392];
                             }
 
                             r.rp_init();
@@ -9103,7 +9090,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 393];
+                                    useObsForLearner.size(0) * 393];
                             }
 
                             r.sp_init();
@@ -9126,7 +9113,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 394];
+                                    useObsForLearner.size(0) * 394];
                             }
 
                             r.tp_init();
@@ -9149,7 +9136,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 395];
+                                    useObsForLearner.size(0) * 395];
                             }
 
                             r.up_init();
@@ -9172,7 +9159,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 396];
+                                    useObsForLearner.size(0) * 396];
                             }
 
                             r.vp_init();
@@ -9195,7 +9182,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 397];
+                                    useObsForLearner.size(0) * 397];
                             }
 
                             r.wp_init();
@@ -9218,7 +9205,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 398];
+                                    useObsForLearner.size(0) * 398];
                             }
 
                             r.xp_init();
@@ -9234,7 +9221,7 @@ namespace coder {
                             b_useObsForLearner.set_size(useObsForLearner.size(0));
                             for (i = 0; i < loop_ub; i++) {
                                 b_useObsForLearner[i] = useObsForLearner[i +
-                                                                         useObsForLearner.size(0) * 399];
+                                    useObsForLearner.size(0) * 399];
                             }
 
                             r.yp_init();
@@ -9249,9 +9236,3 @@ namespace coder {
         }
     }
 }
-
-//
-// File trailer for aggregatePredict.cpp
-//
-// [EOF]
-//

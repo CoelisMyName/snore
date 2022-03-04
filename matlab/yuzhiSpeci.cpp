@@ -1,28 +1,14 @@
-//
-// File: yuzhiSpeci.cpp
-//
-// MATLAB Coder version            : 5.2
-// C/C++ source code generated on  : 27-Feb-2022 11:31:05
-//
-
-// Include Files
 #include "yuzhiSpeci.h"
 #include "histcounts.h"
 #include "minOrMax.h"
 #include "rt_nonfinite.h"
 #include "sort.h"
 #include "coder_array.h"
+#include "rt_nonfinite.h"
 #include <string.h>
 
-// Function Definitions
-//
-// function pianyi = yuzhiSpeci(d, position)
-//
-// Arguments    : const coder::array<double, 1U> &d
-//                double position
-// Return Type  : double
-//
-double yuzhiSpeci(const coder::array<double, 1U> &d, double position) {
+double yuzhiSpeci(const coder::array<double, 1U> &d, double position)
+{
     coder::array<double, 2U> b_ddnns_data;
     coder::array<double, 2U> c_ddnns_data;
     coder::array<double, 2U> d_ddnns_data;
@@ -46,30 +32,26 @@ double yuzhiSpeci(const coder::array<double, 1U> &d, double position) {
     int ddnns_size[2];
     int i;
     int iindx;
+    int k;
     int partialTrueCount;
-    int trueCount;
-    // 'yuzhiSpeci:2' up = (max(d) - min(d)) / 200 * position + min(d);
     up_tmp = coder::internal::minimum(d);
     b_up_tmp = (coder::internal::maximum(d) - up_tmp) / 200.0;
     up = b_up_tmp * position + up_tmp;
-    // 'yuzhiSpeci:3' down = (max(d) - min(d)) / 200 * (position - 1) + min(d);
     down = b_up_tmp * (position - 1.0) + up_tmp;
-    // 'yuzhiSpeci:4' dn = sort(d);
     x.set_size(d.size(0));
     iindx = d.size(0);
-    for (trueCount = 0; trueCount < iindx; trueCount++) {
-        x[trueCount] = d[trueCount];
+    for (partialTrueCount = 0; partialTrueCount < iindx; partialTrueCount++) {
+        x[partialTrueCount] = d[partialTrueCount];
     }
     coder::internal::sort(x);
-    // 'yuzhiSpeci:5' ddn = dn(dn <= up);
     iindx = x.size(0) - 1;
-    trueCount = 0;
+    k = 0;
     for (i = 0; i <= iindx; i++) {
         if (x[i] <= up) {
-            trueCount++;
+            k++;
         }
     }
-    ddn.set_size(trueCount);
+    ddn.set_size(k);
     partialTrueCount = 0;
     for (i = 0; i <= iindx; i++) {
         if (x[i] <= up) {
@@ -77,12 +59,11 @@ double yuzhiSpeci(const coder::array<double, 1U> &d, double position) {
             partialTrueCount++;
         }
     }
-    // 'yuzhiSpeci:6' ddn = ddn(ddn > down);
     iindx = ddn.size(0) - 1;
-    trueCount = 0;
+    k = 0;
     for (i = 0; i <= iindx; i++) {
         if (ddn[i] > down) {
-            trueCount++;
+            k++;
         }
     }
     partialTrueCount = 0;
@@ -92,55 +73,63 @@ double yuzhiSpeci(const coder::array<double, 1U> &d, double position) {
             partialTrueCount++;
         }
     }
-    ddn.set_size(trueCount);
-    // 'yuzhiSpeci:7' [ddnn, ~] = histcounts(ddn, 20);
+    ddn.set_size(k);
     coder::histcounts(ddn, ddnn_data, ddnn_size, a__1_data, a__1_size);
-    // 'yuzhiSpeci:8' [~, ddmp] = max(ddnn);
-    coder::internal::b_maximum(ddnn_data, &up_tmp, &iindx);
-    // 'yuzhiSpeci:9' ddnns = sort(ddnn);
+    if (!rtIsNaN(ddnn_data[0])) {
+        iindx = 1;
+    } else {
+        boolean_T exitg1;
+        iindx = 0;
+        k = 2;
+        exitg1 = false;
+        while ((!exitg1) && (k <= 20)) {
+            if (!rtIsNaN(ddnn_data[k - 1])) {
+                iindx = k;
+                exitg1 = true;
+            } else {
+                k++;
+            }
+        }
+    }
+    if (iindx == 0) {
+        iindx = 1;
+    } else {
+        up_tmp = ddnn_data[iindx - 1];
+        partialTrueCount = iindx + 1;
+        for (k = partialTrueCount; k < 21; k++) {
+            b_up_tmp = ddnn_data[k - 1];
+            if (up_tmp < b_up_tmp) {
+                up_tmp = b_up_tmp;
+                iindx = k;
+            }
+        }
+    }
     ddnns_size[0] = 1;
     ddnns_size[1] = 20;
     memcpy(&ddnns_data[0], &ddnn_data[0], 20U * sizeof(double));
     coder::internal::sort(ddnns_data, ddnns_size);
-    // 'yuzhiSpeci:10' m = ddnns(end) / ddnns(end - 1);
     m = ddnns_data[ddnns_size[1] - 1] / ddnns_data[ddnns_size[1] - 2];
-    // 'yuzhiSpeci:12' if ddmp > 15
     if (iindx > 15) {
-        // 'yuzhiSpeci:13' pianyi = max(ddnns);
         b_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         pianyi = coder::internal::maximum(b_ddnns_data);
     } else if (m >= 20.0) {
-        // 'yuzhiSpeci:14' elseif m >= 20
-        // 'yuzhiSpeci:15' pianyi = (max(ddnns) - min(ddnns)) / 20 * (ddmp + 4)
-        // + min(ddnns);
         c_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         up_tmp = coder::internal::minimum(c_ddnns_data);
         g_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         pianyi = (coder::internal::maximum(g_ddnns_data) - up_tmp) / 20.0 *
-                 (static_cast<double>(iindx) + 4.0) +
+                     (static_cast<double>(iindx) + 4.0) +
                  up_tmp;
     } else if (m > 10.0) {
-        // 'yuzhiSpeci:16' elseif m > 10
-        // 'yuzhiSpeci:17' pianyi = (max(ddnns) - min(ddnns)) / 20 * (ddmp + 5)
-        // + min(ddnns);
         e_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         f_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         h_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         pianyi = (coder::internal::maximum(e_ddnns_data) -
                   coder::internal::minimum(f_ddnns_data)) /
-                 20.0 * (static_cast<double>(iindx) + 5.0) +
+                     20.0 * (static_cast<double>(iindx) + 5.0) +
                  coder::internal::minimum(h_ddnns_data);
     } else {
-        // 'yuzhiSpeci:18' else
-        // 'yuzhiSpeci:19' pianyi = max(ddnns);
         d_ddnns_data.set(&ddnns_data[0], ddnns_size[0], ddnns_size[1]);
         pianyi = coder::internal::maximum(d_ddnns_data);
     }
     return pianyi;
 }
-
-//
-// File trailer for yuzhiSpeci.cpp
-//
-// [EOF]
-//
