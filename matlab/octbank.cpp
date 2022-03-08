@@ -5,6 +5,7 @@
 #include "eig.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 #include <string.h>
 
@@ -14,9 +15,9 @@ void octbank(const coder::array<double, 1U> &x, double p[8])
                                    1000.0, 2000.0, 4000.0, 8000.0};
     static const signed char b_iv[18] = {-1, 0, 0, 0, -1, 0, 0, 0, -1,
                                          0,  0, 0, 0, 0,  0, 0, 0, 0};
-    static const signed char b_iv1[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
+    static const signed char iv1[9] = {1, 0, 0, 0, 1, 0, 0, 0, 1};
     static const signed char b[7] = {1, 0, -3, 0, 3, 0, -1};
-    static const signed char b_iv2[6] = {1, 1, 1, -1, -1, -1};
+    static const signed char iv2[6] = {1, 1, 1, -1, -1, -1};
     coder::array<double, 2U> y;
     coder::array<double, 1U> b_y;
     coder::array<double, 1U> c_x;
@@ -104,15 +105,13 @@ void octbank(const coder::array<double, 1U> &x, double p[8])
         for (b_i = 0; b_i < 3; b_i++) {
             t1_tmp[6 * b_i] = Wn1 * (a[3 * b_i] / q) * 0.5 / 2.0;
             jA = 6 * (b_i + 3);
-            t1_tmp[jA] = Wn1 * static_cast<double>(b_iv1[3 * b_i]) * 0.5 / 2.0;
+            t1_tmp[jA] = Wn1 * static_cast<double>(iv1[3 * b_i]) * 0.5 / 2.0;
             jBcol = 3 * b_i + 1;
             t1_tmp[6 * b_i + 1] = Wn1 * (a[jBcol] / q) * 0.5 / 2.0;
-            t1_tmp[jA + 1] =
-                Wn1 * static_cast<double>(b_iv1[jBcol]) * 0.5 / 2.0;
+            t1_tmp[jA + 1] = Wn1 * static_cast<double>(iv1[jBcol]) * 0.5 / 2.0;
             jBcol = 3 * b_i + 2;
             t1_tmp[6 * b_i + 2] = Wn1 * (a[jBcol] / q) * 0.5 / 2.0;
-            t1_tmp[jA + 2] =
-                Wn1 * static_cast<double>(b_iv1[jBcol]) * 0.5 / 2.0;
+            t1_tmp[jA + 2] = Wn1 * static_cast<double>(iv1[jBcol]) * 0.5 / 2.0;
         }
         for (b_i = 0; b_i < 6; b_i++) {
             t1_tmp[6 * b_i + 3] =
@@ -244,7 +243,7 @@ void octbank(const coder::array<double, 1U> &x, double p[8])
             Wn1 = q;
         }
         for (c_i = 0; c_i < 6; c_i++) {
-            b_x[c_i].re = zWn_re - static_cast<double>(b_iv2[c_i]);
+            b_x[c_i].re = zWn_re - static_cast<double>(iv2[c_i]);
             b_x[c_i].im = zWn_im;
         }
         zWn_re = b_x[0].re;

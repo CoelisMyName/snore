@@ -2,6 +2,7 @@
 #include "eml_i64relops.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 void noise_segment(const coder::array<long long, 1U> &starts,
                    const coder::array<long long, 1U> &ends, double fs,

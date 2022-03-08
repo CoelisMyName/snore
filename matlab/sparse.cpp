@@ -4,6 +4,7 @@
 #include "rt_nonfinite.h"
 #include "sparse1.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 namespace coder {
 void b_sparse(const ::coder::array<double, 2U> &varargin_1,

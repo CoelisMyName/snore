@@ -15,6 +15,7 @@
 #include "rt_nonfinite.h"
 #include "var.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 #include <string.h>
 

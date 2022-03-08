@@ -1,5 +1,6 @@
 #include "mod.h"
 #include "rt_nonfinite.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 

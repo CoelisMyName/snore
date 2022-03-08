@@ -2,6 +2,7 @@
 #include "blockedSummation.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 

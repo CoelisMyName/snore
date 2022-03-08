@@ -12,6 +12,7 @@
 #include "sort.h"
 #include "xzggev.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 #include <string.h>

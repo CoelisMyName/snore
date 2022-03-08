@@ -2,6 +2,7 @@
 #include "rt_nonfinite.h"
 #include "xdlanv2.h"
 #include "xzlarfg.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 #include <string.h>

@@ -1,6 +1,7 @@
 #include "blockedSummation.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 namespace coder {
 double blockedSummation(const ::coder::array<double, 1U> &x, int vlen)

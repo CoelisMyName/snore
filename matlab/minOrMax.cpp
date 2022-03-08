@@ -1,6 +1,7 @@
 #include "minOrMax.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 
 namespace coder {
@@ -130,32 +131,6 @@ double maximum(const ::coder::array<double, 1U> &x)
         }
     }
     return ex;
-}
-
-void minimum(const ::coder::array<double, 2U> &x,
-             ::coder::array<double, 2U> &ex)
-{
-    int n;
-    n = x.size(1);
-    ex.set_size(1, x.size(1));
-    for (int j = 0; j < n; j++) {
-        double a;
-        double b;
-        boolean_T p;
-        a = x[2 * j];
-        ex[j] = a;
-        b = x[2 * j + 1];
-        if (rtIsNaN(b)) {
-            p = false;
-        } else if (rtIsNaN(a)) {
-            p = true;
-        } else {
-            p = (a > b);
-        }
-        if (p) {
-            ex[j] = b;
-        }
-    }
 }
 
 void minimum(const ::coder::array<double, 2U> &x, double ex_data[],

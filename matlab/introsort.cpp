@@ -6,6 +6,7 @@
 #include "stack1.h"
 #include "coder_array.h"
 #include "coder_bounded_array.h"
+#include "mylock.h"
 
 namespace coder {
 namespace internal {

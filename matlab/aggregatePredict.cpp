@@ -3,6 +3,7 @@
 #include "predictOneWithCache.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 namespace coder
 {

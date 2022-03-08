@@ -10,6 +10,7 @@
 #include "vad_wave.h"
 #include "yuzhiSpeci.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 

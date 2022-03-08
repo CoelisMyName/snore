@@ -1,6 +1,7 @@
 #include "cepstralCoefficients.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 #include <string.h>
 

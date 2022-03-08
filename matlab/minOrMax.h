@@ -15,9 +15,6 @@ double maximum(const ::coder::array<double, 2U> &x);
 
 double maximum(const ::coder::array<double, 1U> &x);
 
-void minimum(const ::coder::array<double, 2U> &x,
-             ::coder::array<double, 2U> &ex);
-
 void minimum(const ::coder::array<double, 2U> &x, double ex_data[],
              int ex_size[2]);
 

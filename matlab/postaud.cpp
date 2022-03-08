@@ -3,6 +3,7 @@
 #include "asinh.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 
 void postaud(const coder::array<double, 2U> &x, double b_fmax,

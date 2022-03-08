@@ -2,6 +2,7 @@
 #include "SnoringRecognition_rtwutil.h"
 #include "rt_nonfinite.h"
 #include "xnrm2.h"
+#include "mylock.h"
 #include <math.h>
 
 namespace coder {

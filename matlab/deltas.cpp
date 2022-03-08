@@ -1,6 +1,7 @@
 #include "deltas.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 void deltas(const coder::array<double, 2U> &x, coder::array<double, 2U> &d)
 {

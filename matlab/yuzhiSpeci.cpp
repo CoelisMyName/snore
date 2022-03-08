@@ -4,6 +4,7 @@
 #include "rt_nonfinite.h"
 #include "sort.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <string.h>
 

@@ -1,12 +1,13 @@
 #include "mfcc_m.h"
-#include "FFTImplementationCallback.h"
 #include "SnoringRecognition_rtwutil.h"
+#include "fft.h"
 #include "hamming.h"
 #include "melbankm.h"
 #include "minOrMax.h"
 #include "rt_nonfinite.h"
 #include "sparse1.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 #include <string.h>
@@ -22,14 +23,11 @@ void mfcc_m(const coder::array<double, 1U> &x, double fs, double frameSize,
     coder::array<creal_T, 1U> b_x;
     coder::array<double, 2U> b_bank;
     coder::array<double, 2U> b_xx;
-    coder::array<double, 2U> costab;
     coder::array<double, 2U> dtm;
     coder::array<double, 2U> inds;
     coder::array<double, 2U> m;
     coder::array<double, 2U> r;
     coder::array<double, 2U> result;
-    coder::array<double, 2U> sintab;
-    coder::array<double, 2U> sintabinv;
     coder::array<double, 1U> a;
     coder::array<double, 1U> c_x;
     coder::array<double, 1U> indf;
@@ -51,7 +49,7 @@ void mfcc_m(const coder::array<double, 1U> &x, double fs, double frameSize,
     int nx;
     signed char input_sizes_idx_1;
     signed char sizes_idx_1;
-    boolean_T useRadix2;
+    boolean_T empty_non_axis_sizes;
     melbankm(frameSize, fs, &bank);
     b_bank.set_size(16, bank.n);
     naxpy = bank.n << 4;
@@ -180,22 +178,7 @@ void mfcc_m(const coder::array<double, 1U> &x, double fs, double frameSize,
         for (nx = 0; nx < loop_ub; nx++) {
             xx[nx] = b_xx[b_i + b_xx.size(0) * nx] * a[nx];
         }
-        if (xx.size(0) == 0) {
-            b_x.set_size(0);
-        } else {
-            useRadix2 = ((xx.size(0) & (xx.size(0) - 1)) == 0);
-            coder::internal::FFTImplementationCallback::get_algo_sizes(
-                xx.size(0), useRadix2, &cend, &naxpy);
-            coder::internal::FFTImplementationCallback::generate_twiddle_tables(
-                naxpy, useRadix2, costab, sintab, sintabinv);
-            if (useRadix2) {
-                coder::internal::FFTImplementationCallback::
-                    r2br_r2dit_trig_impl(xx, xx.size(0), costab, sintab, b_x);
-            } else {
-                coder::internal::FFTImplementationCallback::dobluesteinfft(
-                    xx, cend, xx.size(0), costab, sintab, sintabinv, b_x);
-            }
-        }
+        coder::fft(xx, b_x);
         nx = b_x.size(0);
         t.set_size(b_x.size(0));
         for (k = 0; k < nx; k++) {
@@ -212,9 +195,9 @@ void mfcc_m(const coder::array<double, 1U> &x, double fs, double frameSize,
         }
         memset(&y_data[0], 0, 16U * sizeof(double));
         for (k = 0; k < inner; k++) {
-            naxpy = k << 4;
-            for (cend = 0; cend < 16; cend++) {
-                y_data[cend] += b_bank[naxpy + cend] * t[k];
+            cend = k << 4;
+            for (idx = 0; idx < 16; idx++) {
+                y_data[idx] += b_bank[cend + idx] * t[k];
             }
         }
         c_x.set_size(16);
@@ -256,13 +239,13 @@ void mfcc_m(const coder::array<double, 1U> &x, double fs, double frameSize,
     } else {
         cend = 0;
     }
-    useRadix2 = (cend == 0);
-    if (useRadix2 || (m.size(0) != 0)) {
+    empty_non_axis_sizes = (cend == 0);
+    if (empty_non_axis_sizes || (m.size(0) != 0)) {
         input_sizes_idx_1 = 8;
     } else {
         input_sizes_idx_1 = 0;
     }
-    if (useRadix2 || (dtm.size(0) != 0)) {
+    if (empty_non_axis_sizes || (dtm.size(0) != 0)) {
         sizes_idx_1 = 8;
     } else {
         sizes_idx_1 = 0;

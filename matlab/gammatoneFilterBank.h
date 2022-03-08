@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <cstdlib>
 
-struct cell_wrap_68 {
+struct cell_wrap_80 {
     unsigned int f1[8];
 };
 
@@ -26,7 +26,7 @@ class gammatoneFilterBank {
   private:
     boolean_T isSetupComplete;
     boolean_T TunablePropsChanged;
-    cell_wrap_68 inputVarSize[1];
+    cell_wrap_80 inputVarSize[1];
     double pCoeffs[624];
     double pStates[208];
     double pCenterFrequencies[26];
@@ -50,7 +50,7 @@ class b_gammatoneFilterBank {
   private:
     boolean_T isSetupComplete;
     boolean_T TunablePropsChanged;
-    cell_wrap_68 inputVarSize[1];
+    cell_wrap_80 inputVarSize[1];
     double pCoeffs[696];
     double pStates[232];
     double pCenterFrequencies[29];
@@ -71,7 +71,7 @@ class c_gammatoneFilterBank {
   private:
     boolean_T isSetupComplete;
     boolean_T TunablePropsChanged;
-    cell_wrap_68 inputVarSize[1];
+    cell_wrap_80 inputVarSize[1];
     double pCoeffs[840];
     double pStates[280];
     double pCenterFrequencies[35];
@@ -92,7 +92,7 @@ class d_gammatoneFilterBank {
   private:
     boolean_T isSetupComplete;
     boolean_T TunablePropsChanged;
-    cell_wrap_68 inputVarSize[1];
+    cell_wrap_80 inputVarSize[1];
     double pCoeffs[864];
     double pStates[288];
     double pCenterFrequencies[36];
@@ -113,7 +113,7 @@ class e_gammatoneFilterBank {
   private:
     boolean_T isSetupComplete;
     boolean_T TunablePropsChanged;
-    cell_wrap_68 inputVarSize[1];
+    cell_wrap_80 inputVarSize[1];
     double pCoeffs[984];
     double pStates[328];
     double pCenterFrequencies[41];
@@ -134,7 +134,7 @@ class f_gammatoneFilterBank {
   private:
     boolean_T isSetupComplete;
     boolean_T TunablePropsChanged;
-    cell_wrap_68 inputVarSize[1];
+    cell_wrap_80 inputVarSize[1];
     double pCoeffs[1008];
     double pStates[336];
     double pCenterFrequencies[42];

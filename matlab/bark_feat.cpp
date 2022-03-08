@@ -2,6 +2,7 @@
 #include "BARKenergy.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 void bark_feat(const coder::array<double, 1U> &sig, double fs,
                double barkee[17])

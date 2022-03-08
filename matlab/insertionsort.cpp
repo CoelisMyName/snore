@@ -2,6 +2,7 @@
 #include "anonymous_function.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 namespace coder {
 namespace internal {

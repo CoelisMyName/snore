@@ -3,6 +3,7 @@
 #include "rt_nonfinite.h"
 #include "xzhgeqz.h"
 #include "xzlartg.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 
 namespace coder {

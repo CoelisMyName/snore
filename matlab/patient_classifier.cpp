@@ -3,6 +3,7 @@
 #include "SnoringRecognition_types.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 double patient_classifier(SnoringRecognitionStackData *SD,
                           const coder::array<double, 2U> &MFCC_feature,

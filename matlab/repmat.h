@@ -7,11 +7,9 @@
 #include <cstdlib>
 
 namespace coder {
-void repmat(const double a[13], double b[52]);
-
 void repmat(const double a[4160], const double varargin_1[3],
             ::coder::array<double, 3U> &b);
 
-} // namespace coder
+}
 
 #endif

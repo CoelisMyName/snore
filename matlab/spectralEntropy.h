@@ -16,15 +16,6 @@ void c_spectralEntropy(const ::coder::array<double, 1U> &x,
 void d_spectralEntropy(const ::coder::array<double, 1U> &x,
                        ::coder::array<double, 1U> &entropy);
 
-void e_spectralEntropy(const ::coder::array<double, 1U> &x,
-                       ::coder::array<double, 1U> &entropy);
-
-void f_spectralEntropy(const ::coder::array<double, 1U> &x,
-                       ::coder::array<double, 1U> &entropy);
-
-void g_spectralEntropy(const ::coder::array<double, 1U> &x,
-                       ::coder::array<double, 1U> &entropy);
-
 void spectralEntropy(const ::coder::array<double, 1U> &x,
                      ::coder::array<double, 1U> &entropy);
 

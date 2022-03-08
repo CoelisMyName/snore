@@ -2,6 +2,7 @@
 #include "colon.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 
@@ -15,10 +16,10 @@ void getCandidates(::coder::array<double, 2U> &domain, const double edge[2],
 {
     array<double, 2U> b_y;
     array<double, 2U> y;
-    double varargin_1_data[941];
+    double varargin_1_data[863];
     double lower;
     double upper;
-    int tmp_data[941];
+    int tmp_data[863];
     int i;
     int last;
     locs.set_size(domain.size(1));

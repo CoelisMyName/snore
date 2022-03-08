@@ -4,6 +4,7 @@
 #include "rt_nonfinite.h"
 #include "sqrt.h"
 #include "xzlartg.h"
+#include "mylock.h"
 #include <math.h>
 #include <string.h>
 

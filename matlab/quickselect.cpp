@@ -1,5 +1,6 @@
 #include "quickselect.h"
 #include "rt_nonfinite.h"
+#include "mylock.h"
 
 namespace coder {
 namespace internal {

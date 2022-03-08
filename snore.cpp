@@ -17,6 +17,7 @@ extern "C" {
 #include "matlab/cweight.h"
 #include "matlab/zweight.h"
 #include "matlab/SnoringRecognition_initialize.h"
+#include "matlab/SnoringRecognition_terminate.h"
 
 #include "matlab/bark_feat.h"
 #include "matlab/cep_feat.h"
@@ -42,7 +43,7 @@ extern "C" {
 
 #define FEAT_GTCC_COLUMN 20
 
-#ifdef ANDROID
+#ifdef __ANDROID__
 #include <android/log.h>
 #define LOG_D(tag, ...) __android_log_print(ANDROID_LOG_DEBUG, tag, __VA_ARGS__)
 static const char *const TAG = "snore";
@@ -477,18 +478,6 @@ private:
     coder::array<double, 1U> mSEVar;
 };
 
-void initialSox() {
-    int res = sox_init();
-    assert(res == SOX_SUCCESS);
-//    assert(sox_format_init() == SOX_SUCCESS);
-}
-
-void quitSox() {
-    int res = sox_quit();
-    assert(res == SOX_SUCCESS);
-//    sox_format_quit();
-}
-
 void freeEffects(sox_effect_t *effects[], int count) {
     for (int i = 0; i < count; ++i)
         free(effects[i]);
@@ -505,8 +494,16 @@ sox_encodinginfo_t getEncodingInfo() {
     return info;
 }
 
+SNORE_UNUSED void snore::snoreInitialize() {
+    SnoringRecognition_initialize();
+}
+
+SNORE_UNUSED void snore::snoreTerminate() {
+    SnoringRecognition_terminate();
+}
+
 SNORE_UNUSED void snore::generateNoiseProfile(SNORE_I16pcm &src, double start, double duration, const char *filename) {
-    initialSox();
+    sox_init();
     /** double转字符串 */
     char start_str[32], duration_str[32];
     sprintf(start_str, "%lf", start);
@@ -555,11 +552,11 @@ SNORE_UNUSED void snore::generateNoiseProfile(SNORE_I16pcm &src, double start, d
     sox_close(input_ft);
     sox_close(output_ft);
 
-    quitSox();
+    sox_quit();
 }
 
 SNORE_UNUSED void snore::reduceNoise(SNORE_I16pcm &src, SNORE_I16pcm &dst, const char *filename, double coefficient) {
-    initialSox();
+    sox_init();
     /** double转字符串 */
     char coefficient_str[32];
     sprintf(coefficient_str, "%lf", coefficient);
@@ -610,13 +607,13 @@ SNORE_UNUSED void snore::reduceNoise(SNORE_I16pcm &src, SNORE_I16pcm &dst, const
     dst.length = output_ft->olength;
     sox_close(input_ft);
     sox_close(output_ft);
-    quitSox();
+    sox_quit();
 }
 
 SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResult &modelResult) {
     auto &modelResultImpl = dynamic_cast<SNORE_ModelResultImpl &>(modelResult);
     modelResultImpl.clear();
-    SnoringRecognition_initialize();
+    snoreInitialize();
     double fs = pcm.fs;
     coder::array<double, 1U> x;
     coder::array<long long, 1U> starts, ends;
@@ -636,14 +633,7 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
     /**
      * 分类器分类
      */
-//#ifdef ANDROID
-//    LOG_D(TAG, "w_starts %d, w_ends %d", w_starts.size(1), w_ends.size(1));
-//    for(int i = 0; i < w_starts.size(1); ++i) {
-//        LOG_D(TAG, "start %.1f, end %.1f", w_starts[i], w_ends[i]);
-//    }
-//#endif
     classifier(x, fs, starts, ends, label);
-    modelResultImpl.clear();
     int64_t labelSize = label.size(0), startsSize = starts.size(0), endsSize = starts.size(0);
     modelResultImpl.mSignalIndexSize = std::min(labelSize, std::min(startsSize, endsSize));
     modelResultImpl.mSignalLabel = new double[modelResultImpl.mSignalIndexSize];
@@ -663,7 +653,7 @@ SNORE_UNUSED void snore::calculateModelResult(SNORE_F64pcm &pcm, SNORE_ModelResu
 SNORE_UNUSED void snore::calculateSPL(SNORE_F64pcm &src, SNORE_SPL &spl) {
     coder::array<double, 1U> x;
     x.set(src.raw, src.length);
-    SnoringRecognition_initialize();
+    snoreInitialize();
     aweight(x, spl.a_pow, spl.freq, &spl.a_sum);
     cweight(x, spl.c_pow, spl.freq, &spl.c_sum);
     zweight(x, spl.z_pow, spl.freq, &spl.z_sum);

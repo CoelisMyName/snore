@@ -4,6 +4,7 @@
 #include "gtcc.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 
 void gtcc_feat(SnoringRecognitionStackData *SD,

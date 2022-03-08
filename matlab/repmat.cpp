@@ -1,18 +1,9 @@
 #include "repmat.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
-#include <string.h>
+#include "mylock.h"
 
 namespace coder {
-void repmat(const double a[13], double b[52])
-{
-    for (int jtilecol = 0; jtilecol < 4; jtilecol++) {
-        int ibtile;
-        ibtile = jtilecol * 13;
-        memcpy(&b[ibtile], &a[0], 13U * sizeof(double));
-    }
-}
-
 void repmat(const double a[4160], const double varargin_1[3],
             ::coder::array<double, 3U> &b)
 {

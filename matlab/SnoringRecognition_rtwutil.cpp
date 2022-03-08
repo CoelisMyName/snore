@@ -1,5 +1,6 @@
 #include "SnoringRecognition_rtwutil.h"
 #include "rt_nonfinite.h"
+#include "mylock.h"
 #include "rt_defines.h"
 #include "rt_nonfinite.h"
 #include <math.h>

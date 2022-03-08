@@ -1,6 +1,7 @@
 #include "eml_i64relops.h"
 #include "SnoringRecognition_rtwutil.h"
 #include "rt_nonfinite.h"
+#include "mylock.h"
 
 namespace coder {
 boolean_T eml_i64relops(long long a, double b)

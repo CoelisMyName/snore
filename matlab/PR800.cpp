@@ -1,14 +1,15 @@
 #include "PR800.h"
-#include "FFTImplementationCallback.h"
 #include "SnoringRecognition_rtwutil.h"
 #include "blockedSummation.h"
 #include "enframe.h"
+#include "fft.h"
 #include "hamming.h"
 #include "mean.h"
 #include "minOrMax.h"
 #include "rt_nonfinite.h"
 #include "vvarstd.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 
 void PR800(const coder::array<double, 1U> &x, double Fs, double *PR800_mean,
@@ -17,10 +18,7 @@ void PR800(const coder::array<double, 1U> &x, double Fs, double *PR800_mean,
     coder::array<creal_T, 1U> Z;
     coder::array<double, 2U> b_PR800;
     coder::array<double, 2U> b_y;
-    coder::array<double, 2U> costab;
     coder::array<double, 2U> r;
-    coder::array<double, 2U> sintab;
-    coder::array<double, 2U> sintabinv;
     coder::array<double, 1U> b_x;
     coder::array<double, 1U> mag;
     coder::array<double, 1U> y;
@@ -36,8 +34,8 @@ void PR800(const coder::array<double, 1U> &x, double Fs, double *PR800_mean,
     int i3;
     int i4;
     int i5;
+    int k;
     int loop_ub;
-    int nRows;
     int nx;
     wlen = 0.02 * Fs;
     if (wlen < 0.0) {
@@ -56,8 +54,8 @@ void PR800(const coder::array<double, 1U> &x, double Fs, double *PR800_mean,
     b_y.set_size(r.size(1), r.size(0));
     nx = r.size(0);
     for (i = 0; i < nx; i++) {
-        nRows = r.size(1);
-        for (i1 = 0; i1 < nRows; i1++) {
+        k = r.size(1);
+        for (i1 = 0; i1 < k; i1++) {
             b_y[i1 + b_y.size(0) * i] = r[i + r.size(0) * i1];
         }
     }
@@ -91,27 +89,11 @@ void PR800(const coder::array<double, 1U> &x, double Fs, double *PR800_mean,
         for (i1 = 0; i1 < loop_ub; i1++) {
             y[i1] = b_y[i1 + b_y.size(0) * b_i];
         }
-        if (y.size(0) == 0) {
-            Z.set_size(0);
-        } else {
-            boolean_T useRadix2;
-            useRadix2 = ((y.size(0) & (y.size(0) - 1)) == 0);
-            coder::internal::FFTImplementationCallback::get_algo_sizes(
-                y.size(0), useRadix2, &nx, &nRows);
-            coder::internal::FFTImplementationCallback::generate_twiddle_tables(
-                nRows, useRadix2, costab, sintab, sintabinv);
-            if (useRadix2) {
-                coder::internal::FFTImplementationCallback::
-                    r2br_r2dit_trig_impl(y, y.size(0), costab, sintab, Z);
-            } else {
-                coder::internal::FFTImplementationCallback::dobluesteinfft(
-                    y, nx, y.size(0), costab, sintab, sintabinv, Z);
-            }
-        }
+        coder::fft(y, Z);
         nx = Z.size(0);
         mag.set_size(Z.size(0));
-        for (nRows = 0; nRows < nx; nRows++) {
-            mag[nRows] = rt_hypotd_snf(Z[nRows].re, Z[nRows].im);
+        for (k = 0; k < nx; k++) {
+            mag[k] = rt_hypotd_snf(Z[k].re, Z[k].im);
         }
         b_x.set_size(b_loop_ub);
         for (i1 = 0; i1 < b_loop_ub; i1++) {

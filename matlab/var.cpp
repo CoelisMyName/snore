@@ -2,6 +2,7 @@
 #include "rt_nonfinite.h"
 #include "vvarstd.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 namespace coder {
 void var(const ::coder::array<double, 2U> &x, double y_data[], int y_size[2])

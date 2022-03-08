@@ -3,6 +3,7 @@
 #include "filter.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <string.h>
 
 namespace coder {

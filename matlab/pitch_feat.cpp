@@ -5,6 +5,7 @@
 #include "rt_nonfinite.h"
 #include "vvarstd.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 void pitch_feat(const coder::array<double, 1U> &sig, double fs,
                 double *period_mean, double *period_max, double *period_min,

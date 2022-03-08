@@ -2,6 +2,7 @@
 #include "eml_i64relops.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 
 void vad_wave(const coder::array<double, 1U> &array,

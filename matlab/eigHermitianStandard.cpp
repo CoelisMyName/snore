@@ -7,6 +7,7 @@
 #include "xdlapy3.h"
 #include "xnrm2.h"
 #include "xzhseqr.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 #include <math.h>
 #include <string.h>

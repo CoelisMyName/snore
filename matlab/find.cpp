@@ -1,6 +1,7 @@
 #include "find.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 
 namespace coder {
 void eml_find(const ::coder::array<boolean_T, 2U> &x, int i_data[],

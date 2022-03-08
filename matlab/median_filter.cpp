@@ -2,6 +2,7 @@
 #include "quickselect.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include "rt_nonfinite.h"
 
 void median_filter(const coder::array<double, 1U> &array,

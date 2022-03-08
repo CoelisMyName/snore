@@ -4,6 +4,7 @@
 #include "octbank.h"
 #include "rt_nonfinite.h"
 #include "coder_array.h"
+#include "mylock.h"
 #include <math.h>
 
 void aweight(const coder::array<double, 1U> &x, double p[8], double f[8],
