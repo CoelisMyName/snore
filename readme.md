@@ -6,4 +6,4 @@
 
 ## 项目依赖
 
-sox、openmp、log
+sox、openmp、log、fftw
